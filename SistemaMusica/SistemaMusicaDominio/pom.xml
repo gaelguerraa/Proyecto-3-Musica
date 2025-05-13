@@ -8,6 +8,13 @@
     </parent>
     <artifactId>SistemaMusicaDominio</artifactId>
     <packaging>jar</packaging>
+    <dependencies>
+                <dependency>
+    <groupId>org.mongodb</groupId>
+    <artifactId>bson</artifactId>
+    <version>3.10.2</version>
+                </dependency>
+    </dependencies>
     <properties>
         <maven.compiler.release>21</maven.compiler.release>
         <exec.mainClass>com.mycompany.sistemamusicadominio.SistemaMusicaDominio</exec.mainClass>

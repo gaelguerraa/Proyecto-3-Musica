@@ -8,6 +8,28 @@
     </parent>
     <artifactId>SistemaMusicaPersistencia</artifactId>
     <packaging>jar</packaging>
+     <dependencies>
+        <dependency>
+        <groupId>org.mongodb</groupId>
+        <artifactId>mongo-java-driver</artifactId>
+        <version>3.10.2</version>
+        </dependency>
+        <dependency>
+    <groupId>org.mongodb</groupId>
+    <artifactId>mongodb-driver-core</artifactId>
+    <version>3.10.2</version>
+        </dependency>
+        <dependency>
+    <groupId>org.mongodb</groupId>
+    <artifactId>bson</artifactId>
+    <version>3.10.2</version>
+</dependency>
+          <dependency>
+               <groupId>${project.groupId}</groupId>
+               <artifactId>SistemaMusicaDominio</artifactId>
+               <version>${project.version}</version>
+          </dependency>
+     </dependencies>
     <properties>
         <maven.compiler.release>21</maven.compiler.release>
         <exec.mainClass>com.mycompany.sistemamusicapersistencia.SistemaMusicaPersistencia</exec.mainClass>

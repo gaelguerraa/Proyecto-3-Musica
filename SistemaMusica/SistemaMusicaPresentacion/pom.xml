@@ -8,6 +8,18 @@
     </parent>
     <artifactId>SistemaMusicaPresentacion</artifactId>
     <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>SistemaMusicaDominio</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>SistemaMusicaNegocio</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
     <properties>
         <maven.compiler.release>21</maven.compiler.release>
         <exec.mainClass>com.mycompany.sistemamusicapresentacion.SistemaMusicaPresentacion</exec.mainClass>
