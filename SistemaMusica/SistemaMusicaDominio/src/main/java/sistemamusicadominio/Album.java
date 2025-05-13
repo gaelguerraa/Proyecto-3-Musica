@@ -13,7 +13,8 @@ import org.bson.types.ObjectId;
  * @author gael_
  */
 public class Album {
-    private ObjectId _id;
+
+    private ObjectId id;
     private String nombre;
     private LocalDate fechaLanzamiento;
     private String genero;
@@ -32,15 +33,13 @@ public class Album {
         this.idArtista = idArtista;
         this.canciones = canciones;
     }
-    
-    
 
     public ObjectId getId() {
-        return _id;
+        return id;
     }
 
     public void setId(ObjectId _id) {
-        this._id = _id;
+        this.id = _id;
     }
 
     public String getNombre() {
@@ -90,6 +89,5 @@ public class Album {
     public void setCanciones(List<Cancion> canciones) {
         this.canciones = canciones;
     }
-    
-    
+
 }

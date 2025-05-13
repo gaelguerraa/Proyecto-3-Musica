@@ -12,8 +12,9 @@ import org.bson.types.ObjectId;
  * @author gael_
  */
 public class Artista {
-    private ObjectId _id;
-    private TipoArtista tipo; 
+
+    private ObjectId id;
+    private TipoArtista tipo;
     private String nombre;
     private String imagen;
     private String genero;
@@ -29,15 +30,13 @@ public class Artista {
         this.genero = genero;
         this.integrantes = integrantes;
     }
-    
-    
 
     public ObjectId getId() {
-        return _id;
+        return id;
     }
 
     public void setId(ObjectId _id) {
-        this._id = _id;
+        this.id = _id;
     }
 
     public TipoArtista getTipo() {
@@ -79,6 +78,5 @@ public class Artista {
     public void setIntegrantes(List<Integrante> integrantes) {
         this.integrantes = integrantes;
     }
-    
-    
+
 }

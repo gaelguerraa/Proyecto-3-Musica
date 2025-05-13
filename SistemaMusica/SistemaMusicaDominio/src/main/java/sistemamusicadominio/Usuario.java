@@ -12,7 +12,8 @@ import org.bson.types.ObjectId;
  * @author gael_
  */
 public class Usuario {
-    private ObjectId _id;
+
+    private ObjectId id;
     private String username;
     private String email;
     private String contrasenia;
@@ -31,14 +32,13 @@ public class Usuario {
         this.favoritos = favoritos;
         this.restricciones = restricciones;
     }
-    
-    
+
     public ObjectId getId() {
-        return _id;
+        return id;
     }
 
     public void setId(ObjectId _id) {
-        this._id = _id;
+        this.id = _id;
     }
 
     public String getUsername() {
@@ -65,7 +65,6 @@ public class Usuario {
         this.contrasenia = contrasenia;
     }
 
- 
     public String getImagenPerfil() {
         return imagenPerfil;
     }
@@ -89,6 +88,5 @@ public class Usuario {
     public void setRestricciones(List<String> restricciones) {
         this.restricciones = restricciones;
     }
-    
-    
+
 }
