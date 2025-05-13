@@ -9,6 +9,7 @@ import java.util.List;
 import org.bson.types.ObjectId;
 
 /**
+ * Entidad Album
  *
  * @author gael_
  */
@@ -22,9 +23,23 @@ public class Album {
     private ObjectId idArtista;
     private List<Cancion> canciones;
 
+    /**
+     * Constructor por omision
+     */
     public Album() {
     }
 
+    /**
+     * Consturctor que inicializa los atributos de la clase al valor de sus
+     * parametros
+     *
+     * @param nombre Nombre del album
+     * @param fechaLanzamiento Fecha de lanzamiento del album
+     * @param genero Genero del album
+     * @param imagenPortada Liga de la imagen de la portada del album
+     * @param idArtista ID del artista que realizo el album
+     * @param canciones Canciones con las que cuenta el album
+     */
     public Album(String nombre, LocalDate fechaLanzamiento, String genero, String imagenPortada, ObjectId idArtista, List<Cancion> canciones) {
         this.nombre = nombre;
         this.fechaLanzamiento = fechaLanzamiento;

@@ -8,6 +8,7 @@ import java.util.List;
 import org.bson.types.ObjectId;
 
 /**
+ * Clase entidad del Artista
  *
  * @author gael_
  */
@@ -20,9 +21,22 @@ public class Artista {
     private String genero;
     private List<Integrante> integrantes; // Solo para bandas
 
+    /**
+     * Constructor por omision
+     */
     public Artista() {
     }
 
+    /**
+     * Constructor que inicializa los atributos de la clase al valor de sus
+     * parametros
+     *
+     * @param tipo Tipo del artista
+     * @param nombre Nombre del artista
+     * @param imagen Liga de la imagen del artista
+     * @param genero Genero del artista
+     * @param integrantes Integrantes del artista (si es una banda)
+     */
     public Artista(TipoArtista tipo, String nombre, String imagen, String genero, List<Integrante> integrantes) {
         this.tipo = tipo;
         this.nombre = nombre;

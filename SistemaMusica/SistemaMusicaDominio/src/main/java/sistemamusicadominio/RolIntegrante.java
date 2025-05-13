@@ -5,6 +5,7 @@
 package sistemamusicadominio;
 
 /**
+ * Clase enumeradora de los roles de los integrantes
  *
  * @author gael_
  */
@@ -14,5 +15,5 @@ public enum RolIntegrante {
     COMPOSITOR,
     CORISTA,
     ARREGLISTA
-    
+
 }

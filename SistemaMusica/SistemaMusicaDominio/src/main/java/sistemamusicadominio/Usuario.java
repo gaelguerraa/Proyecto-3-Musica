@@ -8,6 +8,7 @@ import java.util.List;
 import org.bson.types.ObjectId;
 
 /**
+ * Clase entidad del usuario
  *
  * @author gael_
  */
@@ -21,9 +22,22 @@ public class Usuario {
     private List<Favorito> favoritos;
     private List<String> restricciones;
 
+    /**
+     * Constructor por omision
+     */
     public Usuario() {
     }
 
+    /**
+     * Clase que inicializa los atributos de la clase al valor de sus parametros
+     *
+     * @param username Nombre de usuario
+     * @param email Correo del usuario
+     * @param contrasenia Contrasenia del usuario
+     * @param imagenPerfil Liga de la imagen de perfil del usuario
+     * @param favoritos Favoritos con los que cuenta el usuario
+     * @param restricciones Restricciones con las que cuenta el usuario
+     */
     public Usuario(String username, String email, String contrasenia, String imagenPerfil, List<Favorito> favoritos, List<String> restricciones) {
         this.username = username;
         this.email = email;

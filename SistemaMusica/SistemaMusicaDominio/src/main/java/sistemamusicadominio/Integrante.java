@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import org.bson.types.ObjectId;
 
 /**
+ * Clase entidad de los integrantes
  *
  * @author gael_
  */
@@ -20,9 +21,22 @@ public class Integrante {
     private LocalDate fechaSalida; // puede ser null
     private boolean activo;
 
+    /**
+     * Constructor por omision
+     */
     public Integrante() {
     }
 
+    /**
+     * Constructor que inicializa los atributos de la clase al valor de sus
+     * parametros
+     *
+     * @param nombre Nombre del integrante
+     * @param rol Rol del integrante
+     * @param fechaIngreso Fecha de ingreso del integrante
+     * @param fechaSalida Fecha de salida del integrante (si aplica)
+     * @param activo Si sigue activo el integrante
+     */
     public Integrante(String nombre, RolIntegrante rol, LocalDate fechaIngreso, LocalDate fechaSalida, boolean activo) {
         this.nombre = nombre;
         this.rol = rol;

@@ -8,24 +8,36 @@ import java.time.LocalDate;
 import org.bson.types.ObjectId;
 
 /**
+ * Clase entidad de Favoritos
  *
  * @author gael_
  */
 public class Favorito {
-    private TipoContenido tipo; 
+
+    private TipoContenido tipo;
     private ObjectId idContenido;
     private LocalDate fecha;
 
+    /**
+     * Constructor por omision
+     */
     public Favorito() {
     }
 
+    /**
+     * Constructor que inicializa los atributos de la clase al valor de sus
+     * parametros
+     *
+     * @param tipo Tipo de contenido
+     * @param idContenido ID del contenido
+     * @param fecha Fecha en la que se agrego a favoritos
+     */
     public Favorito(TipoContenido tipo, ObjectId idContenido, LocalDate fecha) {
         this.tipo = tipo;
         this.idContenido = idContenido;
         this.fecha = fecha;
     }
-    
-    
+
     public TipoContenido getTipo() {
         return tipo;
     }
@@ -49,6 +61,5 @@ public class Favorito {
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
-    
-    
+
 }

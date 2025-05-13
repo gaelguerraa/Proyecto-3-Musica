@@ -5,6 +5,7 @@
 package sistemamusicadominio;
 
 /**
+ * Clase enumeradora de los tipos de artista
  *
  * @author gael_
  */

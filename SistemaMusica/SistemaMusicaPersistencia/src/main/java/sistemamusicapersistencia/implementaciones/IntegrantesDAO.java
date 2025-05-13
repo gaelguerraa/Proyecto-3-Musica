@@ -6,14 +6,12 @@ package sistemamusicapersistencia.implementaciones;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import java.time.LocalDate;
 import sistemamusica.dtos.IntegranteDTO;
-import sistemamusica.exception.PersistenciaException;
 import sistemamusicadominio.Integrante;
-import sistemamusicadominio.RolIntegrante;
 import sistemamusicapersistencia.interfaces.IIntegrantesDAO;
 
 /**
+ * Clase Data Access Object para los Integrantes
  *
  * @author PC
  */

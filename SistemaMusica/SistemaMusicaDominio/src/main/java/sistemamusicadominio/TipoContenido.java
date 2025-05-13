@@ -5,6 +5,7 @@
 package sistemamusicadominio;
 
 /**
+ * Clase enumeradora del tipo de contenido
  *
  * @author gael_
  */
