@@ -83,7 +83,7 @@ public class IntegrantesDAOTest {
                 RolIntegrante.VOCALISTA,
                 fechaIngreso,
                 fechaSalida,
-                true
+                false
         );
 
         Integrante integranteAgregado = integrantesDAO.agregarIntegrante(nuevoIntegrante);
@@ -93,7 +93,7 @@ public class IntegrantesDAOTest {
         assertEquals(RolIntegrante.VOCALISTA, integranteAgregado.getRol());
         assertEquals(fechaIngreso, integranteAgregado.getFechaIngreso());
         assertEquals(fechaSalida, integranteAgregado.getFechaSalida());
-        assertTrue(integranteAgregado.isActivo());
+        assertFalse(integranteAgregado.isActivo());
 
     }
 
