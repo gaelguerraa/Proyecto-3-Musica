@@ -5,12 +5,15 @@
 package sistemamusicadominio;
 
 import java.time.LocalDate;
+import org.bson.types.ObjectId;
 
 /**
  *
  * @author gael_
  */
 public class Integrante {
+
+    private ObjectId id;
     private String nombre;
     private RolIntegrante rol;
     private LocalDate fechaIngreso;
@@ -27,8 +30,14 @@ public class Integrante {
         this.fechaSalida = fechaSalida;
         this.activo = activo;
     }
-    
-    
+
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
 
     public String getNombre() {
         return nombre;
@@ -69,6 +78,5 @@ public class Integrante {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
-    
-    
+
 }
