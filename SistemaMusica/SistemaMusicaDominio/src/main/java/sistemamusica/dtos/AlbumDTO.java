@@ -2,29 +2,28 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package sistemamusicadominio;
+package sistemamusica.dtos;
 
 import java.time.LocalDate;
 import java.util.List;
-import org.bson.types.ObjectId;
 
 /**
  *
  * @author gael_
  */
-public class Album {
-    private ObjectId _id;
+public class AlbumDTO {
+    private String id;
     private String nombre;
     private LocalDate fechaLanzamiento;
     private String genero;
     private String imagenPortada;
-    private ObjectId idArtista;
-    private List<Cancion> canciones;
+    private String idArtista;
+    private List<CancionDTO> canciones;
 
-    public Album() {
+    public AlbumDTO() {
     }
 
-    public Album(String nombre, LocalDate fechaLanzamiento, String genero, String imagenPortada, ObjectId idArtista, List<Cancion> canciones) {
+    public AlbumDTO(String nombre, LocalDate fechaLanzamiento, String genero, String imagenPortada, String idArtista, List<CancionDTO> canciones) {
         this.nombre = nombre;
         this.fechaLanzamiento = fechaLanzamiento;
         this.genero = genero;
@@ -32,15 +31,13 @@ public class Album {
         this.idArtista = idArtista;
         this.canciones = canciones;
     }
-    
-    
 
-    public ObjectId getId() {
-        return _id;
+    public String getId() {
+        return id;
     }
 
-    public void setId(ObjectId _id) {
-        this._id = _id;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getNombre() {
@@ -75,19 +72,19 @@ public class Album {
         this.imagenPortada = imagenPortada;
     }
 
-    public ObjectId getIdArtista() {
+    public String getIdArtista() {
         return idArtista;
     }
 
-    public void setIdArtista(ObjectId idArtista) {
+    public void setIdArtista(String idArtista) {
         this.idArtista = idArtista;
     }
 
-    public List<Cancion> getCanciones() {
+    public List<CancionDTO> getCanciones() {
         return canciones;
     }
 
-    public void setCanciones(List<Cancion> canciones) {
+    public void setCanciones(List<CancionDTO> canciones) {
         this.canciones = canciones;
     }
     

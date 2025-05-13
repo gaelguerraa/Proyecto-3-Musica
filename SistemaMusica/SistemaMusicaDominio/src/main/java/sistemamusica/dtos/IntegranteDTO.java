@@ -2,33 +2,32 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package sistemamusicadominio;
+package sistemamusica.dtos;
 
 import java.time.LocalDate;
+import sistemamusicadominio.RolIntegrante;
 
 /**
  *
  * @author gael_
  */
-public class Integrante {
+public class IntegranteDTO {
     private String nombre;
     private RolIntegrante rol;
     private LocalDate fechaIngreso;
     private LocalDate fechaSalida; // puede ser null
     private boolean activo;
 
-    public Integrante() {
+    public IntegranteDTO() {
     }
 
-    public Integrante(String nombre, RolIntegrante rol, LocalDate fechaIngreso, LocalDate fechaSalida, boolean activo) {
+    public IntegranteDTO(String nombre, RolIntegrante rol, LocalDate fechaIngreso, LocalDate fechaSalida, boolean activo) {
         this.nombre = nombre;
         this.rol = rol;
         this.fechaIngreso = fechaIngreso;
         this.fechaSalida = fechaSalida;
         this.activo = activo;
     }
-    
-    
 
     public String getNombre() {
         return nombre;

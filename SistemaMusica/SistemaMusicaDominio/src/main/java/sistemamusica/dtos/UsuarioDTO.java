@@ -2,28 +2,27 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package sistemamusicadominio;
+package sistemamusica.dtos;
 
 import java.util.List;
-import org.bson.types.ObjectId;
 
 /**
  *
  * @author gael_
  */
-public class Usuario {
-    private ObjectId _id;
+public class UsuarioDTO {
+    private String id; 
     private String username;
     private String email;
     private String contrasenia;
     private String imagenPerfil;
-    private List<Favorito> favoritos;
+    private List<FavoritoDTO> favoritos;
     private List<String> restricciones;
 
-    public Usuario() {
+    public UsuarioDTO() {
     }
 
-    public Usuario(String username, String email, String contrasenia, String imagenPerfil, List<Favorito> favoritos, List<String> restricciones) {
+    public UsuarioDTO(String username, String email, String contrasenia, String imagenPerfil, List<FavoritoDTO> favoritos, List<String> restricciones) {
         this.username = username;
         this.email = email;
         this.contrasenia = contrasenia;
@@ -31,14 +30,13 @@ public class Usuario {
         this.favoritos = favoritos;
         this.restricciones = restricciones;
     }
-    
-    
-    public ObjectId getId() {
-        return _id;
+
+    public String getId() {
+        return id;
     }
 
-    public void setId(ObjectId _id) {
-        this._id = _id;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -65,7 +63,6 @@ public class Usuario {
         this.contrasenia = contrasenia;
     }
 
- 
     public String getImagenPerfil() {
         return imagenPerfil;
     }
@@ -74,11 +71,11 @@ public class Usuario {
         this.imagenPerfil = imagenPerfil;
     }
 
-    public List<Favorito> getFavoritos() {
+    public List<FavoritoDTO> getFavoritos() {
         return favoritos;
     }
 
-    public void setFavoritos(List<Favorito> favoritos) {
+    public void setFavoritos(List<FavoritoDTO> favoritos) {
         this.favoritos = favoritos;
     }
 

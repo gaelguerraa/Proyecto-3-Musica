@@ -4,10 +4,12 @@
  */
 package sistemamusicapersistencia.implementaciones;
 
+import sistemamusicapersistencia.interfaces.IUsuariosDAO;
+
 /**
  *
  * @author gael_
  */
-public class UsuariosDAO {
+public class UsuariosDAO implements IUsuariosDAO {
     
 }

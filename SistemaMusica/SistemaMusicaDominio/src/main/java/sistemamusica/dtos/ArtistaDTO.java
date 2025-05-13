@@ -2,42 +2,50 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package sistemamusicadominio;
+package sistemamusica.dtos;
 
 import java.util.List;
-import org.bson.types.ObjectId;
+import sistemamusicadominio.TipoArtista;
 
 /**
  *
  * @author gael_
  */
-public class Artista {
-    private ObjectId _id;
+public class ArtistaDTO {
+    private String id;
     private TipoArtista tipo; 
     private String nombre;
     private String imagen;
     private String genero;
-    private List<Integrante> integrantes; // Solo para bandas
+    private List<IntegranteDTO> integrantes; // solo si es banda
 
-    public Artista() {
+    public ArtistaDTO() {
     }
 
-    public Artista(TipoArtista tipo, String nombre, String imagen, String genero, List<Integrante> integrantes) {
+    //para solistas
+    public ArtistaDTO(TipoArtista tipo, String nombre, String imagen, String genero) {
+        this.tipo = tipo;
+        this.nombre = nombre;
+        this.imagen = imagen;
+        this.genero = genero;
+    }
+    
+
+    //para bandas
+    public ArtistaDTO(TipoArtista tipo, String nombre, String imagen, String genero, List<IntegranteDTO> integrantes) {
         this.tipo = tipo;
         this.nombre = nombre;
         this.imagen = imagen;
         this.genero = genero;
         this.integrantes = integrantes;
     }
-    
-    
 
-    public ObjectId getId() {
-        return _id;
+    public String getId() {
+        return id;
     }
 
-    public void setId(ObjectId _id) {
-        this._id = _id;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public TipoArtista getTipo() {
@@ -72,11 +80,11 @@ public class Artista {
         this.genero = genero;
     }
 
-    public List<Integrante> getIntegrantes() {
+    public List<IntegranteDTO> getIntegrantes() {
         return integrantes;
     }
 
-    public void setIntegrantes(List<Integrante> integrantes) {
+    public void setIntegrantes(List<IntegranteDTO> integrantes) {
         this.integrantes = integrantes;
     }
     

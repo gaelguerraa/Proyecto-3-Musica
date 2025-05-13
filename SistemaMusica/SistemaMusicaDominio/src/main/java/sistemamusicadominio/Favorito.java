@@ -4,6 +4,7 @@
  */
 package sistemamusicadominio;
 
+import java.time.LocalDate;
 import org.bson.types.ObjectId;
 
 /**
@@ -11,18 +12,25 @@ import org.bson.types.ObjectId;
  * @author gael_
  */
 public class Favorito {
-    private String tipo; 
+    private TipoContenido tipo; 
     private ObjectId idContenido;
-    private String fecha;
+    private LocalDate fecha;
 
     public Favorito() {
     }
 
-    public String getTipo() {
+    public Favorito(TipoContenido tipo, ObjectId idContenido, LocalDate fecha) {
+        this.tipo = tipo;
+        this.idContenido = idContenido;
+        this.fecha = fecha;
+    }
+    
+    
+    public TipoContenido getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(TipoContenido tipo) {
         this.tipo = tipo;
     }
 
@@ -34,11 +42,11 @@ public class Favorito {
         this.idContenido = idContenido;
     }
 
-    public String getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(String fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
     
