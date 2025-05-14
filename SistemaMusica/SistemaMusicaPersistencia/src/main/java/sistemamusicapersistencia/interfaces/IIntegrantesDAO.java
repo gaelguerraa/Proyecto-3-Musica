@@ -4,6 +4,7 @@
  */
 package sistemamusicapersistencia.interfaces;
 
+import java.util.List;
 import sistemamusica.dtos.IntegranteDTO;
 import sistemamusicadominio.Integrante;
 
@@ -20,5 +21,20 @@ public interface IIntegrantesDAO {
      * @return Integrante agregado en la base de datos
      */
     public Integrante agregarIntegrante(IntegranteDTO nuevoIntegrante);
+
+    /**
+     * Metodo para consultar todos los integrantes
+     *
+     * @return Lista con todos los integrantes de la base de datos
+     */
+    public List<Integrante> consultarTodos();
+
+    /**
+     * Metodo para consultar un integrante segun su ID
+     *
+     * @param idIntegrante ID del integrante a buscar
+     * @return Integrante con el id solicitada
+     */
+    public Integrante consultarPorId(String idIntegrante);
 
 }

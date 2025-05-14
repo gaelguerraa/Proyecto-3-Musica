@@ -9,6 +9,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,7 @@ public class IntegrantesDAOTest {
     }
 
     private Integrante integranteGuardado;
+    private Integrante integranteGuardado2;
     private final IntegrantesDAO integrantesDAO = new IntegrantesDAO();
     private final String COLECCION = "integrantes";
     private final String CAMPO_ID = "_id";
@@ -47,6 +49,11 @@ public class IntegrantesDAOTest {
 
             coleccion.deleteOne(Filters.eq(CAMPO_ID, integranteGuardado.getId()));
             integranteGuardado = null;
+
+            if (integranteGuardado2 != null) {
+                coleccion.deleteOne(Filters.eq(CAMPO_ID, integranteGuardado2.getId()));
+                integranteGuardado2 = null;
+            }
         }
     }
 
@@ -95,6 +102,67 @@ public class IntegrantesDAOTest {
         assertEquals(fechaSalida, integranteAgregado.getFechaSalida());
         assertFalse(integranteAgregado.isActivo());
 
+    }
+
+    @Test
+    public void testConsultarTodos() {
+        final int CANTIDAD_LISTA = 2;
+
+        LocalDate fechaIngreso = LocalDate.of(1999, Month.MARCH, 15);
+        LocalDate fechaSalida = LocalDate.of(2017, Month.JULY, 20);
+
+        IntegranteDTO nuevoIntegrante = new IntegranteDTO(
+                "Chester Bennington",
+                RolIntegrante.VOCALISTA,
+                fechaIngreso,
+                fechaSalida,
+                false
+        );
+
+        Integrante integranteAgregado = integrantesDAO.agregarIntegrante(nuevoIntegrante);
+        integranteGuardado = integranteAgregado;
+
+        IntegranteDTO nuevoIntegrante2 = new IntegranteDTO(
+                "Billie Joe Armstrong",
+                RolIntegrante.VOCALISTA,
+                fechaIngreso,
+                null,
+                true
+        );
+
+        Integrante integranteAgregado2 = integrantesDAO.agregarIntegrante(nuevoIntegrante2);
+        integranteGuardado2 = integranteAgregado2;
+
+        List<Integrante> listaIntegrantesObtenida = integrantesDAO.consultarTodos();
+
+        assertEquals(CANTIDAD_LISTA, listaIntegrantesObtenida.size());
+
+    }
+
+    @Test
+    public void testConsultarPorId() {
+        LocalDate fechaIngreso = LocalDate.of(1999, Month.MARCH, 15);
+        LocalDate fechaSalida = LocalDate.of(2017, Month.JULY, 20);
+
+        IntegranteDTO nuevoIntegrante = new IntegranteDTO(
+                "Chester Bennington",
+                RolIntegrante.VOCALISTA,
+                fechaIngreso,
+                fechaSalida,
+                false
+        );
+
+        Integrante integranteAgregado = integrantesDAO.agregarIntegrante(nuevoIntegrante);
+        integranteGuardado = integranteAgregado;
+
+        System.out.println(integranteAgregado.getId().toString());
+        
+        String ID_OBTENIDA = integranteAgregado.getId().toString();
+        
+        Integrante integranteObtenido = integrantesDAO.consultarPorId(ID_OBTENIDA);
+        
+        assertNotNull(integranteObtenido);
+        assertEquals(ID_OBTENIDA, integranteObtenido.getId().toString());
     }
 
 }

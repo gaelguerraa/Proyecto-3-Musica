@@ -4,8 +4,13 @@
  */
 package sistemamusicapersistencia.implementaciones;
 
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import java.util.LinkedList;
+import java.util.List;
+import org.bson.Document;
+import org.bson.types.ObjectId;
 import sistemamusica.dtos.IntegranteDTO;
 import sistemamusicadominio.Integrante;
 import sistemamusicapersistencia.interfaces.IIntegrantesDAO;
@@ -18,6 +23,7 @@ import sistemamusicapersistencia.interfaces.IIntegrantesDAO;
 public class IntegrantesDAO implements IIntegrantesDAO {
 
     public final String COLECCION = "integrantes";
+    public final String CAMPO_ID = "_id";
     public final String CAMPO_NOMBRE = "nombre";
     public final String CAMPO_ROL = "rol";
     public final String CAMPO_FECHA_INGRESO = "fechaIngreso";
@@ -49,6 +55,43 @@ public class IntegrantesDAO implements IIntegrantesDAO {
         coleccion.insertOne(integrante);
         return integrante;
 
+    }
+
+    /**
+     * Metodo para consultar todos los integrantes
+     *
+     * @return Lista con todos los integrantes de la base de datos
+     */
+    @Override
+    public List<Integrante> consultarTodos() {
+        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Integrante> coleccion = baseDatos.getCollection(
+                COLECCION, Integrante.class);
+
+        FindIterable<Integrante> resultados = coleccion.find();
+        List<Integrante> listaResultados = new LinkedList<>();
+        resultados.into(listaResultados);
+        return listaResultados;
+    }
+
+    /**
+     * Metodo para consultar un integrante segun su ID
+     *
+     * @param idIntegrante ID del integrante a buscar
+     * @return Integrante con el id solicitada
+     */
+    @Override
+    public Integrante consultarPorId(String idIntegrante) {
+        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Integrante> coleccion = baseDatos.getCollection(
+                COLECCION, Integrante.class);
+
+        Document filtros = new Document();
+        filtros.append(CAMPO_ID, new ObjectId(idIntegrante));
+        FindIterable<Integrante> integrantes = coleccion.find(filtros);
+        Integrante integrante = integrantes.first();
+
+        return integrante;
     }
 
 }
