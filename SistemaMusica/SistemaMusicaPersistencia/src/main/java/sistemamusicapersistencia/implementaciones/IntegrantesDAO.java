@@ -22,13 +22,8 @@ import sistemamusicapersistencia.interfaces.IIntegrantesDAO;
  */
 public class IntegrantesDAO implements IIntegrantesDAO {
 
-    public final String COLECCION = "integrantes";
-    public final String CAMPO_ID = "_id";
-    public final String CAMPO_NOMBRE = "nombre";
-    public final String CAMPO_ROL = "rol";
-    public final String CAMPO_FECHA_INGRESO = "fechaIngreso";
-    public final String CAMPO_FECHA_SALIDA = "fechaSalida";
-    public final String CAMPO_ACTIVO = "activo";
+    private final String COLECCION = "integrantes";
+    private final String CAMPO_ID = "_id";
 
     /**
      * Metodo que agrega un integrante a la base de datos

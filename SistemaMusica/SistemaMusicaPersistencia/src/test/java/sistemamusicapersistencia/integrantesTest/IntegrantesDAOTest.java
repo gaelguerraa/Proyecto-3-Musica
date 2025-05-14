@@ -70,7 +70,7 @@ public class IntegrantesDAOTest {
         );
 
         Integrante integranteAgregado = integrantesDAO.agregarIntegrante(nuevoIntegrante);
-        integranteGuardado = integranteAgregado;
+        integranteGuardado = integranteAgregado; // Comentar esta linea para ver en MongoDB
 
         assertEquals("Billie Joe Armstrong", integranteAgregado.getNombre());
         assertEquals(RolIntegrante.VOCALISTA, integranteAgregado.getRol());
@@ -94,7 +94,7 @@ public class IntegrantesDAOTest {
         );
 
         Integrante integranteAgregado = integrantesDAO.agregarIntegrante(nuevoIntegrante);
-        integranteGuardado = integranteAgregado;
+        integranteGuardado = integranteAgregado; // Comentar esta linea para ver en MongoDB
 
         assertEquals("Chester Bennington", integranteAgregado.getNombre());
         assertEquals(RolIntegrante.VOCALISTA, integranteAgregado.getRol());
@@ -120,7 +120,7 @@ public class IntegrantesDAOTest {
         );
 
         Integrante integranteAgregado = integrantesDAO.agregarIntegrante(nuevoIntegrante);
-        integranteGuardado = integranteAgregado;
+        integranteGuardado = integranteAgregado; // Comentar esta linea para ver en MongoDB
 
         IntegranteDTO nuevoIntegrante2 = new IntegranteDTO(
                 "Billie Joe Armstrong",
@@ -131,7 +131,7 @@ public class IntegrantesDAOTest {
         );
 
         Integrante integranteAgregado2 = integrantesDAO.agregarIntegrante(nuevoIntegrante2);
-        integranteGuardado2 = integranteAgregado2;
+        integranteGuardado2 = integranteAgregado2; // Comentar esta linea para ver en MongoDB
 
         List<Integrante> listaIntegrantesObtenida = integrantesDAO.consultarTodos();
 
@@ -153,14 +153,14 @@ public class IntegrantesDAOTest {
         );
 
         Integrante integranteAgregado = integrantesDAO.agregarIntegrante(nuevoIntegrante);
-        integranteGuardado = integranteAgregado;
+        integranteGuardado = integranteAgregado; // Comentar esta linea para ver en MongoDB
 
         System.out.println(integranteAgregado.getId().toString());
-        
+
         String ID_OBTENIDA = integranteAgregado.getId().toString();
-        
+
         Integrante integranteObtenido = integrantesDAO.consultarPorId(ID_OBTENIDA);
-        
+
         assertNotNull(integranteObtenido);
         assertEquals(ID_OBTENIDA, integranteObtenido.getId().toString());
     }

@@ -4,10 +4,21 @@
  */
 package sistemamusicapersistencia.interfaces;
 
+import sistemamusica.dtos.UsuarioDTO;
+import sistemamusicadominio.Usuario;
+
 /**
  *
  * @author gael_
  */
 public interface IUsuariosDAO {
-    
+
+    /**
+     * Metodo para agregar un nuevo usuario a la base de datos
+     *
+     * @param nuevoUsuario Nuevo usuario a agregar a la base de datos
+     * @return Usuario que ha sido agregado
+     */
+    public Usuario agregarUsuario(UsuarioDTO nuevoUsuario);
+
 }
