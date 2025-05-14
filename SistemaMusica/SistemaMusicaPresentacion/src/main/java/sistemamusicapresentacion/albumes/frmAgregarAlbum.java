@@ -9,12 +9,15 @@ package sistemamusicapresentacion.albumes;
  * @author gael_
  */
 public class frmAgregarAlbum extends javax.swing.JFrame {
-
+    
+    ControladorAlbumes controlador;
+    
     /**
      * Creates new form frmAgregarAlbum
      */
-    public frmAgregarAlbum() {
+    public frmAgregarAlbum(ControladorAlbumes controlador) {
         initComponents();
+        this.controlador=controlador;
     }
 
     /**
@@ -44,57 +47,54 @@ public class frmAgregarAlbum extends javax.swing.JFrame {
         labelFotoSubir = new javax.swing.JLabel();
         labelNombre = new javax.swing.JLabel();
         btnFoto = new javax.swing.JButton();
-        btnRegistrarArtista = new javax.swing.JButton();
-        btnAgregarCancionAlbum = new javax.swing.JButton();
-        labelNombreCancin = new javax.swing.JLabel();
-        txtNombreIntegrante = new javax.swing.JTextField();
+        btnAgregarAlbumContinuar = new javax.swing.JButton();
         comboboxArtista = new javax.swing.JComboBox<>();
         labelContrasenia1 = new javax.swing.JLabel();
         labelFechaISalida = new javax.swing.JLabel();
         fechaLanzamiento = new com.github.lgooddatepicker.components.DatePicker();
         btnVolver = new javax.swing.JButton();
-        labelDuracion = new javax.swing.JLabel();
-        txtDuracion = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(850, 550));
+        setPreferredSize(new java.awt.Dimension(850, 550));
 
         panelFondo2.setBackground(new java.awt.Color(0, 0, 0));
 
         panelVerde2.setBackground(new java.awt.Color(30, 215, 96));
 
-        btnArtistas2.setBackground(new java.awt.Color(30, 215, 96));
         btnArtistas2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/BlackStar.png"))); // NOI18N
+        btnArtistas2.setBackground(new java.awt.Color(30, 215, 96));
         btnArtistas2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnArtistas2ActionPerformed(evt);
             }
         });
 
-        labelArtistas.setFont(new java.awt.Font("Gotham Black", 0, 12)); // NOI18N
         labelArtistas.setText("Artistas");
+        labelArtistas.setFont(new java.awt.Font("Gotham Black", 0, 12)); // NOI18N
 
-        labelAlbumes.setFont(new java.awt.Font("Gotham Black", 0, 12)); // NOI18N
         labelAlbumes.setText("Albumes");
+        labelAlbumes.setFont(new java.awt.Font("Gotham Black", 0, 12)); // NOI18N
 
-        btnAlbumes.setBackground(new java.awt.Color(30, 215, 96));
         btnAlbumes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/musica.png"))); // NOI18N
+        btnAlbumes.setBackground(new java.awt.Color(30, 215, 96));
 
-        btnCanciones.setBackground(new java.awt.Color(30, 215, 96));
         btnCanciones.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/disco.png"))); // NOI18N
+        btnCanciones.setBackground(new java.awt.Color(30, 215, 96));
         btnCanciones.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancionesActionPerformed(evt);
             }
         });
 
-        labelCanciones.setFont(new java.awt.Font("Gotham Black", 0, 12)); // NOI18N
         labelCanciones.setText("Canciones");
+        labelCanciones.setFont(new java.awt.Font("Gotham Black", 0, 12)); // NOI18N
 
-        labelUsuario.setFont(new java.awt.Font("Gotham Black", 0, 12)); // NOI18N
         labelUsuario.setText("Usuario");
+        labelUsuario.setFont(new java.awt.Font("Gotham Black", 0, 12)); // NOI18N
 
-        btnUsuario.setBackground(new java.awt.Color(30, 215, 96));
         btnUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/usuario.png"))); // NOI18N
+        btnUsuario.setBackground(new java.awt.Color(30, 215, 96));
         btnUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUsuarioActionPerformed(evt);
@@ -142,40 +142,40 @@ public class frmAgregarAlbum extends javax.swing.JFrame {
                 .addComponent(btnCanciones)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(labelCanciones, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 166, Short.MAX_VALUE)
                 .addComponent(btnUsuario)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(labelUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36))
         );
 
+        labelMusicio1.setText("Music.io");
         labelMusicio1.setFont(new java.awt.Font("Gotham Black", 1, 36)); // NOI18N
         labelMusicio1.setForeground(new java.awt.Color(30, 215, 96));
-        labelMusicio1.setText("Music.io");
 
+        labelRol.setText("artista:");
         labelRol.setFont(new java.awt.Font("Gotham Bold", 1, 14)); // NOI18N
         labelRol.setForeground(new java.awt.Color(30, 215, 96));
-        labelRol.setText("artista:");
 
+        textoAgregarAlbum.setText("Agregar Album");
         textoAgregarAlbum.setFont(new java.awt.Font("Gotham Black", 1, 36)); // NOI18N
         textoAgregarAlbum.setForeground(new java.awt.Color(30, 215, 96));
-        textoAgregarAlbum.setText("Agregar Album");
 
-        comboboxGenero.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
         comboboxGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboboxGenero.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
         comboboxGenero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboboxGeneroActionPerformed(evt);
             }
         });
 
+        labelFotoSubir.setText("subir foto");
         labelFotoSubir.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
         labelFotoSubir.setForeground(new java.awt.Color(30, 215, 96));
-        labelFotoSubir.setText("subir foto");
 
+        labelNombre.setText("nombre:");
         labelNombre.setFont(new java.awt.Font("Gotham Bold", 1, 14)); // NOI18N
         labelNombre.setForeground(new java.awt.Color(30, 215, 96));
-        labelNombre.setText("nombre:");
 
         btnFoto.setText("boton para subir foto");
         btnFoto.addActionListener(new java.awt.event.ActionListener() {
@@ -184,56 +184,39 @@ public class frmAgregarAlbum extends javax.swing.JFrame {
             }
         });
 
-        btnRegistrarArtista.setBackground(new java.awt.Color(30, 215, 96));
-        btnRegistrarArtista.setFont(new java.awt.Font("Gotham Black", 1, 18)); // NOI18N
-        btnRegistrarArtista.setText("Guardar Album");
-        btnRegistrarArtista.addActionListener(new java.awt.event.ActionListener() {
+        btnAgregarAlbumContinuar.setText("Guardar Album y Añadir Canciones");
+        btnAgregarAlbumContinuar.setBackground(new java.awt.Color(30, 215, 96));
+        btnAgregarAlbumContinuar.setFont(new java.awt.Font("Gotham Black", 1, 18)); // NOI18N
+        btnAgregarAlbumContinuar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegistrarArtistaActionPerformed(evt);
+                btnAgregarAlbumContinuarActionPerformed(evt);
             }
         });
 
-        btnAgregarCancionAlbum.setBackground(new java.awt.Color(30, 215, 96));
-        btnAgregarCancionAlbum.setFont(new java.awt.Font("Gotham Black", 1, 18)); // NOI18N
-        btnAgregarCancionAlbum.setText("Agregar Cancion");
-        btnAgregarCancionAlbum.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarCancionAlbumActionPerformed(evt);
-            }
-        });
-
-        labelNombreCancin.setFont(new java.awt.Font("Gotham Bold", 1, 14)); // NOI18N
-        labelNombreCancin.setForeground(new java.awt.Color(30, 215, 96));
-        labelNombreCancin.setText("nombre de la cancion:");
-
-        comboboxArtista.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
         comboboxArtista.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboboxArtista.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
         comboboxArtista.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboboxArtistaActionPerformed(evt);
             }
         });
 
+        labelContrasenia1.setText("genero:");
         labelContrasenia1.setFont(new java.awt.Font("Gotham Bold", 1, 14)); // NOI18N
         labelContrasenia1.setForeground(new java.awt.Color(30, 215, 96));
-        labelContrasenia1.setText("genero:");
 
+        labelFechaISalida.setText("fecha de salida:");
         labelFechaISalida.setFont(new java.awt.Font("Gotham Bold", 1, 14)); // NOI18N
         labelFechaISalida.setForeground(new java.awt.Color(30, 215, 96));
-        labelFechaISalida.setText("fecha de salida:");
 
+        btnVolver.setText("Volver");
         btnVolver.setBackground(new java.awt.Color(30, 215, 96));
         btnVolver.setFont(new java.awt.Font("Gotham Black", 1, 18)); // NOI18N
-        btnVolver.setText("Volver");
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVolverActionPerformed(evt);
             }
         });
-
-        labelDuracion.setFont(new java.awt.Font("Gotham Bold", 1, 14)); // NOI18N
-        labelDuracion.setForeground(new java.awt.Color(30, 215, 96));
-        labelDuracion.setText("duracion:");
 
         javax.swing.GroupLayout panelFondo2Layout = new javax.swing.GroupLayout(panelFondo2);
         panelFondo2.setLayout(panelFondo2Layout);
@@ -243,104 +226,81 @@ public class frmAgregarAlbum extends javax.swing.JFrame {
                 .addComponent(panelVerde2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(panelFondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondo2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 114, Short.MAX_VALUE)
                         .addComponent(textoAgregarAlbum, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(33, 33, 33)
                         .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(24, 24, 24))
                     .addGroup(panelFondo2Layout.createSequentialGroup()
                         .addGroup(panelFondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelFondo2Layout.createSequentialGroup()
-                                .addGap(56, 56, 56)
-                                .addGroup(panelFondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(comboboxGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(labelNombre)
-                                    .addComponent(labelContrasenia1)
-                                    .addComponent(labelRol)
-                                    .addComponent(labelFechaISalida)
-                                    .addGroup(panelFondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(fechaLanzamiento, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(comboboxArtista, javax.swing.GroupLayout.Alignment.LEADING, 0, 221, Short.MAX_VALUE))))
-                            .addGroup(panelFondo2Layout.createSequentialGroup()
-                                .addGap(121, 121, 121)
-                                .addComponent(labelFotoSubir))
+                            .addGroup(panelFondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(panelFondo2Layout.createSequentialGroup()
+                                    .addGroup(panelFondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(panelFondo2Layout.createSequentialGroup()
+                                            .addGap(289, 289, 289)
+                                            .addComponent(labelFotoSubir))
+                                        .addGroup(panelFondo2Layout.createSequentialGroup()
+                                            .addGap(254, 254, 254)
+                                            .addComponent(btnFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGap(38, 38, 38))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondo2Layout.createSequentialGroup()
+                                    .addGap(224, 224, 224)
+                                    .addGroup(panelFondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(comboboxGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(labelNombre)
+                                        .addComponent(labelContrasenia1)
+                                        .addComponent(labelRol)
+                                        .addComponent(labelFechaISalida)
+                                        .addGroup(panelFondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(fechaLanzamiento, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(comboboxArtista, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                             .addGroup(panelFondo2Layout.createSequentialGroup()
                                 .addGap(28, 28, 28)
-                                .addComponent(btnVolver))
-                            .addGroup(panelFondo2Layout.createSequentialGroup()
-                                .addGap(86, 86, 86)
-                                .addComponent(btnFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(124, 124, 124)
-                        .addGroup(panelFondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelFondo2Layout.createSequentialGroup()
-                                .addGroup(panelFondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(labelNombreCancin)
-                                    .addComponent(txtNombreIntegrante, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(labelDuracion)
-                                    .addComponent(txtDuracion, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 43, Short.MAX_VALUE))
-                            .addGroup(panelFondo2Layout.createSequentialGroup()
-                                .addGroup(panelFondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnRegistrarArtista, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnAgregarCancionAlbum, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                .addComponent(btnVolver)
+                                .addGap(40, 40, 40)
+                                .addComponent(btnAgregarAlbumContinuar)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         panelFondo2Layout.setVerticalGroup(
             panelFondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panelVerde2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(panelFondo2Layout.createSequentialGroup()
-                .addGroup(panelFondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelFondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panelFondo2Layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addComponent(textoAgregarAlbum, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26)
-                        .addComponent(labelNombre)
-                        .addGap(3, 3, 3)
-                        .addGroup(panelFondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(labelNombreCancin)
-                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(panelFondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtNombreIntegrante, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(panelFondo2Layout.createSequentialGroup()
-                                .addComponent(labelContrasenia1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(comboboxGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(panelFondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(labelRol)
-                            .addComponent(labelDuracion))))
+                    .addComponent(textoAgregarAlbum, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(45, 45, 45)
+                .addComponent(labelNombre)
+                .addGap(3, 3, 3)
+                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(labelContrasenia1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelFondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelFondo2Layout.createSequentialGroup()
-                        .addComponent(comboboxArtista, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondo2Layout.createSequentialGroup()
-                        .addComponent(txtDuracion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(4, 4, 4)))
+                .addComponent(comboboxGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(labelRol)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(comboboxArtista, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(labelFechaISalida)
                 .addGap(13, 13, 13)
                 .addComponent(fechaLanzamiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(21, 21, 21)
-                .addGroup(panelFondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelFotoSubir, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAgregarCancionAlbum))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelFondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnFoto)
-                    .addComponent(btnRegistrarArtista))
-                .addGap(42, 42, 42)
-                .addComponent(btnVolver)
-                .addGap(16, 16, 16))
+                .addGap(28, 28, 28)
+                .addComponent(labelFotoSubir, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnFoto)
+                .addGap(31, 31, 31)
+                .addGroup(panelFondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnVolver)
+                    .addComponent(btnAgregarAlbumContinuar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelFondo2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelFondo2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -370,17 +330,15 @@ public class frmAgregarAlbum extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnFotoActionPerformed
 
-    private void btnRegistrarArtistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarArtistaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnRegistrarArtistaActionPerformed
+    private void btnAgregarAlbumContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarAlbumContinuarActionPerformed
+        controlador.agregarCanciones();
+        this.dispose();
+    }//GEN-LAST:event_btnAgregarAlbumContinuarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        // TODO add your handling code here:
+        controlador.mostrarAlbumesPrincipal();
+        this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
-
-    private void btnAgregarCancionAlbumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCancionAlbumActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAgregarCancionAlbumActionPerformed
 
     private void comboboxArtistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboboxArtistaActionPerformed
         // TODO add your handling code here:
@@ -389,13 +347,11 @@ public class frmAgregarAlbum extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAgregarCancionAlbum;
+    private javax.swing.JButton btnAgregarAlbumContinuar;
     private javax.swing.JButton btnAlbumes;
-    private javax.swing.JButton btnArtistas1;
     private javax.swing.JButton btnArtistas2;
     private javax.swing.JButton btnCanciones;
     private javax.swing.JButton btnFoto;
-    private javax.swing.JButton btnRegistrarArtista;
     private javax.swing.JButton btnUsuario;
     private javax.swing.JButton btnVolver;
     private javax.swing.JComboBox<String> comboboxArtista;
@@ -405,21 +361,15 @@ public class frmAgregarAlbum extends javax.swing.JFrame {
     private javax.swing.JLabel labelArtistas;
     private javax.swing.JLabel labelCanciones;
     private javax.swing.JLabel labelContrasenia1;
-    private javax.swing.JLabel labelDuracion;
     private javax.swing.JLabel labelFechaISalida;
     private javax.swing.JLabel labelFotoSubir;
     private javax.swing.JLabel labelMusicio1;
     private javax.swing.JLabel labelNombre;
-    private javax.swing.JLabel labelNombreCancin;
     private javax.swing.JLabel labelRol;
     private javax.swing.JLabel labelUsuario;
-    private javax.swing.JPanel panelFondo1;
     private javax.swing.JPanel panelFondo2;
-    private javax.swing.JPanel panelVerde1;
     private javax.swing.JPanel panelVerde2;
     private javax.swing.JLabel textoAgregarAlbum;
-    private javax.swing.JTextField txtDuracion;
     private javax.swing.JTextField txtNombre;
-    private javax.swing.JTextField txtNombreIntegrante;
     // End of variables declaration//GEN-END:variables
 }

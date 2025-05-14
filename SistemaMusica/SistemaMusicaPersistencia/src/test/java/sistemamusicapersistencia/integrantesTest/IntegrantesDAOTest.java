@@ -9,6 +9,8 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -59,12 +61,13 @@ public class IntegrantesDAOTest {
 
     @Test
     public void testAgregarIntegranteSinFechaSalida() {
-        LocalDate fechaIngreso = LocalDate.of(1987, Month.MARCH, 15);
+        LocalDate fechaIngreso = LocalDate.of(1999, Month.MARCH, 15);
+        Date fechaIngresoDate = Date.from(fechaIngreso.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         IntegranteDTO nuevoIntegrante = new IntegranteDTO(
                 "Billie Joe Armstrong",
                 RolIntegrante.VOCALISTA,
-                fechaIngreso,
+                fechaIngresoDate,
                 null,
                 true
         );
@@ -74,7 +77,7 @@ public class IntegrantesDAOTest {
 
         assertEquals("Billie Joe Armstrong", integranteAgregado.getNombre());
         assertEquals(RolIntegrante.VOCALISTA, integranteAgregado.getRol());
-        assertEquals(fechaIngreso, integranteAgregado.getFechaIngreso());
+        assertEquals(fechaIngresoDate, integranteAgregado.getFechaIngreso());
         assertNull(integranteAgregado.getFechaSalida());
         assertTrue(integranteAgregado.isActivo());
 
@@ -85,11 +88,14 @@ public class IntegrantesDAOTest {
         LocalDate fechaIngreso = LocalDate.of(1999, Month.MARCH, 15);
         LocalDate fechaSalida = LocalDate.of(2017, Month.JULY, 20);
 
+        Date fechaIngresoDate = Date.from(fechaIngreso.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date fechaSalidaDate = Date.from(fechaSalida.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
         IntegranteDTO nuevoIntegrante = new IntegranteDTO(
                 "Chester Bennington",
                 RolIntegrante.VOCALISTA,
-                fechaIngreso,
-                fechaSalida,
+                fechaIngresoDate,
+                fechaSalidaDate,
                 false
         );
 
@@ -98,8 +104,8 @@ public class IntegrantesDAOTest {
 
         assertEquals("Chester Bennington", integranteAgregado.getNombre());
         assertEquals(RolIntegrante.VOCALISTA, integranteAgregado.getRol());
-        assertEquals(fechaIngreso, integranteAgregado.getFechaIngreso());
-        assertEquals(fechaSalida, integranteAgregado.getFechaSalida());
+        assertEquals(fechaIngresoDate, integranteAgregado.getFechaIngreso());
+        assertEquals(fechaSalidaDate, integranteAgregado.getFechaSalida());
         assertFalse(integranteAgregado.isActivo());
 
     }
@@ -110,12 +116,15 @@ public class IntegrantesDAOTest {
 
         LocalDate fechaIngreso = LocalDate.of(1999, Month.MARCH, 15);
         LocalDate fechaSalida = LocalDate.of(2017, Month.JULY, 20);
+        
+        Date fechaIngresoDate = Date.from(fechaIngreso.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date fechaSalidaDate = Date.from(fechaSalida.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         IntegranteDTO nuevoIntegrante = new IntegranteDTO(
                 "Chester Bennington",
                 RolIntegrante.VOCALISTA,
-                fechaIngreso,
-                fechaSalida,
+                fechaIngresoDate,
+                fechaSalidaDate,
                 false
         );
 
@@ -125,7 +134,7 @@ public class IntegrantesDAOTest {
         IntegranteDTO nuevoIntegrante2 = new IntegranteDTO(
                 "Billie Joe Armstrong",
                 RolIntegrante.VOCALISTA,
-                fechaIngreso,
+                fechaIngresoDate,
                 null,
                 true
         );
@@ -143,12 +152,15 @@ public class IntegrantesDAOTest {
     public void testConsultarIntegrantePorId() {
         LocalDate fechaIngreso = LocalDate.of(1999, Month.MARCH, 15);
         LocalDate fechaSalida = LocalDate.of(2017, Month.JULY, 20);
+        
+        Date fechaIngresoDate = Date.from(fechaIngreso.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date fechaSalidaDate = Date.from(fechaSalida.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         IntegranteDTO nuevoIntegrante = new IntegranteDTO(
                 "Chester Bennington",
                 RolIntegrante.VOCALISTA,
-                fechaIngreso,
-                fechaSalida,
+                fechaIngresoDate,
+                fechaSalidaDate,
                 false
         );
 

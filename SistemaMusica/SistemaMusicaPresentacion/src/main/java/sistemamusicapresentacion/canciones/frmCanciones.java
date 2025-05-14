@@ -4,19 +4,26 @@
  */
 package sistemamusicapresentacion.canciones;
 
+import sistemamusicapresentacion.main.ControladorUniversal;
+
 /**
  *
  * @author gael_
  */
 public class frmCanciones extends javax.swing.JFrame {
 
+    ControladorCanciones controlador;
+    ControladorUniversal universal;
+    
     /**
      * Creates new form frmCanciones
      */
-    public frmCanciones() {
+    public frmCanciones(ControladorCanciones controlador, ControladorUniversal universal  ) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Canciones");
+        this.controlador=controlador;
+        this.universal=universal;
     }
 
     /**
@@ -69,6 +76,11 @@ public class frmCanciones extends javax.swing.JFrame {
 
         btnAlbumes.setBackground(new java.awt.Color(30, 215, 96));
         btnAlbumes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/musica.png"))); // NOI18N
+        btnAlbumes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlbumesActionPerformed(evt);
+            }
+        });
 
         btnCanciones.setBackground(new java.awt.Color(30, 215, 96));
         btnCanciones.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/disco.png"))); // NOI18N
@@ -86,6 +98,11 @@ public class frmCanciones extends javax.swing.JFrame {
 
         btnUsuario.setBackground(new java.awt.Color(30, 215, 96));
         btnUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/usuario.png"))); // NOI18N
+        btnUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUsuarioActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelVerdeLayout = new javax.swing.GroupLayout(panelVerde);
         panelVerde.setLayout(panelVerdeLayout);
@@ -236,12 +253,23 @@ public class frmCanciones extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnArtistasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArtistasActionPerformed
-        // TODO add your handling code here:
+        universal.mostrarModuloArtistas();
+        this.dispose();
     }//GEN-LAST:event_btnArtistasActionPerformed
 
     private void btnCancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancionesActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCancionesActionPerformed
+
+    private void btnAlbumesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlbumesActionPerformed
+        universal.mostrarModuloAlbumes();
+        this.dispose();
+    }//GEN-LAST:event_btnAlbumesActionPerformed
+
+    private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioActionPerformed
+        universal.mostrarModuloUsuarios();
+        this.dispose();
+    }//GEN-LAST:event_btnUsuarioActionPerformed
 
 
 

@@ -4,7 +4,7 @@
  */
 package sistemamusica.dtos;
 
-import java.time.LocalDate;
+import java.util.Date;
 import sistemamusicadominio.TipoContenido;
 
 /**
@@ -14,12 +14,12 @@ import sistemamusicadominio.TipoContenido;
 public class FavoritoDTO {
     private TipoContenido tipo; 
     private String idElemento; 
-    private LocalDate fechaAgregado;
+    private Date fechaAgregado;
 
     public FavoritoDTO() {
     }
 
-    public FavoritoDTO(TipoContenido tipo, String idElemento, LocalDate fechaAgregado) {
+    public FavoritoDTO(TipoContenido tipo, String idElemento, Date fechaAgregado) {
         this.tipo = tipo;
         this.idElemento = idElemento;
         this.fechaAgregado = fechaAgregado;
@@ -41,11 +41,11 @@ public class FavoritoDTO {
         this.idElemento = idElemento;
     }
 
-    public LocalDate getFechaAgregado() {
+    public Date getFechaAgregado() {
         return fechaAgregado;
     }
 
-    public void setFechaAgregado(LocalDate fechaAgregado) {
+    public void setFechaAgregado(Date fechaAgregado) {
         this.fechaAgregado = fechaAgregado;
     }
     

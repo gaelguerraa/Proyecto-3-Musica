@@ -4,19 +4,26 @@
  */
 package sistemamusicapresentacion.albumes;
 
+import sistemamusicapresentacion.main.ControladorUniversal;
+
 /**
  *
  * @author gael_
  */
 public class frmAlbumesPrincipal extends javax.swing.JFrame {
 
+    ControladorAlbumes controlador;
+    ControladorUniversal universal;
+    
     /**
      * Creates new form frmAlbumesPrincipal
      */
-    public frmAlbumesPrincipal() {
+    public frmAlbumesPrincipal(ControladorAlbumes controlador, ControladorUniversal universal) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Albumes");
+        this.controlador=controlador;
+        this.universal = universal;
     }
 
     /**
@@ -86,6 +93,11 @@ public class frmAlbumesPrincipal extends javax.swing.JFrame {
 
         btnUsuario.setBackground(new java.awt.Color(30, 215, 96));
         btnUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/usuario.png"))); // NOI18N
+        btnUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUsuarioActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelVerdeLayout = new javax.swing.GroupLayout(panelVerde);
         panelVerde.setLayout(panelVerdeLayout);
@@ -155,14 +167,14 @@ public class frmAlbumesPrincipal extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Imagen", "Nombre", "Genero", "Artista"
+                "Nombre", "Genero", "Artista"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -253,16 +265,24 @@ public class frmAlbumesPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnArtistasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArtistasActionPerformed
-        // TODO add your handling code here:
+        universal.mostrarModuloArtistas();
+        this.dispose();
     }//GEN-LAST:event_btnArtistasActionPerformed
 
     private void btnCancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancionesActionPerformed
-        // TODO add your handling code here:
+        universal.mostrarModuloCanciones();
+        this.dispose();
     }//GEN-LAST:event_btnCancionesActionPerformed
 
     private void btnAgregarAlbumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarAlbumActionPerformed
-        // TODO add your handling code here:
+        controlador.mostrarAgregarAlbum();
+        this.dispose();
     }//GEN-LAST:event_btnAgregarAlbumActionPerformed
+
+    private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioActionPerformed
+        universal.mostrarModuloUsuarios();
+        this.dispose();
+    }//GEN-LAST:event_btnUsuarioActionPerformed
 
 
 

@@ -4,7 +4,7 @@
  */
 package sistemamusicadominio;
 
-import java.time.LocalDate;
+import java.util.Date;
 import org.bson.types.ObjectId;
 
 /**
@@ -16,7 +16,7 @@ public class Favorito {
 
     private TipoContenido tipo;
     private ObjectId idContenido;
-    private LocalDate fecha;
+    private Date fecha;
 
     /**
      * Constructor por omision
@@ -32,7 +32,7 @@ public class Favorito {
      * @param idContenido ID del contenido
      * @param fecha Fecha en la que se agrego a favoritos
      */
-    public Favorito(TipoContenido tipo, ObjectId idContenido, LocalDate fecha) {
+    public Favorito(TipoContenido tipo, ObjectId idContenido, Date fecha) {
         this.tipo = tipo;
         this.idContenido = idContenido;
         this.fecha = fecha;
@@ -54,11 +54,11 @@ public class Favorito {
         this.idContenido = idContenido;
     }
 
-    public LocalDate getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 

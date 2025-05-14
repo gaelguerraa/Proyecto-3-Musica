@@ -10,13 +10,16 @@ package sistemamusicapresentacion.usuario;
  */
 public class frmCambiarDatos extends javax.swing.JFrame {
 
+    ControladorUsuario controlador; 
+    
     /**
      * Creates new form frmCambiarDatos
      */
-    public frmCambiarDatos() {
+    public frmCambiarDatos(ControladorUsuario controlador) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Actualizar Datos");
+        this.controlador=controlador;
     }
 
     /**
@@ -42,7 +45,6 @@ public class frmCambiarDatos extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(850, 550));
-        setPreferredSize(new java.awt.Dimension(850, 550));
 
         panelFondo.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -82,10 +84,20 @@ public class frmCambiarDatos extends javax.swing.JFrame {
         btnActualizar.setBackground(new java.awt.Color(30, 215, 96));
         btnActualizar.setFont(new java.awt.Font("Gotham Black", 1, 18)); // NOI18N
         btnActualizar.setText("Actualizar Datos");
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarActionPerformed(evt);
+            }
+        });
 
         btnVolver.setBackground(new java.awt.Color(30, 215, 96));
         btnVolver.setFont(new java.awt.Font("Gotham Black", 1, 18)); // NOI18N
         btnVolver.setText("Volver");
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
         panelFondo.setLayout(panelFondoLayout);
@@ -171,6 +183,16 @@ public class frmCambiarDatos extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        controlador.mostrarUsuarioPrincipal();
+        this.dispose();
+    }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        controlador.mostrarUsuarioPrincipal();
+        this.dispose();
+    }//GEN-LAST:event_btnActualizarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

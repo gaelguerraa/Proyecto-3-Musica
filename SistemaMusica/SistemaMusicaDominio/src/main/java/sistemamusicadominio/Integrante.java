@@ -4,7 +4,7 @@
  */
 package sistemamusicadominio;
 
-import java.time.LocalDate;
+import java.util.Date;
 import org.bson.types.ObjectId;
 
 /**
@@ -17,8 +17,8 @@ public class Integrante {
     private ObjectId id;
     private String nombre;
     private RolIntegrante rol;
-    private LocalDate fechaIngreso;
-    private LocalDate fechaSalida; // puede ser null
+    private Date fechaIngreso;
+    private Date fechaSalida; // puede ser null
     private boolean activo;
 
     /**
@@ -37,7 +37,7 @@ public class Integrante {
      * @param fechaSalida Fecha de salida del integrante (si aplica)
      * @param activo Si sigue activo el integrante
      */
-    public Integrante(String nombre, RolIntegrante rol, LocalDate fechaIngreso, LocalDate fechaSalida, boolean activo) {
+    public Integrante(String nombre, RolIntegrante rol, Date fechaIngreso, Date fechaSalida, boolean activo) {
         this.nombre = nombre;
         this.rol = rol;
         this.fechaIngreso = fechaIngreso;
@@ -69,19 +69,19 @@ public class Integrante {
         this.rol = rol;
     }
 
-    public LocalDate getFechaIngreso() {
+    public Date getFechaIngreso() {
         return fechaIngreso;
     }
 
-    public void setFechaIngreso(LocalDate fechaIngreso) {
+    public void setFechaIngreso(Date fechaIngreso) {
         this.fechaIngreso = fechaIngreso;
     }
 
-    public LocalDate getFechaSalida() {
+    public Date getFechaSalida() {
         return fechaSalida;
     }
 
-    public void setFechaSalida(LocalDate fechaSalida) {
+    public void setFechaSalida(Date fechaSalida) {
         this.fechaSalida = fechaSalida;
     }
 

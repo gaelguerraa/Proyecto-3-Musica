@@ -4,19 +4,26 @@
  */
 package sistemamusicapresentacion.usuario;
 
+import sistemamusicapresentacion.main.ControladorUniversal;
+
 /**
  *
  * @author gael_
  */
 public class frmRestringidosUsuario extends javax.swing.JFrame {
 
+    ControladorUsuario controlador;
+    ControladorUniversal universal;
+    
     /**
      * Creates new form frmRestringidosUsuario
      */
-    public frmRestringidosUsuario() {
+    public frmRestringidosUsuario(ControladorUsuario controlador, ControladorUniversal universal) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Restringidos");
+        this.controlador=controlador;
+        this.universal=universal;
     }
 
     /**
@@ -256,11 +263,13 @@ public class frmRestringidosUsuario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnArtistasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArtistasActionPerformed
-        // TODO add your handling code here:
+        universal.mostrarModuloArtistas();
+        this.dispose();
     }//GEN-LAST:event_btnArtistasActionPerformed
 
     private void btnCancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancionesActionPerformed
-        // TODO add your handling code here:
+        universal.mostrarModuloCanciones();
+        this.dispose();
     }//GEN-LAST:event_btnCancionesActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
@@ -268,7 +277,8 @@ public class frmRestringidosUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        // TODO add your handling code here:
+        controlador.mostrarUsuarioPrincipal();
+        this.dispose();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
 

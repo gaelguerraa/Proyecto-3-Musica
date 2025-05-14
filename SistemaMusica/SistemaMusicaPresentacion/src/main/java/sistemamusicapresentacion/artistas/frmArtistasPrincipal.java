@@ -4,17 +4,24 @@
  */
 package sistemamusicapresentacion.artistas;
 
+import sistemamusicapresentacion.main.ControladorUniversal;
+
 /**
  *
  * @author gael_
  */
 public class frmArtistasPrincipal extends javax.swing.JFrame {
 
+    ControladorArtistas controlador;
+    ControladorUniversal universal;
+    
     /**
      * Creates new form frmArtistasPrincipal
      */
-    public frmArtistasPrincipal() {
+    public frmArtistasPrincipal(ControladorArtistas controlador, ControladorUniversal universal) {
         initComponents();
+        this.controlador=controlador;
+        this.universal=universal;
     }
 
     /**
@@ -48,7 +55,6 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(850, 550));
-        setPreferredSize(new java.awt.Dimension(850, 550));
 
         panelFondo.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -70,6 +76,11 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
 
         btnAlbumes.setBackground(new java.awt.Color(30, 215, 96));
         btnAlbumes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/musica.png"))); // NOI18N
+        btnAlbumes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlbumesActionPerformed(evt);
+            }
+        });
 
         btnCanciones.setBackground(new java.awt.Color(30, 215, 96));
         btnCanciones.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/disco.png"))); // NOI18N
@@ -87,6 +98,11 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
 
         btnUsuario.setBackground(new java.awt.Color(30, 215, 96));
         btnUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/usuario.png"))); // NOI18N
+        btnUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUsuarioActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelVerdeLayout = new javax.swing.GroupLayout(panelVerde);
         panelVerde.setLayout(panelVerdeLayout);
@@ -271,7 +287,8 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnArtistasActionPerformed
 
     private void btnCancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancionesActionPerformed
-        // TODO add your handling code here:
+        universal.mostrarModuloCanciones();
+        this.dispose();
     }//GEN-LAST:event_btnCancionesActionPerformed
 
     private void btnAgregarSolistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarSolistaActionPerformed
@@ -281,6 +298,16 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
     private void btnAgregarBandaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarBandaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAgregarBandaActionPerformed
+
+    private void btnAlbumesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlbumesActionPerformed
+        universal.mostrarModuloAlbumes();
+        this.dispose();
+    }//GEN-LAST:event_btnAlbumesActionPerformed
+
+    private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioActionPerformed
+        universal.mostrarModuloUsuarios();
+        this.dispose();
+    }//GEN-LAST:event_btnUsuarioActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

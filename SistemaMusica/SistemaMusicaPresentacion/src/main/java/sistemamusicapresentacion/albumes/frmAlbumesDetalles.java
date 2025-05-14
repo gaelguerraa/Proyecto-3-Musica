@@ -4,19 +4,26 @@
  */
 package sistemamusicapresentacion.albumes;
 
+import sistemamusicapresentacion.main.ControladorUniversal;
+
 /**
  *
  * @author gael_
  */
 public class frmAlbumesDetalles extends javax.swing.JFrame {
 
+    ControladorAlbumes controlador;
+    ControladorUniversal universal;
+    
     /**
      * Creates new form frmAlbumesDetalles
      */
-    public frmAlbumesDetalles() {
+    public frmAlbumesDetalles(ControladorAlbumes controlador, ControladorUniversal universal) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Album Detalles");
+        this.controlador=controlador;
+        this.universal=universal;
     }
 
     /**
@@ -45,10 +52,10 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
         txtNombreArtista = new javax.swing.JTextField();
         txtAlbum = new javax.swing.JTextField();
         labelAlbum = new javax.swing.JLabel();
+        labelFoto = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(850, 550));
-        setPreferredSize(new java.awt.Dimension(850, 550));
 
         panelFondo.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -87,6 +94,11 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
 
         btnUsuario.setBackground(new java.awt.Color(30, 215, 96));
         btnUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/usuario.png"))); // NOI18N
+        btnUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUsuarioActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelVerdeLayout = new javax.swing.GroupLayout(panelVerde);
         panelVerde.setLayout(panelVerdeLayout);
@@ -190,6 +202,9 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
         labelAlbum.setForeground(new java.awt.Color(30, 215, 96));
         labelAlbum.setText("Albumes");
 
+        labelFoto.setForeground(new java.awt.Color(255, 255, 255));
+        labelFoto.setText("Mostrar Foto de album aqui");
+
         javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
         panelFondo.setLayout(panelFondoLayout);
         panelFondoLayout.setHorizontalGroup(
@@ -198,7 +213,7 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
                 .addComponent(panelVerde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -209,7 +224,9 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
                                 .addComponent(txtNombreArtista, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txtAlbum, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(390, 390, 390))))
+                                .addGap(73, 73, 73)
+                                .addComponent(labelFoto)
+                                .addGap(280, 280, 280))))
                     .addGroup(panelFondoLayout.createSequentialGroup()
                         .addGap(145, 145, 145)
                         .addComponent(labelAlbum, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -224,16 +241,21 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelAlbum, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
-                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnVolver)
+                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtNombreArtista)
-                            .addComponent(txtAlbum))))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(37, 37, 37)
+                        .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnVolver)
+                            .addGroup(panelFondoLayout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txtNombreArtista)
+                                    .addComponent(txtAlbum))))
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(labelFoto)))
                 .addContainerGap(89, Short.MAX_VALUE))
         );
 
@@ -252,20 +274,27 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnArtistasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArtistasActionPerformed
-        // TODO add your handling code here:
+        universal.mostrarModuloArtistas();
+        this.dispose();
     }//GEN-LAST:event_btnArtistasActionPerformed
 
     private void btnCancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancionesActionPerformed
-        // TODO add your handling code here:
+        universal.mostrarModuloCanciones();
+        this.dispose();
     }//GEN-LAST:event_btnCancionesActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        // TODO add your handling code here:
+        controlador.mostrarAlbumesPrincipal();
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void txtAlbumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAlbumActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtAlbumActionPerformed
+
+    private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioActionPerformed
+        universal.mostrarModuloUsuarios();
+        this.dispose();
+    }//GEN-LAST:event_btnUsuarioActionPerformed
 
 
 
@@ -280,6 +309,7 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
     private javax.swing.JLabel labelAlbumes;
     private javax.swing.JLabel labelArtistas;
     private javax.swing.JLabel labelCanciones;
+    private javax.swing.JLabel labelFoto;
     private javax.swing.JLabel labelMusicio1;
     private javax.swing.JLabel labelUsuario;
     private javax.swing.JPanel panelFondo;

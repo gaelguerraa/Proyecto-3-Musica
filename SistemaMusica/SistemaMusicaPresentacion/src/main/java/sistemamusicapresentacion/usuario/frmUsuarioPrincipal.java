@@ -4,19 +4,26 @@
  */
 package sistemamusicapresentacion.usuario;
 
+import sistemamusicapresentacion.main.ControladorUniversal;
+
 /**
  *
  * @author gael_
  */
 public class frmUsuarioPrincipal extends javax.swing.JFrame {
 
+    ControladorUsuario controlador;
+    ControladorUniversal universal;
+    
     /**
      * Creates new form frmUsuarioPrincipal
      */
-    public frmUsuarioPrincipal() {
+    public frmUsuarioPrincipal(ControladorUsuario controlador, ControladorUniversal universal) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Usuario");
+        this.controlador=controlador;
+        this.universal=universal;
     }
 
     /**
@@ -71,6 +78,11 @@ public class frmUsuarioPrincipal extends javax.swing.JFrame {
 
         btnAlbumes.setBackground(new java.awt.Color(30, 215, 96));
         btnAlbumes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/musica.png"))); // NOI18N
+        btnAlbumes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlbumesActionPerformed(evt);
+            }
+        });
 
         btnCanciones.setBackground(new java.awt.Color(30, 215, 96));
         btnCanciones.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/disco.png"))); // NOI18N
@@ -278,11 +290,13 @@ public class frmUsuarioPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnArtistas1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArtistas1ActionPerformed
-        // TODO add your handling code here:
+        universal.mostrarModuloAlbumes();
+        this.dispose();
     }//GEN-LAST:event_btnArtistas1ActionPerformed
 
     private void btnCancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancionesActionPerformed
-        // TODO add your handling code here:
+        universal.mostrarModuloCanciones();
+        this.dispose();
     }//GEN-LAST:event_btnCancionesActionPerformed
 
     private void btnRegistrarMasivamenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarMasivamenteActionPerformed
@@ -290,21 +304,28 @@ public class frmUsuarioPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrarMasivamenteActionPerformed
 
     private void btnFavoritosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFavoritosActionPerformed
-        // TODO add your handling code here:
+        controlador.mostrarFavoritosUsuario();
+        this.dispose();
     }//GEN-LAST:event_btnFavoritosActionPerformed
 
     private void btnCambiarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarDatosActionPerformed
-        // TODO add your handling code here:
+        controlador.mostrarCambiarDatos();
+        this.dispose();
     }//GEN-LAST:event_btnCambiarDatosActionPerformed
 
     private void btnRestringidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestringidosActionPerformed
-        // TODO add your handling code here:
+        controlador.mostrarRestringidosUsuario();
+        this.dispose();
     }//GEN-LAST:event_btnRestringidosActionPerformed
+
+    private void btnAlbumesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlbumesActionPerformed
+        universal.mostrarModuloAlbumes();
+        this.dispose();
+    }//GEN-LAST:event_btnAlbumesActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAlbumes;
-    private javax.swing.JButton btnArtistas;
     private javax.swing.JButton btnArtistas1;
     private javax.swing.JButton btnCambiarDatos;
     private javax.swing.JButton btnCanciones;
@@ -322,9 +343,7 @@ public class frmUsuarioPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel labelFoto;
     private javax.swing.JLabel labelMusicio1;
     private javax.swing.JLabel labelUsuario;
-    private javax.swing.JPanel panelFondo;
     private javax.swing.JPanel panelFondo1;
-    private javax.swing.JPanel panelVerde;
     private javax.swing.JPanel panelVerde1;
     // End of variables declaration//GEN-END:variables
 }

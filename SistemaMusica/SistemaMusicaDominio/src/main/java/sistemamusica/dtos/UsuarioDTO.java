@@ -6,6 +6,7 @@ package sistemamusica.dtos;
 
 import java.util.List;
 import sistemamusicadominio.Favorito;
+import sistemamusicadominio.Genero;
 
 /**
  *
@@ -18,12 +19,12 @@ public class UsuarioDTO {
     private String contrasenia;
     private String imagenPerfil;
     private List<Favorito> favoritos;
-    private List<String> restricciones;
+    private List<Genero> restricciones;
 
     public UsuarioDTO() {
     }
 
-    public UsuarioDTO(String username, String email, String contrasenia, String imagenPerfil, List<Favorito> favoritos, List<String> restricciones) {
+    public UsuarioDTO(String username, String email, String contrasenia, String imagenPerfil, List<Favorito> favoritos, List<Genero> restricciones) {
         this.username = username;
         this.email = email;
         this.contrasenia = contrasenia;
@@ -80,11 +81,11 @@ public class UsuarioDTO {
         this.favoritos = favoritos;
     }
 
-    public List<String> getRestricciones() {
+    public List<Genero> getRestricciones() {
         return restricciones;
     }
 
-    public void setRestricciones(List<String> restricciones) {
+    public void setRestricciones(List<Genero> restricciones) {
         this.restricciones = restricciones;
     }
     

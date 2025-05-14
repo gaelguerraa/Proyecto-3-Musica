@@ -4,8 +4,10 @@
  */
 package sistemamusica.dtos;
 
-import java.time.LocalDate;
+
+import java.util.Date;
 import java.util.List;
+import sistemamusicadominio.Genero;
 
 /**
  *
@@ -14,22 +16,22 @@ import java.util.List;
 public class AlbumDTO {
     private String id;
     private String nombre;
-    private LocalDate fechaLanzamiento;
-    private String genero;
+    private Date fechaLanzamiento;
+    private Genero genero;
     private String imagenPortada;
     private String idArtista;
-    private List<CancionDTO> canciones;
+    private List<String> idCanciones;
 
     public AlbumDTO() {
     }
 
-    public AlbumDTO(String nombre, LocalDate fechaLanzamiento, String genero, String imagenPortada, String idArtista, List<CancionDTO> canciones) {
+    public AlbumDTO(String nombre, Date fechaLanzamiento, Genero genero, String imagenPortada, String idArtista, List<String> idCanciones) {
         this.nombre = nombre;
         this.fechaLanzamiento = fechaLanzamiento;
         this.genero = genero;
         this.imagenPortada = imagenPortada;
         this.idArtista = idArtista;
-        this.canciones = canciones;
+        this.idCanciones = idCanciones;
     }
 
     public String getId() {
@@ -48,19 +50,19 @@ public class AlbumDTO {
         this.nombre = nombre;
     }
 
-    public LocalDate getFechaLanzamiento() {
+    public Date getFechaLanzamiento() {
         return fechaLanzamiento;
     }
 
-    public void setFechaLanzamiento(LocalDate fechaLanzamiento) {
+    public void setFechaLanzamiento(Date fechaLanzamiento) {
         this.fechaLanzamiento = fechaLanzamiento;
     }
 
-    public String getGenero() {
+    public Genero getGenero() {
         return genero;
     }
 
-    public void setGenero(String genero) {
+    public void setGenero(Genero genero) {
         this.genero = genero;
     }
 
@@ -80,12 +82,12 @@ public class AlbumDTO {
         this.idArtista = idArtista;
     }
 
-    public List<CancionDTO> getCanciones() {
-        return canciones;
+    public List<String> getidCanciones() {
+        return idCanciones;
     }
 
-    public void setCanciones(List<CancionDTO> canciones) {
-        this.canciones = canciones;
+    public void setCanciones(List<String> idCanciones) {
+        this.idCanciones = idCanciones;
     }
     
     

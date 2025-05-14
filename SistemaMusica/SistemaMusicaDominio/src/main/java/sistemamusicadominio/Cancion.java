@@ -4,6 +4,8 @@
  */
 package sistemamusicadominio;
 
+import org.bson.types.ObjectId;
+
 /**
  * Clase entidad de la Cancion
  *
@@ -11,8 +13,11 @@ package sistemamusicadominio;
  */
 public class Cancion {
 
+    private ObjectId id;
     private String titulo;
     private float duracion;
+    private ObjectId idAlbum;
+    private ObjectId idArtista;
 
     /**
      * Constructor por omision
@@ -20,16 +25,19 @@ public class Cancion {
     public Cancion() {
     }
 
-    /**
-     * Constructor que inicializa los atributos de la clase al valor de sus
-     * parametros
-     *
-     * @param titulo Titulo de la cancion
-     * @param duracion Duracion de la cancion
-     */
-    public Cancion(String titulo, float duracion) {
+    public Cancion(String titulo, float duracion, ObjectId idAlbum, ObjectId idArtista) {
         this.titulo = titulo;
         this.duracion = duracion;
+        this.idAlbum = idAlbum;
+        this.idArtista = idArtista;
+    }
+
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 
     public String getTitulo() {
@@ -47,5 +55,23 @@ public class Cancion {
     public void setDuracion(float duracion) {
         this.duracion = duracion;
     }
+
+    public ObjectId getIdAlbum() {
+        return idAlbum;
+    }
+
+    public void setIdAlbum(ObjectId idAlbum) {
+        this.idAlbum = idAlbum;
+    }
+
+    public ObjectId getIdArtista() {
+        return idArtista;
+    }
+
+    public void setIdArtista(ObjectId idArtista) {
+        this.idArtista = idArtista;
+    }
+
+    
 
 }

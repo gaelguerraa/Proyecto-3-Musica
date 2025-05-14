@@ -4,7 +4,7 @@
  */
 package sistemamusicadominio;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import org.bson.types.ObjectId;
 
@@ -17,11 +17,11 @@ public class Album {
 
     private ObjectId id;
     private String nombre;
-    private LocalDate fechaLanzamiento;
+    private Date fechaLanzamiento;
     private Genero genero;
     private String imagenPortada;
     private ObjectId idArtista;
-    private List<Cancion> canciones;
+    private List<ObjectId> canciones;
 
     /**
      * Constructor por omision
@@ -29,18 +29,7 @@ public class Album {
     public Album() {
     }
 
-    /**
-     * Consturctor que inicializa los atributos de la clase al valor de sus
-     * parametros
-     *
-     * @param nombre Nombre del album
-     * @param fechaLanzamiento Fecha de lanzamiento del album
-     * @param genero Genero del album
-     * @param imagenPortada Liga de la imagen de la portada del album
-     * @param idArtista ID del artista que realizo el album
-     * @param canciones Canciones con las que cuenta el album
-     */
-    public Album(String nombre, LocalDate fechaLanzamiento, Genero genero, String imagenPortada, ObjectId idArtista, List<Cancion> canciones) {
+    public Album(String nombre, Date fechaLanzamiento, Genero genero, String imagenPortada, ObjectId idArtista, List<ObjectId> canciones) {
         this.nombre = nombre;
         this.fechaLanzamiento = fechaLanzamiento;
         this.genero = genero;
@@ -65,11 +54,11 @@ public class Album {
         this.nombre = nombre;
     }
 
-    public LocalDate getFechaLanzamiento() {
+    public Date getFechaLanzamiento() {
         return fechaLanzamiento;
     }
 
-    public void setFechaLanzamiento(LocalDate fechaLanzamiento) {
+    public void setFechaLanzamiento(Date fechaLanzamiento) {
         this.fechaLanzamiento = fechaLanzamiento;
     }
 
@@ -97,12 +86,14 @@ public class Album {
         this.idArtista = idArtista;
     }
 
-    public List<Cancion> getCanciones() {
+    public List<ObjectId> getCanciones() {
         return canciones;
     }
 
-    public void setCanciones(List<Cancion> canciones) {
+    public void setCanciones(List<ObjectId> canciones) {
         this.canciones = canciones;
     }
+
+    
 
 }

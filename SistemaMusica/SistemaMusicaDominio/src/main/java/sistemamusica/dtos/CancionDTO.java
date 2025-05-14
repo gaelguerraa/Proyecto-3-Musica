@@ -9,15 +9,28 @@ package sistemamusica.dtos;
  * @author gael_
  */
 public class CancionDTO {
+    private String id;
     private String titulo;
     private float duracion;
+    private String idAlbum;
+    private String idArtista;
 
     public CancionDTO() {
     }
 
-    public CancionDTO(String titulo, float duracion) {
+    public CancionDTO(String titulo, float duracion, String idAlbum, String idArtista) {
         this.titulo = titulo;
         this.duracion = duracion;
+        this.idAlbum = idAlbum;
+        this.idArtista = idArtista;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitulo() {
@@ -35,6 +48,24 @@ public class CancionDTO {
     public void setDuracion(float duracion) {
         this.duracion = duracion;
     }
+
+    public String getIdAlbum() {
+        return idAlbum;
+    }
+
+    public void setIdAlbum(String idAlbum) {
+        this.idAlbum = idAlbum;
+    }
+
+    public String getIdArtista() {
+        return idArtista;
+    }
+
+    public void setIdArtista(String idArtista) {
+        this.idArtista = idArtista;
+    }
+
+    
     
     
 }

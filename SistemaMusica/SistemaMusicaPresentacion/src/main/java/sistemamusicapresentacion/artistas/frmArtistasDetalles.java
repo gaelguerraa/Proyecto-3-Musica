@@ -4,19 +4,26 @@
  */
 package sistemamusicapresentacion.artistas;
 
+import sistemamusicapresentacion.main.ControladorUniversal;
+
 /**
  *
  * @author gael_
  */
 public class frmArtistasDetalles extends javax.swing.JFrame {
 
+    ControladorArtistas controlador;
+    ControladorUniversal universal;
+    
     /**
      * Creates new form frmArtistasDetalles
      */
-    public frmArtistasDetalles() {
+    public frmArtistasDetalles(ControladorArtistas controlador, ControladorUniversal universal) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Artistas Detalles");
+        this.controlador=controlador;
+        this.universal=universal;
     }
 
     /**
@@ -71,6 +78,11 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
 
         btnAlbumes.setBackground(new java.awt.Color(30, 215, 96));
         btnAlbumes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/musica.png"))); // NOI18N
+        btnAlbumes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlbumesActionPerformed(evt);
+            }
+        });
 
         btnCanciones.setBackground(new java.awt.Color(30, 215, 96));
         btnCanciones.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/disco.png"))); // NOI18N
@@ -88,6 +100,11 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
 
         btnUsuario.setBackground(new java.awt.Color(30, 215, 96));
         btnUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/usuario.png"))); // NOI18N
+        btnUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUsuarioActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelVerdeLayout = new javax.swing.GroupLayout(panelVerde);
         panelVerde.setLayout(panelVerdeLayout);
@@ -266,12 +283,24 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
     }//GEN-LAST:event_btnArtistasActionPerformed
 
     private void btnCancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancionesActionPerformed
-        // TODO add your handling code here:
+        universal.mostrarModuloCanciones();
+        this.dispose();
     }//GEN-LAST:event_btnCancionesActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        // TODO add your handling code here:
+        controlador.mostrarArtistasPrincipal();
+        this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void btnAlbumesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlbumesActionPerformed
+        universal.mostrarModuloAlbumes();
+        this.dispose();
+    }//GEN-LAST:event_btnAlbumesActionPerformed
+
+    private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioActionPerformed
+        universal.mostrarModuloUsuarios();
+        this.dispose();
+    }//GEN-LAST:event_btnUsuarioActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

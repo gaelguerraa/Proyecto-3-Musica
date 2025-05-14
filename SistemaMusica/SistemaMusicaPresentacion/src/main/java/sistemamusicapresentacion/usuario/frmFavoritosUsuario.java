@@ -4,19 +4,26 @@
  */
 package sistemamusicapresentacion.usuario;
 
+import sistemamusicapresentacion.main.ControladorUniversal;
+
 /**
  *
  * @author gael_
  */
 public class frmFavoritosUsuario extends javax.swing.JFrame {
 
+    ControladorUsuario controlador;
+    ControladorUniversal universal;
+    
     /**
      * Creates new form frmFavoritosUsuario
      */
-    public frmFavoritosUsuario() {
+    public frmFavoritosUsuario(ControladorUsuario controlador,ControladorUniversal universal) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Favoritos");
+        this.controlador=controlador;
+        this.universal=universal;
     }
 
     /**
@@ -46,6 +53,7 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaFavoritos = new javax.swing.JTable();
         btnBorrarFavorito = new javax.swing.JButton();
+        btnVolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -69,6 +77,11 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
 
         btnAlbumes.setBackground(new java.awt.Color(30, 215, 96));
         btnAlbumes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/musica.png"))); // NOI18N
+        btnAlbumes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlbumesActionPerformed(evt);
+            }
+        });
 
         btnCanciones.setBackground(new java.awt.Color(30, 215, 96));
         btnCanciones.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/disco.png"))); // NOI18N
@@ -184,37 +197,45 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
             }
         });
 
+        btnVolver.setBackground(new java.awt.Color(30, 215, 96));
+        btnVolver.setFont(new java.awt.Font("Gotham Black", 1, 18)); // NOI18N
+        btnVolver.setText("Volver");
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
         panelFondo.setLayout(panelFondoLayout);
         panelFondoLayout.setHorizontalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addComponent(panelVerde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(58, 58, 58)
                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelFondoLayout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(panelFondoLayout.createSequentialGroup()
-                                .addComponent(comboboxFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(panelFondoLayout.createSequentialGroup()
-                                        .addComponent(labelFavoritos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGap(107, 107, 107)
-                                        .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(panelFondoLayout.createSequentialGroup()
-                                        .addComponent(txtBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 6, Short.MAX_VALUE)))
-                                .addContainerGap())))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
+                        .addComponent(btnVolver)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnBorrarFavorito, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(220, 220, 220))))
+                        .addGap(220, 220, 220))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addComponent(comboboxFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelFondoLayout.createSequentialGroup()
+                                .addComponent(labelFavoritos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(107, 107, 107)
+                                .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelFondoLayout.createSequentialGroup()
+                                .addComponent(txtBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 6, Short.MAX_VALUE)))
+                        .addContainerGap())))
         );
         panelFondoLayout.setVerticalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -233,7 +254,9 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnBorrarFavorito)
+                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnBorrarFavorito)
+                    .addComponent(btnVolver))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
@@ -252,16 +275,28 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnArtistasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArtistasActionPerformed
-        // TODO add your handling code here:
+        universal.mostrarModuloArtistas();
+        this.dispose();
     }//GEN-LAST:event_btnArtistasActionPerformed
 
     private void btnCancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancionesActionPerformed
-        // TODO add your handling code here:
+        universal.mostrarModuloCanciones();
+        this.dispose();
     }//GEN-LAST:event_btnCancionesActionPerformed
 
     private void btnBorrarFavoritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarFavoritoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnBorrarFavoritoActionPerformed
+
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        controlador.mostrarUsuarioPrincipal();
+        this.dispose();
+    }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void btnAlbumesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlbumesActionPerformed
+        universal.mostrarModuloAlbumes();
+        this.dispose();
+    }//GEN-LAST:event_btnAlbumesActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -271,6 +306,7 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCanciones;
     private javax.swing.JButton btnUsuario;
+    private javax.swing.JButton btnVolver;
     private javax.swing.JComboBox<String> comboboxFiltro;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelAlbumes;

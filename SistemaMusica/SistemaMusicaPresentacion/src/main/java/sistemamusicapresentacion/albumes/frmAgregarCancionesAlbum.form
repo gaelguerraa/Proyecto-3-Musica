@@ -3,9 +3,6 @@
 <Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
-    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[850, 550]"/>
-    </Property>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -26,17 +23,17 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="panelFondo" alignment="0" max="32767" attributes="0"/>
+          <Component id="panelFondo2" alignment="1" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="panelFondo" alignment="1" max="32767" attributes="0"/>
+          <Component id="panelFondo2" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="javax.swing.JPanel" name="panelFondo">
+    <Container class="javax.swing.JPanel" name="panelFondo2">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="0" green="0" red="0" type="rgb"/>
@@ -47,33 +44,26 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="panelVerde" min="-2" max="-2" attributes="0"/>
+                  <Component id="panelVerde2" min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="1" attributes="0">
-                                  <Component id="jScrollPane1" min="-2" pref="659" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <Component id="btnVolver" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                                  <Component id="txtNombreArtista" min="-2" pref="89" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="txtAlbum" min="-2" pref="88" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="73" max="-2" attributes="0"/>
-                                  <Component id="labelFoto" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="280" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="145" max="-2" attributes="0"/>
-                          <Component id="labelAlbum" min="-2" pref="174" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Component id="labelMusicio1" min="-2" pref="207" max="-2" attributes="0"/>
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace pref="141" max="32767" attributes="0"/>
+                          <Component id="textoAgregarCancion" min="-2" pref="381" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
+                          <Component id="labelMusicio1" min="-2" pref="207" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="278" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="txtNombreCancion" min="-2" pref="223" max="-2" attributes="0"/>
+                              <Component id="labelNombreCancin" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelDuracion" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtDuracion" alignment="0" min="-2" pref="223" max="-2" attributes="0"/>
+                              <Component id="btnAgregarCancionAlbum" alignment="0" min="-2" pref="210" max="-2" attributes="0"/>
+                              <Component id="btnTerminar" alignment="0" min="-2" pref="210" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -81,40 +71,34 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="panelVerde" alignment="0" max="32767" attributes="0"/>
+              <Component id="panelVerde2" alignment="0" max="32767" attributes="0"/>
               <Group type="102" alignment="0" attributes="0">
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="labelMusicio1" alignment="1" min="-2" pref="85" max="-2" attributes="0"/>
-                      <Component id="labelAlbum" alignment="1" min="-2" pref="55" max="-2" attributes="0"/>
-                  </Group>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="btnVolver" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="txtNombreArtista" alignment="3" max="32767" attributes="0"/>
-                                      <Component id="txtAlbum" alignment="3" max="32767" attributes="0"/>
-                                  </Group>
-                              </Group>
-                          </Group>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="jScrollPane1" min="-2" pref="295" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="labelMusicio1" min="-2" pref="85" max="-2" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
-                          <Component id="labelFoto" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
+                          <Component id="textoAgregarCancion" min="-2" pref="55" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
+                          <Component id="labelNombreCancin" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="txtNombreCancion" min="-2" pref="30" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="89" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="labelDuracion" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="txtDuracion" min="-2" pref="30" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
+                  <Component id="btnAgregarCancionAlbum" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
+                  <Component id="btnTerminar" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Container class="javax.swing.JPanel" name="panelVerde">
+        <Container class="javax.swing.JPanel" name="panelVerde2">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="60" green="d7" red="1e" type="rgb"/>
@@ -125,26 +109,30 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="labelCanciones" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="labelUsuario" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="btnUsuario" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="labelCanciones" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="labelAlbumes" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                                              <Component id="btnCanciones" alignment="1" min="-2" max="-2" attributes="0"/>
+                                              <Component id="btnAlbumes" alignment="1" min="-2" max="-2" attributes="0"/>
+                                              <Component id="btnArtistas2" alignment="1" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Component id="labelArtistas" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
                               </Group>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="labelAlbumes" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Group type="103" alignment="0" groupAlignment="1" attributes="0">
-                                      <Component id="btnCanciones" alignment="1" min="-2" max="-2" attributes="0"/>
-                                      <Component id="btnAlbumes" alignment="1" min="-2" max="-2" attributes="0"/>
-                                      <Component id="btnArtistas" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="labelArtistas" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="labelUsuario" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnUsuario" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -156,7 +144,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
-                      <Component id="btnArtistas" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnArtistas2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="labelArtistas" min="-2" pref="18" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
@@ -167,17 +155,17 @@
                       <Component id="btnCanciones" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="labelCanciones" min="-2" pref="18" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="144" max="32767" attributes="0"/>
                       <Component id="btnUsuario" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="labelUsuario" min="-2" pref="18" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JButton" name="btnArtistas">
+            <Component class="javax.swing.JButton" name="btnArtistas2">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="60" green="d7" red="1e" type="rgb"/>
@@ -187,7 +175,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnArtistasActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnArtistas2ActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="labelArtistas">
@@ -260,25 +248,6 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="javax.swing.JScrollPane" name="jScrollPane1">
-
-          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-          <SubComponents>
-            <Component class="javax.swing.JTable" name="tablaAlbumDetalles">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Gotham Black" size="12" style="1"/>
-                </Property>
-                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="2" rowCount="0">
-                    <Column editable="false" title="Nombre" type="java.lang.String"/>
-                    <Column editable="false" title="Duracion" type="java.lang.String"/>
-                  </Table>
-                </Property>
-              </Properties>
-            </Component>
-          </SubComponents>
-        </Container>
         <Component class="javax.swing.JLabel" name="labelMusicio1">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -290,42 +259,7 @@
             <Property name="text" type="java.lang.String" value="Music.io"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="btnVolver">
-          <Properties>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="60" green="d7" red="1e" type="rgb"/>
-            </Property>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Gotham Black" size="18" style="1"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Volver"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVolverActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JTextField" name="txtNombreArtista">
-          <Properties>
-            <Property name="editable" type="boolean" value="false"/>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Gotham Black" size="14" style="1"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Artista"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="txtAlbum">
-          <Properties>
-            <Property name="editable" type="boolean" value="false"/>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Gotham Black" size="14" style="1"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Album"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtAlbumActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JLabel" name="labelAlbum">
+        <Component class="javax.swing.JLabel" name="textoAgregarCancion">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Gotham Black" size="36" style="1"/>
@@ -333,16 +267,65 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="60" green="d7" red="1e" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Albumes"/>
+            <Property name="text" type="java.lang.String" value="Agregar Canciones"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="labelFoto">
+        <Component class="javax.swing.JButton" name="btnTerminar">
           <Properties>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="60" green="d7" red="1e" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Mostrar Foto de album aqui"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Gotham Black" size="18" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Terminar"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTerminarActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnAgregarCancionAlbum">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="60" green="d7" red="1e" type="rgb"/>
+            </Property>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Gotham Black" size="18" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Agregar Cancion"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAgregarCancionAlbumActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="labelNombreCancin">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Gotham Bold" size="14" style="1"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="60" green="d7" red="1e" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="nombre de la cancion:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtNombreCancion">
+        </Component>
+        <Component class="javax.swing.JLabel" name="labelDuracion">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Gotham Bold" size="14" style="1"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="60" green="d7" red="1e" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="duracion:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtDuracion">
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtDuracionActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
