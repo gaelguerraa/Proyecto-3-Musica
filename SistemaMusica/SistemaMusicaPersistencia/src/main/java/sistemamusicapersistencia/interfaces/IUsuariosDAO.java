@@ -21,4 +21,12 @@ public interface IUsuariosDAO {
      */
     public Usuario agregarUsuario(UsuarioDTO nuevoUsuario);
 
+    /**
+     * Metodo para consultar un usuario en base a un id en la base de datos
+     *
+     * @param idUsuario ID del usuario a buscar
+     * @return Usuario obtenido con el id mencionado
+     */
+    public Usuario consultarPorId(String idUsuario);
+
 }

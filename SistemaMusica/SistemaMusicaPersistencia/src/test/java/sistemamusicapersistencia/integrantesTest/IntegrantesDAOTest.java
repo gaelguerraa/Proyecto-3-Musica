@@ -105,7 +105,7 @@ public class IntegrantesDAOTest {
     }
 
     @Test
-    public void testConsultarTodos() {
+    public void testConsultarTodosIntegrantesOk() {
         final int CANTIDAD_LISTA = 2;
 
         LocalDate fechaIngreso = LocalDate.of(1999, Month.MARCH, 15);
@@ -140,7 +140,7 @@ public class IntegrantesDAOTest {
     }
 
     @Test
-    public void testConsultarPorId() {
+    public void testConsultarIntegrantePorId() {
         LocalDate fechaIngreso = LocalDate.of(1999, Month.MARCH, 15);
         LocalDate fechaSalida = LocalDate.of(2017, Month.JULY, 20);
 

@@ -52,7 +52,7 @@ public class UsuariosDAOTest {
     public void testAgregarUsuarioSinImagenSinFavoritosSinRestriccionesOk() {
         final String CONTRASENIA_ENCRIPTADA = "bec5dd096ebf60d66caf925de00f7aa011c988a99928ae90b453070f6fcdbe1b";
         final String DIRECTORIO_IMAGEN_PLACEHOLDER = "userImages/userPlaceholder.jpg";
-        
+
         UsuarioDTO nuevoUsuario = new UsuarioDTO(
                 "BartoloXD",
                 "bartoloSabritones@gmail.com",
@@ -72,6 +72,30 @@ public class UsuariosDAOTest {
         assertNull(usuarioAgregado.getFavoritos());
         assertNull(usuarioAgregado.getRestricciones());
 
+    }
+
+    @Test
+    public void testConsultarUsuarioPorId() {
+        UsuarioDTO nuevoUsuario = new UsuarioDTO(
+                "BartoloXD",
+                "bartoloSabritones@gmail.com",
+                "123contrasenia123",
+                null,
+                null,
+                null
+        );
+
+        Usuario usuarioAgregado = usuariosDAO.agregarUsuario(nuevoUsuario);
+        usuarioGuardado = usuarioAgregado; // Comentar esta linea para ver en MongoDB
+
+        System.out.println(usuarioAgregado.getId().toString());
+
+        String ID_OBTENIDA = usuarioAgregado.getId().toString();
+
+        Usuario usuarioObtenido = usuariosDAO.consultarPorId(ID_OBTENIDA);
+
+        assertNotNull(usuarioObtenido);
+        assertEquals(ID_OBTENIDA, usuarioObtenido.getId().toString());
     }
 
 }

@@ -4,11 +4,14 @@
  */
 package sistemamusicapersistencia.implementaciones;
 
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import org.bson.Document;
+import org.bson.types.ObjectId;
 import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicadominio.Integrante;
 import sistemamusicadominio.Usuario;
@@ -65,6 +68,26 @@ public class UsuariosDAO implements IUsuariosDAO {
             System.out.println("No se pudo encriptar la contraseña: " + e);
             return null;
         }
+    }
+
+    /**
+     * Metodo para consultar un usuario en base a un id en la base de datos
+     *
+     * @param idUsuario ID del usuario a buscar
+     * @return Usuario obtenido con el id mencionado
+     */
+    @Override
+    public Usuario consultarPorId(String idUsuario) {
+        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Usuario> coleccion = baseDatos.getCollection(
+                COLECCION, Usuario.class);
+
+        Document filtros = new Document();
+        filtros.append(CAMPO_ID, new ObjectId(idUsuario));
+        FindIterable<Usuario> usuarios = coleccion.find(filtros);
+        Usuario usuario = usuarios.first();
+
+        return usuario;
     }
 
     /**
