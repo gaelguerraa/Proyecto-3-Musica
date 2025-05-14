@@ -76,6 +76,9 @@ public class UsuariosDAOTest {
 
     @Test
     public void testConsultarUsuarioPorId() {
+        final String CONTRASENIA_ENCRIPTADA = "bec5dd096ebf60d66caf925de00f7aa011c988a99928ae90b453070f6fcdbe1b";
+        final String DIRECTORIO_IMAGEN_PLACEHOLDER = "userImages/userPlaceholder.jpg";
+
         UsuarioDTO nuevoUsuario = new UsuarioDTO(
                 "BartoloXD",
                 "bartoloSabritones@gmail.com",
@@ -96,6 +99,48 @@ public class UsuariosDAOTest {
 
         assertNotNull(usuarioObtenido);
         assertEquals(ID_OBTENIDA, usuarioObtenido.getId().toString());
+        assertEquals(CONTRASENIA_ENCRIPTADA, usuarioObtenido.getContrasenia());
+        assertEquals(DIRECTORIO_IMAGEN_PLACEHOLDER, usuarioObtenido.getImagenPerfil());
+    }
+
+    @Test
+    public void testModificarUsuario() {
+        final String CONTRASENIA_ENCRIPTADA = "19cdf9613859fb11858c564cb02e00596b9bc1414c724fe9a4ca38ed79bd2254";
+        final String DIRECTORIO_IMAGEN_PLACEHOLDER = "userImages/user123.jpg";
+
+        UsuarioDTO nuevoUsuario = new UsuarioDTO(
+                "BartoloXD",
+                "bartoloSabritones@gmail.com",
+                "123contrasenia123",
+                null,
+                null,
+                null
+        );
+
+        Usuario usuarioAgregado = usuariosDAO.agregarUsuario(nuevoUsuario);
+        usuarioGuardado = usuarioAgregado; // Comentar esta linea para ver en MongoDB
+
+        System.out.println(usuarioAgregado.getId().toString());
+
+        String ID_OBTENIDA = usuarioAgregado.getId().toString();
+
+        UsuarioDTO nuevaInformacion = new UsuarioDTO(
+                "BartoloXD240",
+                "bartoloSabritones123@gmail.com",
+                "holaSoyBartolo",
+                "userImages/user123.jpg",
+                null,
+                null
+        );
+
+        Usuario usuarioObtenido = usuariosDAO.modificarUsuario(ID_OBTENIDA, nuevaInformacion);
+
+        System.out.println("Nueva contrasenia encriptada: " + usuarioObtenido.getContrasenia());
+
+        assertEquals("BartoloXD240", usuarioObtenido.getUsername());
+        assertEquals("bartoloSabritones123@gmail.com", usuarioObtenido.getEmail());
+        assertEquals(CONTRASENIA_ENCRIPTADA, usuarioObtenido.getContrasenia());
+        assertEquals(DIRECTORIO_IMAGEN_PLACEHOLDER, usuarioObtenido.getImagenPerfil());
     }
 
 }

@@ -29,4 +29,13 @@ public interface IUsuariosDAO {
      */
     public Usuario consultarPorId(String idUsuario);
 
+    /**
+     * Metodo para modificar un usuario especificado por su id
+     *
+     * @param idUsuario ID del usuario a modificar
+     * @param datosActualizados Datos a actualizar del usuario
+     * @return Usuario modificado de la base de datos
+     */
+    public Usuario modificarUsuario(String idUsuario, UsuarioDTO datosActualizados);
+
 }

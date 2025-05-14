@@ -7,13 +7,13 @@ package sistemamusicapersistencia.implementaciones;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import sistemamusica.dtos.UsuarioDTO;
-import sistemamusicadominio.Integrante;
 import sistemamusicadominio.Usuario;
 import sistemamusicapersistencia.interfaces.IUsuariosDAO;
 
@@ -88,6 +88,52 @@ public class UsuariosDAO implements IUsuariosDAO {
         Usuario usuario = usuarios.first();
 
         return usuario;
+    }
+
+    /**
+     * Metodo para modificar un usuario especificado por su id
+     *
+     * @param idUsuario ID del usuario a modificar
+     * @param datosActualizados Datos a actualizar del usuario
+     * @return Usuario modificado de la base de datos
+     */
+    @Override
+    public Usuario modificarUsuario(String idUsuario, UsuarioDTO datosActualizados) {
+        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Usuario> coleccion = baseDatos.getCollection(
+                COLECCION, Usuario.class);
+
+        Document camposActualizar = new Document();
+
+        if (datosActualizados.getUsername() != null) {
+            camposActualizar.append(CAMPO_USERNAME, datosActualizados.getUsername());
+        }
+        if (datosActualizados.getEmail() != null) {
+            camposActualizar.append(CAMPO_EMAIL, datosActualizados.getEmail());
+        }
+        if (datosActualizados.getContrasenia() != null) {
+            try {
+                camposActualizar.append(CAMPO_CONTRASENIA, encriptarContrasenia(
+                        datosActualizados.getContrasenia()));
+            } catch (NoSuchAlgorithmException e) {
+                System.out.println("Error al encriptar la contraseña: " + e.getMessage());
+                return null;
+            }
+        }
+        if (datosActualizados.getImagenPerfil() != null) {
+            camposActualizar.append(CAMPO_IMAGEN_PERFIL, datosActualizados.getImagenPerfil());
+        }
+
+        if (camposActualizar.isEmpty()) {
+            System.out.println("No hay campos para actualizar.");
+            return null;
+        }
+
+        Document actualizacion = new Document("$set", camposActualizar);
+
+        coleccion.updateOne(Filters.eq(CAMPO_ID, new ObjectId(idUsuario)), actualizacion);
+        
+        return consultarPorId(idUsuario);
     }
 
     /**
