@@ -18,7 +18,7 @@ public class Album {
     private ObjectId id;
     private String nombre;
     private LocalDate fechaLanzamiento;
-    private String genero;
+    private Genero genero;
     private String imagenPortada;
     private ObjectId idArtista;
     private List<Cancion> canciones;
@@ -40,7 +40,7 @@ public class Album {
      * @param idArtista ID del artista que realizo el album
      * @param canciones Canciones con las que cuenta el album
      */
-    public Album(String nombre, LocalDate fechaLanzamiento, String genero, String imagenPortada, ObjectId idArtista, List<Cancion> canciones) {
+    public Album(String nombre, LocalDate fechaLanzamiento, Genero genero, String imagenPortada, ObjectId idArtista, List<Cancion> canciones) {
         this.nombre = nombre;
         this.fechaLanzamiento = fechaLanzamiento;
         this.genero = genero;
@@ -53,8 +53,8 @@ public class Album {
         return id;
     }
 
-    public void setId(ObjectId _id) {
-        this.id = _id;
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 
     public String getNombre() {
@@ -73,11 +73,11 @@ public class Album {
         this.fechaLanzamiento = fechaLanzamiento;
     }
 
-    public String getGenero() {
+    public Genero getGenero() {
         return genero;
     }
 
-    public void setGenero(String genero) {
+    public void setGenero(Genero genero) {
         this.genero = genero;
     }
 

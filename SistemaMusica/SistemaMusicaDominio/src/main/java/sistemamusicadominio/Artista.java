@@ -18,7 +18,7 @@ public class Artista {
     private TipoArtista tipo;
     private String nombre;
     private String imagen;
-    private String genero;
+    private Genero genero;
     private List<Integrante> integrantes; // Solo para bandas
 
     /**
@@ -37,7 +37,7 @@ public class Artista {
      * @param genero Genero del artista
      * @param integrantes Integrantes del artista (si es una banda)
      */
-    public Artista(TipoArtista tipo, String nombre, String imagen, String genero, List<Integrante> integrantes) {
+    public Artista(TipoArtista tipo, String nombre, String imagen, Genero genero, List<Integrante> integrantes) {
         this.tipo = tipo;
         this.nombre = nombre;
         this.imagen = imagen;
@@ -49,8 +49,8 @@ public class Artista {
         return id;
     }
 
-    public void setId(ObjectId _id) {
-        this.id = _id;
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 
     public TipoArtista getTipo() {
@@ -77,11 +77,11 @@ public class Artista {
         this.imagen = imagen;
     }
 
-    public String getGenero() {
+    public Genero getGenero() {
         return genero;
     }
 
-    public void setGenero(String genero) {
+    public void setGenero(Genero genero) {
         this.genero = genero;
     }
 
