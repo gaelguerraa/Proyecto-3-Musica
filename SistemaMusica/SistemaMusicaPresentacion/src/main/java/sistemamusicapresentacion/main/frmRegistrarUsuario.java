@@ -4,17 +4,31 @@
  */
 package sistemamusicapresentacion.main;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import sistemamusica.dtos.UsuarioDTO;
+import sistemamusicanegocio.exception.NegocioException;
+import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
+import sistemamusicanegocio.interfaces.IUsuariosBO;
+
 /**
  *
  * @author gael_
  */
 public class frmRegistrarUsuario extends javax.swing.JFrame {
 
+    private final IUsuariosBO usuarioBO = FabricaObjetosNegocio.crearUsuariosBO();
+    private final ControladorUniversal control;
+
     /**
      * Creates new form frmRegistrarUsuario
+     *
+     * @param control Clase control
      */
-    public frmRegistrarUsuario() {
+    public frmRegistrarUsuario(ControladorUniversal control) {
         initComponents();
+        this.control = control;
         setLocationRelativeTo(null);
         setTitle("Registrarse");
     }
@@ -34,13 +48,13 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
         labelEmail = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
         labelContrasenia = new javax.swing.JLabel();
-        txtContrasenia = new javax.swing.JTextField();
         labelUsername = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         labelFotoSubir = new javax.swing.JLabel();
         btnRegistrarse = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
+        txtContrasenia = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(850, 550));
@@ -69,6 +83,11 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
         labelUsername.setText("username:");
 
         jButton1.setText("boton para subir foto");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         labelFotoSubir.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
         labelFotoSubir.setForeground(new java.awt.Color(30, 215, 96));
@@ -77,10 +96,20 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
         btnRegistrarse.setBackground(new java.awt.Color(30, 215, 96));
         btnRegistrarse.setFont(new java.awt.Font("Gotham Black", 1, 18)); // NOI18N
         btnRegistrarse.setText("Registrarse");
+        btnRegistrarse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarseActionPerformed(evt);
+            }
+        });
 
         btnVolver.setBackground(new java.awt.Color(30, 215, 96));
         btnVolver.setFont(new java.awt.Font("Gotham Black", 1, 18)); // NOI18N
         btnVolver.setText("Volver");
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
         panelFondo.setLayout(panelFondoLayout);
@@ -99,6 +128,11 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
                 .addGap(111, 111, 111)
                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addComponent(labelContrasenia)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 290, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addGap(224, 224, 224))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
                         .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(labelUsername)
                             .addComponent(labelEmail)
@@ -114,15 +148,9 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
                                         .addComponent(btnVolver)
                                         .addGap(93, 93, 93)))
-                                .addComponent(btnRegistrarse)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelContrasenia)
+                                .addComponent(btnRegistrarse))
                             .addComponent(txtContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 156, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addGap(224, 224, 224))))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         panelFondoLayout.setVerticalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -139,17 +167,16 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
                         .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelFondoLayout.createSequentialGroup()
-                                .addComponent(labelContrasenia)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(labelContrasenia)
                             .addComponent(jButton1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(labelUsername)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(labelFotoSubir))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRegistrarse)
                     .addComponent(btnVolver))
@@ -170,6 +197,35 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO Agregar funcionamiento con JFileChooser
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        control.mostrarModuloIniciarSesion();
+        this.dispose();
+    }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void btnRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarseActionPerformed
+
+        String username = txtUsername.getText();
+        char[] contraseniaChars = txtContrasenia.getPassword();
+        String contrasenia = new String(contraseniaChars);
+        String email = txtEmail.getText();
+        String imagenPerfil = null; // Esta parte esta null porque no esta el JFileChooser
+
+        UsuarioDTO nuevoUsuario = new UsuarioDTO(username, email, contrasenia, imagenPerfil);
+
+        try {
+            usuarioBO.agregarUsuario(nuevoUsuario);
+            JOptionPane.showMessageDialog(this, "El usuario se ha registrado correctamente.", "Info.", JOptionPane.INFORMATION_MESSAGE);
+            control.mostrarModuloIniciarSesion();
+            this.dispose();
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error.", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnRegistrarseActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -183,7 +239,7 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
     private javax.swing.JLabel labelRegistrar;
     private javax.swing.JLabel labelUsername;
     private javax.swing.JPanel panelFondo;
-    private javax.swing.JTextField txtContrasenia;
+    private javax.swing.JPasswordField txtContrasenia;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables

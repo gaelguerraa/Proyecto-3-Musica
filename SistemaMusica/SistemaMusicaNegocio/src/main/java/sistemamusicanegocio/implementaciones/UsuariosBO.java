@@ -18,6 +18,10 @@ public class UsuariosBO implements IUsuariosBO {
 
     private IUsuariosDAO usuariosDAO;
 
+    public UsuariosBO(IUsuariosDAO usuariosDAO) {
+        this.usuariosDAO = usuariosDAO;
+    }
+
     /**
      * Metodo para que el usuario pueda iniciar sesion, mandando su nombre de
      * usuario y su contrasenia
@@ -35,24 +39,53 @@ public class UsuariosBO implements IUsuariosBO {
         Usuario usuario = usuariosDAO.consultarInicioSesion(username, contrasenia);
 
         if (usuario != null) {
-            UsuarioDTO usuarioDTO = new UsuarioDTO();
-            usuarioDTO.setId(usuario.getId().toHexString());
-            usuarioDTO.setUsername(usuario.getUsername());
-            usuarioDTO.setEmail(usuario.getEmail());
-            usuarioDTO.setContrasenia(usuario.getContrasenia());
-            usuarioDTO.setImagenPerfil(usuario.getImagenPerfil());
-            usuarioDTO.setFavoritos(usuario.getFavoritos());
-            usuarioDTO.setRestricciones(usuario.getRestricciones());
+            UsuarioDTO usuarioObtenido = new UsuarioDTO();
+            usuarioObtenido.setId(usuario.getId().toString()); // Esto estaba en toHexString() si hay un error cambiarlo nuevamente
+            usuarioObtenido.setUsername(usuario.getUsername());
+            usuarioObtenido.setEmail(usuario.getEmail());
+            usuarioObtenido.setContrasenia(usuario.getContrasenia());
+            usuarioObtenido.setImagenPerfil(usuario.getImagenPerfil());
+            usuarioObtenido.setFavoritos(usuario.getFavoritos());
+            usuarioObtenido.setRestricciones(usuario.getRestricciones());
 
-            return usuarioDTO;
+            return usuarioObtenido;
         } else {
             throw new NegocioException("Credenciales invalidas: usuario o contraseña incorrectos.");
         }
     }
 
+    /**
+     * Metodo para agregar un nuevo usuario a la base de datos
+     *
+     * @param nuevoUsuario Nuevo usuario a agregar a la base de datos
+     * @return Usuario que ha sido agregado
+     * @throws NegocioException Si ocurre una incidencia al agregar el usuario
+     */
     @Override
-    public Usuario agregarUsuario(UsuarioDTO nuevoUsuario) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public UsuarioDTO agregarUsuario(UsuarioDTO nuevoUsuario) throws NegocioException {
+        String username = nuevoUsuario.getUsername();
+        String email = nuevoUsuario.getEmail();
+        String contrasenia = nuevoUsuario.getContrasenia();
+
+        validarUsername(username);
+        validarEmail(email);
+        validarContrasenia(contrasenia);
+
+        Usuario usuario = usuariosDAO.agregarUsuario(nuevoUsuario);
+
+        if (usuario != null) {
+            UsuarioDTO usuarioObtenido = new UsuarioDTO();
+            usuarioObtenido.setUsername(usuario.getUsername());
+            usuarioObtenido.setEmail(usuario.getEmail());
+            usuarioObtenido.setContrasenia(usuario.getContrasenia());
+            usuarioObtenido.setImagenPerfil(usuario.getImagenPerfil());
+            usuarioObtenido.setFavoritos(usuario.getFavoritos());
+            usuarioObtenido.setRestricciones(usuario.getRestricciones());
+
+            return usuarioObtenido;
+        } else {
+            throw new NegocioException("No se pudo agregar al usuario a la base de datos.");
+        }
     }
 
     @Override
@@ -122,6 +155,39 @@ public class UsuariosBO implements IUsuariosBO {
 
         if (!contrasenia.matches(".*[^a-zA-Z0-9].*")) {
             throw new NegocioException("La contraseña debe contener al menos un caracter especial.");
+        }
+    }
+
+    /**
+     * Validador para el email del usuario
+     *
+     * @param email Email del usuario a validar
+     * @throws NegocioException En caso de que haya una incidencia con el email
+     * del usuario
+     */
+    private void validarEmail(String email) throws NegocioException {
+        if (email == null || email.isBlank()) {
+            throw new NegocioException("El email no puede estar vacio.");
+        }
+
+        if (!email.endsWith("@gmail.com") && !email.endsWith("@yahoo.com")
+                && !email.endsWith("@outlook.com")
+                && !email.endsWith("@potros.itson.edu.mx")) {
+            throw new NegocioException("""
+                                       El email no cuenta con una direccion de correo valida.
+                                       Necesita ser una de las siguientes:
+                                       @gmail.com
+                                       @yahoo.com
+                                       @outlook.com
+                                       @potros.itson.edu.mx
+                                       """);
+        }
+
+        // Extraer la parte antes del @ para validacion adicional
+        String nombreUsuario = email.substring(0, email.indexOf('@'));
+
+        if (!nombreUsuario.matches("^[A-Za-z0-9]+$")) {
+            throw new NegocioException("El email solo puede contener letras y numeros antes del '@'");
         }
     }
 

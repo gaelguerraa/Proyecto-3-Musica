@@ -4,16 +4,23 @@
  */
 package sistemamusicapresentacion.main;
 
+import javax.swing.JOptionPane;
+import sistemamusicanegocio.exception.NegocioException;
+import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
+import sistemamusicanegocio.interfaces.IUsuariosBO;
+
 /**
  *
  * @author gael_
  */
 public class frmIniciarSesion extends javax.swing.JFrame {
 
+    private final IUsuariosBO usuarioBO = FabricaObjetosNegocio.crearUsuariosBO();
     private final ControladorUniversal control;
-    
+
     /**
      * Creates new form frmIniciarSesion
+     *
      * @param control Clase control
      */
     public frmIniciarSesion(ControladorUniversal control) {
@@ -38,9 +45,9 @@ public class frmIniciarSesion extends javax.swing.JFrame {
         labelContrasenia = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
         labelUsername = new javax.swing.JLabel();
-        txtContrasenia = new javax.swing.JTextField();
         btnAcceder = new javax.swing.JButton();
         btnRegistrarse1 = new javax.swing.JButton();
+        txtContrasenia = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(850, 550));
@@ -75,12 +82,17 @@ public class frmIniciarSesion extends javax.swing.JFrame {
         btnRegistrarse1.setBackground(new java.awt.Color(30, 215, 96));
         btnRegistrarse1.setFont(new java.awt.Font("Gotham Black", 1, 18)); // NOI18N
         btnRegistrarse1.setText("Registrarse");
+        btnRegistrarse1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarse1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
         panelFondo.setLayout(panelFondoLayout);
         panelFondoLayout.setHorizontalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
+            .addGroup(panelFondoLayout.createSequentialGroup()
                 .addContainerGap(317, Short.MAX_VALUE)
                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
@@ -88,11 +100,11 @@ public class frmIniciarSesion extends javax.swing.JFrame {
                         .addGap(135, 135, 135))
                     .addComponent(labelIniciarSesion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
-                        .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(labelContrasenia)
-                            .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelUsername))
+                            .addComponent(txtUsername, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                            .addComponent(labelUsername)
+                            .addComponent(txtContrasenia))
                         .addGap(138, 138, 138))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
                         .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -114,9 +126,9 @@ public class frmIniciarSesion extends javax.swing.JFrame {
                 .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(labelContrasenia)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38)
+                .addGap(32, 32, 32)
                 .addComponent(btnAcceder)
                 .addGap(18, 18, 18)
                 .addComponent(btnRegistrarse1)
@@ -138,9 +150,30 @@ public class frmIniciarSesion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAccederActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccederActionPerformed
-        // TODO add your handling code here:
+
+        String username = txtUsername.getText();
+        char[] contraseniaChars = txtContrasenia.getPassword();
+        String contrasenia = new String(contraseniaChars);
+
+        System.out.println(contrasenia);
+
+        try {
+            usuarioBO.iniciarSesion(username, contrasenia);
+            JOptionPane.showMessageDialog(this, "El usuario: " + username
+                    + " ha iniciado sesion", "Info.",
+                    JOptionPane.INFORMATION_MESSAGE); // TODO: Eliminar cuando exista pantalla principal
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Info.",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_btnAccederActionPerformed
 
+    private void btnRegistrarse1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarse1ActionPerformed
+
+        control.mostrarModuloRegistrarUsuario();
+        this.dispose();
+
+    }//GEN-LAST:event_btnRegistrarse1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -151,7 +184,7 @@ public class frmIniciarSesion extends javax.swing.JFrame {
     private javax.swing.JLabel labelMusicio1;
     private javax.swing.JLabel labelUsername;
     private javax.swing.JPanel panelFondo;
-    private javax.swing.JTextField txtContrasenia;
+    private javax.swing.JPasswordField txtContrasenia;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 }

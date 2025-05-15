@@ -19,8 +19,9 @@ public interface IUsuariosBO {
      *
      * @param nuevoUsuario Nuevo usuario a agregar a la base de datos
      * @return Usuario que ha sido agregado
+     * @throws NegocioException Si ocurre una incidencia al agregar el usuario
      */
-    public Usuario agregarUsuario(UsuarioDTO nuevoUsuario);
+    public UsuarioDTO agregarUsuario(UsuarioDTO nuevoUsuario) throws NegocioException;
 
     /**
      * Metodo para consultar un usuario en base a un id en la base de datos
@@ -38,7 +39,6 @@ public interface IUsuariosBO {
      * @return Usuario modificado de la base de datos
      */
     public Usuario modificarUsuario(String idUsuario, UsuarioDTO datosActualizados);
-
 
     /**
      * Metodo para que el usuario pueda iniciar sesion, mandando su nombre de

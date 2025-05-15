@@ -33,6 +33,15 @@ public class UsuarioDTO {
         this.restricciones = restricciones;
     }
 
+    public UsuarioDTO(String username, String email, String contrasenia, String imagenPerfil) {
+        this.username = username;
+        this.email = email;
+        this.contrasenia = contrasenia;
+        this.imagenPerfil = imagenPerfil;
+    }
+    
+    
+
     public String getId() {
         return id;
     }
