@@ -38,4 +38,14 @@ public interface IUsuariosDAO {
      */
     public Usuario modificarUsuario(String idUsuario, UsuarioDTO datosActualizados);
 
+    /**
+     * Metodo para obtener un usuario en base a un nombre de usuario y una
+     * contrasenia
+     *
+     * @param username Nombre de usuario
+     * @param contrasenia Contrasenia del usuario
+     * @return Un usuario que coincida con ambos filtros
+     */
+    public Usuario consultarInicioSesion(String username, String contrasenia);
+
 }

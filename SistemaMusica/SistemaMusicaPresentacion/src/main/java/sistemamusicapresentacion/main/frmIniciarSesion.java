@@ -10,11 +10,15 @@ package sistemamusicapresentacion.main;
  */
 public class frmIniciarSesion extends javax.swing.JFrame {
 
+    private final ControladorUniversal control;
+    
     /**
      * Creates new form frmIniciarSesion
+     * @param control Clase control
      */
-    public frmIniciarSesion() {
+    public frmIniciarSesion(ControladorUniversal control) {
         initComponents();
+        this.control = control;
         setLocationRelativeTo(null);
         setTitle("Iniciar Sesion");
     }
@@ -62,6 +66,11 @@ public class frmIniciarSesion extends javax.swing.JFrame {
         btnAcceder.setBackground(new java.awt.Color(30, 215, 96));
         btnAcceder.setFont(new java.awt.Font("Gotham Black", 1, 18)); // NOI18N
         btnAcceder.setText("Acceder");
+        btnAcceder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAccederActionPerformed(evt);
+            }
+        });
 
         btnRegistrarse1.setBackground(new java.awt.Color(30, 215, 96));
         btnRegistrarse1.setFont(new java.awt.Font("Gotham Black", 1, 18)); // NOI18N
@@ -127,6 +136,10 @@ public class frmIniciarSesion extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAccederActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccederActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAccederActionPerformed
 
 
 
