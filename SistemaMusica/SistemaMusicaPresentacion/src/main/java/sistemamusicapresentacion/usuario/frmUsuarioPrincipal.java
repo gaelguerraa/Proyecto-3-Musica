@@ -5,6 +5,8 @@
 package sistemamusicapresentacion.usuario;
 
 import sistemamusica.dtos.UsuarioDTO;
+import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
+import sistemamusicanegocio.interfaces.IUsuariosBO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
@@ -13,6 +15,7 @@ import sistemamusicapresentacion.main.ControladorUniversal;
  */
 public class frmUsuarioPrincipal extends javax.swing.JFrame {
 
+    private final IUsuariosBO usuarioBO = FabricaObjetosNegocio.crearUsuariosBO();
     ControladorUniversal control;
     private UsuarioDTO usuario;
 
@@ -28,6 +31,7 @@ public class frmUsuarioPrincipal extends javax.swing.JFrame {
         this.control = control;
         this.usuario = usuario;
         lblUsername.setText(usuario.getUsername());
+        txtEmail.setText(usuario.getEmail());
         
     }
 
@@ -57,7 +61,7 @@ public class frmUsuarioPrincipal extends javax.swing.JFrame {
         btnFavoritos = new javax.swing.JButton();
         labelFoto = new javax.swing.JLabel();
         labelEmail = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtEmail = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         btnRestringidos = new javax.swing.JButton();
 
@@ -194,8 +198,8 @@ public class frmUsuarioPrincipal extends javax.swing.JFrame {
         labelEmail.setForeground(new java.awt.Color(30, 215, 96));
         labelEmail.setText("email:");
 
-        jTextField1.setEditable(false);
-        jTextField1.setText("recuperar email");
+        txtEmail.setEditable(false);
+        txtEmail.setText("recuperar email");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -240,7 +244,7 @@ public class frmUsuarioPrincipal extends javax.swing.JFrame {
                                 .addGroup(panelFondo1Layout.createSequentialGroup()
                                     .addComponent(labelEmail)
                                     .addGap(18, 18, 18)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(182, 182, 182)
                                     .addComponent(btnCambiarDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(btnFavoritos, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -255,7 +259,7 @@ public class frmUsuarioPrincipal extends javax.swing.JFrame {
                 .addGroup(panelFondo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(labelEmail)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondo1Layout.createSequentialGroup()
                         .addGroup(panelFondo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelFondo1Layout.createSequentialGroup()
@@ -295,12 +299,12 @@ public class frmUsuarioPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnArtistas1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArtistas1ActionPerformed
-        control.mostrarModuloAlbumes();
+        control.mostrarArtistasPrincipal(usuario);
         this.dispose();
     }//GEN-LAST:event_btnArtistas1ActionPerformed
 
     private void btnCancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancionesActionPerformed
-        control.mostrarModuloCanciones();
+        control.mostrarCanciones(usuario);
         this.dispose();
     }//GEN-LAST:event_btnCancionesActionPerformed
 
@@ -324,7 +328,7 @@ public class frmUsuarioPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRestringidosActionPerformed
 
     private void btnAlbumesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlbumesActionPerformed
-        control.mostrarModuloAlbumes();
+        control.mostrarAlbumesPrincipal(usuario);
         this.dispose();
     }//GEN-LAST:event_btnAlbumesActionPerformed
 
@@ -339,7 +343,6 @@ public class frmUsuarioPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnRestringidos;
     private javax.swing.JButton btnUsuario;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel labelAlbumes;
     private javax.swing.JLabel labelArtistas;
     private javax.swing.JLabel labelCanciones;
@@ -350,5 +353,6 @@ public class frmUsuarioPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel lblUsername;
     private javax.swing.JPanel panelFondo1;
     private javax.swing.JPanel panelVerde1;
+    private javax.swing.JTextField txtEmail;
     // End of variables declaration//GEN-END:variables
 }

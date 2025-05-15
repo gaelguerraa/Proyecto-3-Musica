@@ -119,5 +119,24 @@ public class ArtistasDAO implements IArtistasDAO {
         resultados.into(listaArtistas);
         return listaArtistas;
     }
+
+    @Override
+    public Artista buscarArtistaPorNombre(String nombre) {
+        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Artista> coleccion = baseDatos.getCollection(COLECCION, Artista.class);
+        
+        Document filtro = new Document();
+        filtro.append(CAMPO_NOMBRE, nombre);
+        
+        FindIterable<Artista> resultados = coleccion.find(filtro);
+        
+        Artista artista = resultados.first();
+        
+        if(artista != null){
+            return artista;
+        }else{
+            return null;
+        }
+    }
     
 }

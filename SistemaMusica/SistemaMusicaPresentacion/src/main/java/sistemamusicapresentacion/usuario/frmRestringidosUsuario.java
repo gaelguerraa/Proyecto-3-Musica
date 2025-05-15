@@ -5,6 +5,8 @@
 package sistemamusicapresentacion.usuario;
 
 import sistemamusica.dtos.UsuarioDTO;
+import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
+import sistemamusicanegocio.interfaces.IUsuariosBO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
@@ -13,6 +15,7 @@ import sistemamusicapresentacion.main.ControladorUniversal;
  */
 public class frmRestringidosUsuario extends javax.swing.JFrame {
 
+    private final IUsuariosBO usuarioBO = FabricaObjetosNegocio.crearUsuariosBO();
     ControladorUniversal control;
     UsuarioDTO usuario;
 
@@ -57,7 +60,6 @@ public class frmRestringidosUsuario extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(850, 550));
-        setPreferredSize(new java.awt.Dimension(850, 550));
 
         panelFondo.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -79,6 +81,11 @@ public class frmRestringidosUsuario extends javax.swing.JFrame {
 
         btnAlbumes.setBackground(new java.awt.Color(30, 215, 96));
         btnAlbumes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/musica.png"))); // NOI18N
+        btnAlbumes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlbumesActionPerformed(evt);
+            }
+        });
 
         btnCanciones.setBackground(new java.awt.Color(30, 215, 96));
         btnCanciones.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/disco.png"))); // NOI18N
@@ -264,23 +271,29 @@ public class frmRestringidosUsuario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnArtistasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArtistasActionPerformed
-        control.mostrarModuloArtistas();
+        control.mostrarArtistasPrincipal(usuario);
         this.dispose();
     }//GEN-LAST:event_btnArtistasActionPerformed
 
     private void btnCancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancionesActionPerformed
-        control.mostrarModuloCanciones();
+        control.mostrarCanciones(usuario);
         this.dispose();
     }//GEN-LAST:event_btnCancionesActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        // TODO add your handling code here:
+        control.mostrarModuloPrincipalUsuarios(usuario);
+        this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         control.mostrarModuloPrincipalUsuarios(usuario);
         this.dispose();
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnAlbumesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlbumesActionPerformed
+        control.mostrarAlbumesPrincipal(usuario);
+        this.dispose();
+    }//GEN-LAST:event_btnAlbumesActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -6,8 +6,10 @@ package sistemamusicapresentacion.artistas;
 
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
+import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicadominio.Artista;
 import sistemamusicadominio.Genero;
+import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
 import sistemamusicanegocio.interfaces.IArtistasBO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
@@ -17,18 +19,23 @@ import sistemamusicapresentacion.main.ControladorUniversal;
  */
 public class frmArtistasPrincipal extends javax.swing.JFrame {
 
-    IArtistasBO artistasBO;
-    ControladorArtistas controlador;
+    private IArtistasBO artistasBO = FabricaObjetosNegocio.crearArtistasBO();
+    UsuarioDTO usuarioActual;
     ControladorUniversal universal;
+    
+    String nombreArtista;
+    Artista artistaSeleccionado;
     
     /**
      * Creates new form frmArtistasPrincipal
      */
-    public frmArtistasPrincipal(ControladorArtistas controlador, ControladorUniversal universal, IArtistasBO artistasBO) {
+    public frmArtistasPrincipal(ControladorUniversal universal, UsuarioDTO usuarioActual) {
         initComponents();
-        this.controlador=controlador;
+        setLocationRelativeTo(null);
+        setTitle("Artistas");
         this.universal=universal;
-        this.artistasBO=artistasBO;
+        this.usuarioActual = usuarioActual;
+        this.seleccionarArtista();
         LlenarCBGenero();
         this.LlenarTablaArtistas();
     }
@@ -39,6 +46,20 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
             }
     }
     
+    private void seleccionarArtista(){
+            this.tablaArtistas.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int selectedRow = tablaArtistas.getSelectedRow();
+                if (selectedRow != -1) {
+                    this.nombreArtista = (String) tablaArtistas.getValueAt(selectedRow, 0);
+                    this.artistaSeleccionado = this.artistasBO.buscarArtistaPorNombre(this.nombreArtista);
+                    universal.mostrarArtistasDetalles(artistaSeleccionado);
+                    System.out.println(nombreArtista);
+                }
+            }
+        });
+    }
+    
     private void LlenarTablaArtistas() {
         List<Artista> artistasConsultados;
 
@@ -47,18 +68,9 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
 
         if (nombreArtista.isEmpty() && generoSeleccionado.equals("CUALQUIERA")) {
             artistasConsultados = artistasBO.buscarArtistas();
-        } else if (!nombreArtista.isEmpty() && generoSeleccionado.equals("CUALQUIERA")) {
-            artistasConsultados = artistasBO.buscarArtistasPorNombre(nombreArtista);
-        } else if (nombreArtista.isEmpty() && !generoSeleccionado.equals("CUALQUIERA")) {
-            artistasConsultados = artistasBO.buscarArtistasPorGenero(generoSeleccionado);
-        } else {
-            artistasConsultados = artistasBO.buscarArtistasPorNombreGenero(nombreArtista, generoSeleccionado);
-        }
-
-        DefaultTableModel modeloTabla = (DefaultTableModel) tablaArtistas.getModel();
-        modeloTabla.setRowCount(0);
-
-        for (Artista a : artistasConsultados) {
+            DefaultTableModel modeloTabla = (DefaultTableModel) tablaArtistas.getModel();
+            modeloTabla.setRowCount(0);
+            for (Artista a : artistasConsultados) {
             Object[] fila = {
                 a.getNombre(),
                 a.getGenero(),
@@ -66,6 +78,45 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
             };
             modeloTabla.addRow(fila);
         }
+        } else if (!nombreArtista.isEmpty() && generoSeleccionado.equals("CUALQUIERA")) {
+            artistasConsultados = artistasBO.buscarArtistasPorNombre(nombreArtista);
+            DefaultTableModel modeloTabla = (DefaultTableModel) tablaArtistas.getModel();
+            modeloTabla.setRowCount(0);
+            for (Artista a : artistasConsultados) {
+                Object[] fila = {
+                    a.getNombre(),
+                    a.getGenero(),
+                    a.getTipo()
+                };
+                modeloTabla.addRow(fila);
+            }
+        } else if (nombreArtista.isEmpty() && !generoSeleccionado.equals("CUALQUIERA")) {
+            artistasConsultados = artistasBO.buscarArtistasPorGenero(generoSeleccionado);
+            DefaultTableModel modeloTabla = (DefaultTableModel) tablaArtistas.getModel();
+            modeloTabla.setRowCount(0);
+            for (Artista a : artistasConsultados) {
+                Object[] fila = {
+                    a.getNombre(),
+                    a.getGenero(),
+                    a.getTipo()
+                };
+                modeloTabla.addRow(fila);
+            }
+        } else {
+            artistasConsultados = artistasBO.buscarArtistasPorNombreGenero(nombreArtista, generoSeleccionado);
+            DefaultTableModel modeloTabla = (DefaultTableModel) tablaArtistas.getModel();
+            modeloTabla.setRowCount(0);
+            for (Artista a : artistasConsultados) {
+                Object[] fila = {
+                    a.getNombre(),
+                    a.getGenero(),
+                    a.getTipo()
+                };
+                modeloTabla.addRow(fila);
+            }
+        }
+
+
     }
 
 
@@ -359,27 +410,27 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnArtistasActionPerformed
 
     private void btnCancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancionesActionPerformed
-        universal.mostrarModuloCanciones();
+        universal.mostrarCanciones(usuarioActual);
         this.dispose();
     }//GEN-LAST:event_btnCancionesActionPerformed
 
     private void btnAgregarSolistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarSolistaActionPerformed
-        controlador.mostrarAgregarSolista();
+        universal.mostrarAgregarSolista();
         this.dispose();
     }//GEN-LAST:event_btnAgregarSolistaActionPerformed
 
     private void btnAgregarBandaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarBandaActionPerformed
-        controlador.mostrarAgregarBanda();
+        universal.mostrarAgregarBanda();
         this.dispose();
     }//GEN-LAST:event_btnAgregarBandaActionPerformed
 
     private void btnAlbumesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlbumesActionPerformed
-        universal.mostrarModuloAlbumes();
+        universal.mostrarAlbumesPrincipal(usuarioActual);
         this.dispose();
     }//GEN-LAST:event_btnAlbumesActionPerformed
 
     private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioActionPerformed
-        // aqui se muestra el modulo principal de usuarios
+        universal.mostrarModuloPrincipalUsuarios(usuarioActual);
         this.dispose();
     }//GEN-LAST:event_btnUsuarioActionPerformed
 

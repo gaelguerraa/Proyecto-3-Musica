@@ -15,13 +15,16 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import sistemamusica.dtos.ArtistaDTO;
 import sistemamusica.dtos.IntegranteDTO;
+import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicadominio.Genero;
 import sistemamusicadominio.Integrante;
 import sistemamusicadominio.RolIntegrante;
 import sistemamusicadominio.TipoArtista;
 import sistemamusicanegocio.exception.NegocioException;
+import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
 import sistemamusicanegocio.interfaces.IArtistasBO;
 import sistemamusicanegocio.interfaces.IIntegrantesBO;
+import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
  *
@@ -29,9 +32,10 @@ import sistemamusicanegocio.interfaces.IIntegrantesBO;
  */
 public class frmAgregarBanda extends javax.swing.JFrame {
 
-    IArtistasBO artistasBO;
-    IIntegrantesBO integrantesBO;
-    ControladorArtistas controlador;
+    UsuarioDTO usuarioActual;
+    private IArtistasBO artistasBO = FabricaObjetosNegocio.crearArtistasBO();
+    private IIntegrantesBO integrantesBO = FabricaObjetosNegocio.crearIntegrantesBO();
+    ControladorUniversal controlador;
     
     private List<Integrante> integrantes = new ArrayList<>();
     private String rutaImagenSeleccionada;
@@ -39,7 +43,7 @@ public class frmAgregarBanda extends javax.swing.JFrame {
     /**
      * Creates new form frmAgregarBanda
      */
-    public frmAgregarBanda(ControladorArtistas controlador, IArtistasBO artistasBO, IIntegrantesBO integrantesBO) {
+    public frmAgregarBanda(ControladorUniversal controlador) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Agregar Banda");
@@ -475,7 +479,7 @@ public class frmAgregarBanda extends javax.swing.JFrame {
                     .addGroup(panelFondo1Layout.createSequentialGroup()
                         .addGap(37, 37, 37)
                         .addComponent(checkActivo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                         .addComponent(btnAgregarMiembro)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnRegistrarArtista)
@@ -490,9 +494,7 @@ public class frmAgregarBanda extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(panelFondo1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(panelFondo1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -511,7 +513,7 @@ public class frmAgregarBanda extends javax.swing.JFrame {
     }//GEN-LAST:event_cbGeneroActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        controlador.mostrarArtistasPrincipal();
+        controlador.mostrarArtistasPrincipal(usuarioActual);
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 

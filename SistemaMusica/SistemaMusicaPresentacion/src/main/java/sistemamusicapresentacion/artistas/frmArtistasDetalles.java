@@ -4,6 +4,9 @@
  */
 package sistemamusicapresentacion.artistas;
 
+import sistemamusica.dtos.UsuarioDTO;
+import sistemamusicadominio.Artista;
+import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
 import sistemamusicanegocio.interfaces.IArtistasBO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
@@ -13,21 +16,28 @@ import sistemamusicapresentacion.main.ControladorUniversal;
  */
 public class frmArtistasDetalles extends javax.swing.JFrame {
 
-    IArtistasBO artistasBO;
-    ControladorArtistas controlador;
+    UsuarioDTO usuarioActual;
+    private IArtistasBO artistasBO = FabricaObjetosNegocio.crearArtistasBO();
     ControladorUniversal universal;
+    Artista artistaSeleccionado;
     
     /**
      * Creates new form frmArtistasDetalles
      */
-    public frmArtistasDetalles(ControladorArtistas controlador, ControladorUniversal universal, IArtistasBO artistasBO) {
+    public frmArtistasDetalles(ControladorUniversal universal, Artista artistaSeleccionado) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Artistas Detalles");
-        this.controlador=controlador;
         this.universal=universal;
-        this.artistasBO=artistasBO;
+        this.artistaSeleccionado=artistasBO.buscarArtistaPorNombre(artistaSeleccionado.getNombre());
+        this.mostrarInfoArtista(artistaSeleccionado);
     }
+    
+    public void mostrarInfoArtista(Artista artista){
+        this.txtNombreArtista.setText(artista.getNombre());
+        this.txtGenero.setText(artista.getGenero().toString());
+        //this.labelFoto
+    } 
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -296,22 +306,22 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
     }//GEN-LAST:event_btnArtistasActionPerformed
 
     private void btnCancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancionesActionPerformed
-        universal.mostrarModuloCanciones();
+        universal.mostrarCanciones(usuarioActual);
         this.dispose();
     }//GEN-LAST:event_btnCancionesActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        controlador.mostrarArtistasPrincipal();
+        universal.mostrarArtistasPrincipal(usuarioActual);
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnAlbumesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlbumesActionPerformed
-        universal.mostrarModuloAlbumes();
+        universal.mostrarAlbumesPrincipal(usuarioActual);
         this.dispose();
     }//GEN-LAST:event_btnAlbumesActionPerformed
 
     private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioActionPerformed
-        // aqui se muestra el modulo principal de usuarios
+        universal.mostrarModuloPrincipalUsuarios(usuarioActual);
         this.dispose();
     }//GEN-LAST:event_btnUsuarioActionPerformed
 

@@ -38,6 +38,10 @@ public class ArtistasBO implements IArtistasBO {
         if (nuevoSolista.getNombre().length() > 30) {
             throw new NegocioException("El nombre del solista no puede tener más de 30 caracteres.");
         }
+        Artista existente = artistasDAO.buscarArtistaPorNombre(nuevoSolista.getNombre());
+        if (existente != null) {
+            throw new NegocioException("Ya existe un artista registrado con ese nombre.");
+        }
         return artistasDAO.registrarSolista(nuevoSolista);
     }
 
@@ -61,6 +65,10 @@ public class ArtistasBO implements IArtistasBO {
         if(nuevaBanda.getIntegrantes() == null){
             throw new NegocioException("Una banda debe tener integrantes.");
         }
+        Artista existente = artistasDAO.buscarArtistaPorNombre(nuevaBanda.getNombre());
+        if (existente != null) {
+            throw new NegocioException("Ya existe un artista registrado con ese nombre.");
+        }
         return artistasDAO.registrarBanda(nuevaBanda);
     }
 
@@ -82,6 +90,11 @@ public class ArtistasBO implements IArtistasBO {
     @Override
     public List<Artista> buscarArtistas() {
         return artistasDAO.buscarArtistas();
+    }
+
+    @Override
+    public Artista buscarArtistaPorNombre(String nombre) {
+        return artistasDAO.buscarArtistaPorNombre(nombre);
     }
     
 }

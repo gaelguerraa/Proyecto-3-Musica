@@ -4,10 +4,6 @@
  */
 package sistemamusicapresentacion.main;
 
-import sistemamusicapresentacion.albumes.ControladorAlbumes;
-import sistemamusicapresentacion.artistas.ControladorArtistas;
-import sistemamusicapresentacion.canciones.ControladorCanciones;
-
 /**
  *
  * @author PC
@@ -19,11 +15,8 @@ public class ControladorMain {
      */
     public static void main(String[] args) {
 
-        ControladorArtistas controladorArtistas = new ControladorArtistas();
-        ControladorAlbumes controladorAlbumes = new ControladorAlbumes();
-        ControladorCanciones controladorCanciones = new ControladorCanciones();
 
-        ControladorUniversal control = new ControladorUniversal(controladorArtistas, controladorAlbumes, controladorCanciones);
+        ControladorUniversal control = new ControladorUniversal();
         control.mostrarModuloIniciarSesion();
 
     }

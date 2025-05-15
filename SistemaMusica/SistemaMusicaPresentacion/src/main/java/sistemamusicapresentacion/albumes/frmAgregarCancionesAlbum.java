@@ -4,21 +4,26 @@
  */
 package sistemamusicapresentacion.albumes;
 
+import sistemamusica.dtos.UsuarioDTO;
+import sistemamusicapresentacion.main.ControladorUniversal;
+
 /**
  *
  * @author gael_
  */
 public class frmAgregarCancionesAlbum extends javax.swing.JFrame {
 
-    ControladorAlbumes controlador;
+    UsuarioDTO usuario;
+    ControladorUniversal controlador;
     
     /**
      * Creates new form frmAgregarCancionesAlbum
      */
-    public frmAgregarCancionesAlbum(ControladorAlbumes controlador) {
+    public frmAgregarCancionesAlbum(ControladorUniversal controlador, UsuarioDTO usuario) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Agregar Cancion Album");
+        this.usuario=usuario;
         this.controlador=controlador;
     }
 
@@ -258,7 +263,7 @@ public class frmAgregarCancionesAlbum extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUsuarioActionPerformed
 
     private void btnTerminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminarActionPerformed
-        controlador.mostrarAlbumesPrincipal();
+        controlador.mostrarAlbumesPrincipal(usuario);
         this.dispose();
     }//GEN-LAST:event_btnTerminarActionPerformed
 

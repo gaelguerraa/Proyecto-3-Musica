@@ -9,10 +9,13 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import sistemamusica.dtos.ArtistaDTO;
+import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicadominio.Genero;
 import sistemamusicadominio.TipoArtista;
 import sistemamusicanegocio.exception.NegocioException;
+import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
 import sistemamusicanegocio.interfaces.IArtistasBO;
+import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
  *
@@ -20,19 +23,19 @@ import sistemamusicanegocio.interfaces.IArtistasBO;
  */
 public class frmAgregarSolista extends javax.swing.JFrame {
 
-    ControladorArtistas controlador;
-    IArtistasBO artistasBO; 
+    UsuarioDTO usuarioActual;
+    ControladorUniversal controlador;
+    private IArtistasBO artistasBO = FabricaObjetosNegocio.crearArtistasBO(); 
     private String rutaImagenSeleccionada;
 
     /**
      * Creates new form frmAgregarSolista
      */
-    public frmAgregarSolista(ControladorArtistas controlador, IArtistasBO artistasBO) {
+    public frmAgregarSolista(ControladorUniversal controlador) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Agregar Solista");
         this.controlador=controlador;
-        this.artistasBO=artistasBO;
         LlenarComboboxGenero();
     }
     
@@ -353,7 +356,7 @@ public class frmAgregarSolista extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancionesActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        controlador.mostrarArtistasPrincipal();
+        controlador.mostrarArtistasPrincipal(usuarioActual);
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 

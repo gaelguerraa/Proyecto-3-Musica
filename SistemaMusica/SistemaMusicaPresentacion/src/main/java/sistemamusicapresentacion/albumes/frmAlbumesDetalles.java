@@ -4,6 +4,7 @@
  */
 package sistemamusicapresentacion.albumes;
 
+import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
@@ -12,17 +13,17 @@ import sistemamusicapresentacion.main.ControladorUniversal;
  */
 public class frmAlbumesDetalles extends javax.swing.JFrame {
 
-    ControladorAlbumes controlador;
+    UsuarioDTO usuarioActual;
     ControladorUniversal universal;
     
     /**
      * Creates new form frmAlbumesDetalles
      */
-    public frmAlbumesDetalles(ControladorAlbumes controlador, ControladorUniversal universal) {
+    public frmAlbumesDetalles(ControladorUniversal universal, UsuarioDTO usuarioActual) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Album Detalles");
-        this.controlador=controlador;
+        this.usuarioActual=usuarioActual;
         this.universal=universal;
     }
 
@@ -274,17 +275,17 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnArtistasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArtistasActionPerformed
-        universal.mostrarModuloArtistas();
+        universal.mostrarArtistasPrincipal(usuarioActual);
         this.dispose();
     }//GEN-LAST:event_btnArtistasActionPerformed
 
     private void btnCancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancionesActionPerformed
-        universal.mostrarModuloCanciones();
+        universal.mostrarCanciones(usuarioActual);
         this.dispose();
     }//GEN-LAST:event_btnCancionesActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        controlador.mostrarAlbumesPrincipal();
+        universal.mostrarAlbumesPrincipal(usuarioActual);
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void txtAlbumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAlbumActionPerformed
@@ -292,7 +293,7 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
     }//GEN-LAST:event_txtAlbumActionPerformed
 
     private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioActionPerformed
-        // aqui se muestra el modulo principal de usuarios
+        universal.mostrarModuloPrincipalUsuarios(usuarioActual);
         this.dispose();
     }//GEN-LAST:event_btnUsuarioActionPerformed
 

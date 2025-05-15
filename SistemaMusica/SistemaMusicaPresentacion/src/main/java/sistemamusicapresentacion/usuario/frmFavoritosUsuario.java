@@ -5,6 +5,8 @@
 package sistemamusicapresentacion.usuario;
 
 import sistemamusica.dtos.UsuarioDTO;
+import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
+import sistemamusicanegocio.interfaces.IUsuariosBO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
@@ -13,6 +15,7 @@ import sistemamusicapresentacion.main.ControladorUniversal;
  */
 public class frmFavoritosUsuario extends javax.swing.JFrame {
 
+    private final IUsuariosBO usuarioBO = FabricaObjetosNegocio.crearUsuariosBO();
     ControladorUniversal control;
     UsuarioDTO usuario;
 
@@ -276,12 +279,12 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnArtistasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArtistasActionPerformed
-        control.mostrarModuloArtistas();
+        control.mostrarArtistasPrincipal(usuario);
         this.dispose();
     }//GEN-LAST:event_btnArtistasActionPerformed
 
     private void btnCancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancionesActionPerformed
-        control.mostrarModuloCanciones();
+        control.mostrarCanciones(usuario);
         this.dispose();
     }//GEN-LAST:event_btnCancionesActionPerformed
 
@@ -295,7 +298,7 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnAlbumesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlbumesActionPerformed
-        control.mostrarModuloAlbumes();
+        control.mostrarAlbumesPrincipal(usuario);
         this.dispose();
     }//GEN-LAST:event_btnAlbumesActionPerformed
 

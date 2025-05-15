@@ -4,6 +4,7 @@
  */
 package sistemamusicapresentacion.canciones;
 
+import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
@@ -12,17 +13,17 @@ import sistemamusicapresentacion.main.ControladorUniversal;
  */
 public class frmCanciones extends javax.swing.JFrame {
 
-    ControladorCanciones controlador;
+    UsuarioDTO usuarioActual;
     ControladorUniversal universal;
     
     /**
      * Creates new form frmCanciones
      */
-    public frmCanciones(ControladorCanciones controlador, ControladorUniversal universal  ) {
+    public frmCanciones(ControladorUniversal universal, UsuarioDTO usuarioActual  ) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Canciones");
-        this.controlador=controlador;
+        this.usuarioActual=usuarioActual;
         this.universal=universal;
     }
 
@@ -253,21 +254,22 @@ public class frmCanciones extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnArtistasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArtistasActionPerformed
-        universal.mostrarModuloArtistas();
+        universal.mostrarArtistasPrincipal(usuarioActual);
         this.dispose();
     }//GEN-LAST:event_btnArtistasActionPerformed
 
     private void btnCancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancionesActionPerformed
-        // TODO add your handling code here:
+        universal.mostrarModuloPrincipalUsuarios(usuarioActual);
+        this.dispose();
     }//GEN-LAST:event_btnCancionesActionPerformed
 
     private void btnAlbumesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlbumesActionPerformed
-        universal.mostrarModuloAlbumes();
+        universal.mostrarAlbumesPrincipal(usuarioActual);
         this.dispose();
     }//GEN-LAST:event_btnAlbumesActionPerformed
 
     private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioActionPerformed
-        //aqui se muestra el modulo principal de usuarios
+        universal.mostrarModuloPrincipalUsuarios(usuarioActual);
         this.dispose();
     }//GEN-LAST:event_btnUsuarioActionPerformed
 

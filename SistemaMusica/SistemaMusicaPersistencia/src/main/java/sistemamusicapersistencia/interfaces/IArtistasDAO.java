@@ -19,4 +19,5 @@ public interface IArtistasDAO {
     public abstract List<Artista> buscarArtistasPorGenero(String genero);
     public abstract List<Artista> buscarArtistasPorNombreGenero(String nombre, String genero);
     public abstract List<Artista> buscarArtistas();
+    public abstract Artista buscarArtistaPorNombre(String nombre);
 }

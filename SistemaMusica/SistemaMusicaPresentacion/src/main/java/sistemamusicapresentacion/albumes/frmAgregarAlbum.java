@@ -4,20 +4,35 @@
  */
 package sistemamusicapresentacion.albumes;
 
+import sistemamusica.dtos.UsuarioDTO;
+import sistemamusicadominio.Genero;
+import sistemamusicapresentacion.main.ControladorUniversal;
+
 /**
  *
  * @author gael_
  */
 public class frmAgregarAlbum extends javax.swing.JFrame {
     
-    ControladorAlbumes controlador;
+    UsuarioDTO usuario;
+    ControladorUniversal controlador;
     
     /**
      * Creates new form frmAgregarAlbum
      */
-    public frmAgregarAlbum(ControladorAlbumes controlador) {
+    public frmAgregarAlbum(ControladorUniversal controlador, UsuarioDTO usuario) {
         initComponents();
+        setLocationRelativeTo(null);
+        setTitle("Agregar Album");
         this.controlador=controlador;
+        this.usuario=usuario;
+        LlenarCBGenero();
+    }
+    
+    public void LlenarCBGenero(){
+        for(Genero tipo : Genero.values()){
+                comboboxGenero.addItem(tipo.toString());
+            }
     }
 
     /**
@@ -56,7 +71,6 @@ public class frmAgregarAlbum extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(850, 550));
-        setPreferredSize(new java.awt.Dimension(850, 550));
 
         panelFondo2.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -161,7 +175,6 @@ public class frmAgregarAlbum extends javax.swing.JFrame {
         textoAgregarAlbum.setFont(new java.awt.Font("Gotham Black", 1, 36)); // NOI18N
         textoAgregarAlbum.setForeground(new java.awt.Color(30, 215, 96));
 
-        comboboxGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         comboboxGenero.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
         comboboxGenero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -331,12 +344,12 @@ public class frmAgregarAlbum extends javax.swing.JFrame {
     }//GEN-LAST:event_btnFotoActionPerformed
 
     private void btnAgregarAlbumContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarAlbumContinuarActionPerformed
-        controlador.agregarCanciones();
+        controlador.mostrarAlbumesPrincipal(usuario);
         this.dispose();
     }//GEN-LAST:event_btnAgregarAlbumContinuarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        controlador.mostrarAlbumesPrincipal();
+        controlador.mostrarAlbumesPrincipal(usuario);
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 

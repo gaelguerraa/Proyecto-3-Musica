@@ -5,6 +5,8 @@
 package sistemamusicapresentacion.usuario;
 
 import sistemamusica.dtos.UsuarioDTO;
+import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
+import sistemamusicanegocio.interfaces.IUsuariosBO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
@@ -13,6 +15,7 @@ import sistemamusicapresentacion.main.ControladorUniversal;
  */
 public class frmCambiarDatos extends javax.swing.JFrame {
 
+    private final IUsuariosBO usuarioBO = FabricaObjetosNegocio.crearUsuariosBO();
     ControladorUniversal control;
     UsuarioDTO usuario;
 
@@ -24,6 +27,7 @@ public class frmCambiarDatos extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setTitle("Actualizar Datos");
         this.control = control;
+        this.usuario=usuario;
     }
 
     /**

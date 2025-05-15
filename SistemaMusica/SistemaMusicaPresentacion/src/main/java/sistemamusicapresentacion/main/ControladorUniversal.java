@@ -5,9 +5,16 @@
 package sistemamusicapresentacion.main;
 
 import sistemamusica.dtos.UsuarioDTO;
-import sistemamusicapresentacion.albumes.ControladorAlbumes;
-import sistemamusicapresentacion.artistas.ControladorArtistas;
-import sistemamusicapresentacion.canciones.ControladorCanciones;
+import sistemamusicadominio.Artista;
+import sistemamusicapresentacion.albumes.frmAgregarAlbum;
+import sistemamusicapresentacion.albumes.frmAgregarCancionesAlbum;
+import sistemamusicapresentacion.albumes.frmAlbumesDetalles;
+import sistemamusicapresentacion.albumes.frmAlbumesPrincipal;
+import sistemamusicapresentacion.artistas.frmAgregarBanda;
+import sistemamusicapresentacion.artistas.frmAgregarSolista;
+import sistemamusicapresentacion.artistas.frmArtistasDetalles;
+import sistemamusicapresentacion.artistas.frmArtistasPrincipal;
+import sistemamusicapresentacion.canciones.frmCanciones;
 import sistemamusicapresentacion.usuario.frmCambiarDatos;
 import sistemamusicapresentacion.usuario.frmFavoritosUsuario;
 import sistemamusicapresentacion.usuario.frmRestringidosUsuario;
@@ -19,24 +26,15 @@ import sistemamusicapresentacion.usuario.frmUsuarioPrincipal;
  */
 public class ControladorUniversal {
 
-    private final ControladorArtistas controladorArtistas;
-    private final ControladorAlbumes controladorAlbumes;
-    private final ControladorCanciones controladorCanciones;
+
     private frmIniciarSesion mostrarIniciarSesion;
     private frmRegistrarUsuario mostrarRegistrarUsuario;
+    
 
-    /**
-     * Constructor que inicializa los atributos de la clase al valor de sus
-     * parametros
-     *
-     * @param controladorArtistas clase control de Artistas
-     * @param controladorAlbumes clase control de Albumes
-     * @param controladorCanciones clase control de Canciones
-     */
-    public ControladorUniversal(ControladorArtistas controladorArtistas, ControladorAlbumes controladorAlbumes, ControladorCanciones controladorCanciones) {
-        this.controladorArtistas = new ControladorArtistas();
-        this.controladorAlbumes = new ControladorAlbumes();
-        this.controladorCanciones = new ControladorCanciones();
+
+    public ControladorUniversal() {
+
+
     }
 
     /**
@@ -95,25 +93,49 @@ public class ControladorUniversal {
         frmRestringidosUsuario.setVisible(true);
     }
 
-    /**
-     * Metodo para mostrar el modulo de Artistas
-     */
-    public void mostrarModuloArtistas() {
-        controladorArtistas.mostrarArtistasPrincipal();
+    public void mostrarArtistasPrincipal(UsuarioDTO usuario){
+        frmArtistasPrincipal artistasPrincipal = new frmArtistasPrincipal(this, usuario);
+        artistasPrincipal.setVisible(true);
+    }
+    
+    public void mostrarAgregarSolista(){
+        frmAgregarSolista agregarSolista = new frmAgregarSolista(this);
+        agregarSolista.setVisible(true);
+    }
+    
+    public void mostrarAgregarBanda(){
+        frmAgregarBanda agregarBanda = new frmAgregarBanda(this);
+        agregarBanda.setVisible(true);
+    }
+    
+    public void mostrarArtistasDetalles(Artista artistaSeleccionado){
+        frmArtistasDetalles artistasDetalles = new frmArtistasDetalles(this, artistaSeleccionado);
+        artistasDetalles.setVisible(true);
     }
 
-    /**
-     * Metodo para mostrar el modulo de Albumes
-     */
-    public void mostrarModuloAlbumes() {
-        controladorAlbumes.mostrarAlbumesPrincipal();
+    public void mostrarCanciones(UsuarioDTO usuario){
+        frmCanciones cancionesVentana= new frmCanciones(this, usuario);
+        cancionesVentana.setVisible(true);
     }
-
-    /**
-     * Metodo para mostrar el modulo de canciones
-     */
-    public void mostrarModuloCanciones() {
-        controladorCanciones.mostrarCanciones();
+    
+       public void mostrarAlbumesPrincipal(UsuarioDTO usuario){
+        frmAlbumesPrincipal albumesPrincipal = new frmAlbumesPrincipal(this, usuario);
+        albumesPrincipal.setVisible(true);
+    }
+    
+    public void mostrarAlbumDetalles(UsuarioDTO usuario){
+        frmAlbumesDetalles albumDetalles = new frmAlbumesDetalles(this, usuario);
+        albumDetalles.setVisible(true);
+    } 
+    
+    public void mostrarAgregarAlbum(UsuarioDTO usuario){
+        frmAgregarAlbum agregarAlbum= new frmAgregarAlbum(this, usuario);
+        agregarAlbum.setVisible(true);
+    }
+    
+    public void agregarCanciones(UsuarioDTO usuario){
+        frmAgregarCancionesAlbum agregarCanciones = new frmAgregarCancionesAlbum(this, usuario);
+        agregarCanciones.setVisible(true);
     }
 
 }
