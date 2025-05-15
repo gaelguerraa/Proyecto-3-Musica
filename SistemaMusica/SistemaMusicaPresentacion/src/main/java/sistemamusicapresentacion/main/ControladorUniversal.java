@@ -4,10 +4,15 @@
  */
 package sistemamusicapresentacion.main;
 
+import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicapresentacion.albumes.ControladorAlbumes;
 import sistemamusicapresentacion.artistas.ControladorArtistas;
 import sistemamusicapresentacion.canciones.ControladorCanciones;
 import sistemamusicapresentacion.usuario.ControladorUsuario;
+import sistemamusicapresentacion.usuario.frmCambiarDatos;
+import sistemamusicapresentacion.usuario.frmFavoritosUsuario;
+import sistemamusicapresentacion.usuario.frmRestringidosUsuario;
+import sistemamusicapresentacion.usuario.frmUsuarioPrincipal;
 
 /**
  *
@@ -56,9 +61,42 @@ public class ControladorUniversal {
 
     /**
      * Metodo para mostrar el modulo de Usuarios
+     *
+     * @param usuario Usuario a mostrar en la pantalla
      */
-    public void mostrarModuloUsuarios() {
-        controladorUsuario.mostrarUsuarioPrincipal();
+    public void mostrarModuloPrincipalUsuarios(UsuarioDTO usuario) {
+        frmUsuarioPrincipal frmUsuarioPrincipal = new frmUsuarioPrincipal(this, usuario);
+        frmUsuarioPrincipal.setVisible(true);
+    }
+
+    /**
+     * Metodo para mostrar el modulo de Favoritos del usuario
+     *
+     * @param usuario Usuario referenciado
+     */
+    public void mostrarModuloFavoritosUsuario(UsuarioDTO usuario) {
+        frmFavoritosUsuario frmFavoritosUsuario = new frmFavoritosUsuario(this, usuario);
+        frmFavoritosUsuario.setVisible(true);
+    }
+
+    /**
+     * Metodo para mostrar el modulo de Modificar el usuario
+     *
+     * @param usuario Usuario referenciado
+     */
+    public void mostrarModuloModificarUsuario(UsuarioDTO usuario) {
+        frmCambiarDatos frmCambiarDatos = new frmCambiarDatos(this, usuario);
+        frmCambiarDatos.setVisible(true);
+    }
+
+    /**
+     * Metodo para mostrar las Restricciones del usuario
+     *
+     * @param usuario Usuario referenciado
+     */
+    public void mostrarModuloRestringidosUsuario(UsuarioDTO usuario) {
+        frmRestringidosUsuario frmRestringidosUsuario = new frmRestringidosUsuario(this, usuario);
+        frmRestringidosUsuario.setVisible(true);
     }
 
     /**

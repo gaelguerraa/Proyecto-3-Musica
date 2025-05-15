@@ -4,22 +4,27 @@
  */
 package sistemamusicapresentacion.usuario;
 
+import sistemamusica.dtos.UsuarioDTO;
+import sistemamusicapresentacion.main.ControladorUniversal;
+
 /**
  *
  * @author gael_
  */
 public class frmCambiarDatos extends javax.swing.JFrame {
 
-    ControladorUsuario controlador; 
+//    ControladorUsuario controlador; 
+    ControladorUniversal control;
+    UsuarioDTO usuario;
     
     /**
      * Creates new form frmCambiarDatos
      */
-    public frmCambiarDatos(ControladorUsuario controlador) {
+    public frmCambiarDatos(ControladorUniversal control, UsuarioDTO usuario) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Actualizar Datos");
-        this.controlador=controlador;
+        this.control = control;
     }
 
     /**
@@ -185,12 +190,12 @@ public class frmCambiarDatos extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        controlador.mostrarUsuarioPrincipal();
+        control.mostrarModuloPrincipalUsuarios(usuario);
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        controlador.mostrarUsuarioPrincipal();
+        control.mostrarModuloPrincipalUsuarios(usuario);
         this.dispose();
     }//GEN-LAST:event_btnActualizarActionPerformed
 

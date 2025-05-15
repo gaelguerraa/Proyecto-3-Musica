@@ -4,6 +4,7 @@
  */
 package sistemamusicapresentacion.usuario;
 
+import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
@@ -12,18 +13,21 @@ import sistemamusicapresentacion.main.ControladorUniversal;
  */
 public class frmUsuarioPrincipal extends javax.swing.JFrame {
 
-    ControladorUsuario controlador;
-    ControladorUniversal universal;
+    //ControladorUsuario controlador;
+    ControladorUniversal control;
+    private UsuarioDTO usuario;
     
     /**
      * Creates new form frmUsuarioPrincipal
+     * @param universal
+     * @param usuario
      */
-    public frmUsuarioPrincipal(ControladorUsuario controlador, ControladorUniversal universal) {
+    public frmUsuarioPrincipal(ControladorUniversal control, UsuarioDTO usuario) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Usuario");
-        this.controlador=controlador;
-        this.universal=universal;
+        this.control = control;
+        this.usuario = usuario;
     }
 
     /**
@@ -290,12 +294,12 @@ public class frmUsuarioPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnArtistas1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArtistas1ActionPerformed
-        universal.mostrarModuloAlbumes();
+        control.mostrarModuloAlbumes();
         this.dispose();
     }//GEN-LAST:event_btnArtistas1ActionPerformed
 
     private void btnCancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancionesActionPerformed
-        universal.mostrarModuloCanciones();
+        control.mostrarModuloCanciones();
         this.dispose();
     }//GEN-LAST:event_btnCancionesActionPerformed
 
@@ -304,22 +308,22 @@ public class frmUsuarioPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrarMasivamenteActionPerformed
 
     private void btnFavoritosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFavoritosActionPerformed
-        controlador.mostrarFavoritosUsuario();
+        control.mostrarModuloFavoritosUsuario(usuario);
         this.dispose();
     }//GEN-LAST:event_btnFavoritosActionPerformed
 
     private void btnCambiarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarDatosActionPerformed
-        controlador.mostrarCambiarDatos();
+        control.mostrarModuloModificarUsuario(usuario);
         this.dispose();
     }//GEN-LAST:event_btnCambiarDatosActionPerformed
 
     private void btnRestringidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestringidosActionPerformed
-        controlador.mostrarRestringidosUsuario();
+        control.mostrarModuloRestringidosUsuario(usuario);
         this.dispose();
     }//GEN-LAST:event_btnRestringidosActionPerformed
 
     private void btnAlbumesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlbumesActionPerformed
-        universal.mostrarModuloAlbumes();
+        control.mostrarModuloAlbumes();
         this.dispose();
     }//GEN-LAST:event_btnAlbumesActionPerformed
 

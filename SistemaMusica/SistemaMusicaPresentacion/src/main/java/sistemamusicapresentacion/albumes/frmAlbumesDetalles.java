@@ -292,7 +292,7 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
     }//GEN-LAST:event_txtAlbumActionPerformed
 
     private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioActionPerformed
-        universal.mostrarModuloUsuarios();
+        // aqui se muestra el modulo principal de usuarios
         this.dispose();
     }//GEN-LAST:event_btnUsuarioActionPerformed
 

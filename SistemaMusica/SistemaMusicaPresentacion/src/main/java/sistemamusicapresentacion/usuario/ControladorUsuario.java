@@ -4,6 +4,7 @@
  */
 package sistemamusicapresentacion.usuario;
 
+import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
@@ -17,27 +18,28 @@ public class ControladorUsuario {
     frmRestringidosUsuario restringidosUsuario;
     
     ControladorUniversal universal;
+    UsuarioDTO usuarioDTO;
 
     public ControladorUsuario() {
     }
     
-    public void mostrarUsuarioPrincipal(){
-        this.usuarioPrincipal = new frmUsuarioPrincipal(this, universal);
-        usuarioPrincipal.setVisible(true);
-    }
+//    public void mostrarUsuarioPrincipal(){
+//        this.usuarioPrincipal = new frmUsuarioPrincipal(this, universal, usuarioDTO);
+//        usuarioPrincipal.setVisible(true);
+//    }
     
-    public void mostrarFavoritosUsuario(){
-        this.favoritosUsuario = new frmFavoritosUsuario(this, universal);
-        favoritosUsuario.setVisible(true);
-    }
+//    public void mostrarFavoritosUsuario(){
+//        this.favoritosUsuario = new frmFavoritosUsuario(this, universal);
+//        favoritosUsuario.setVisible(true);
+//    }
     
-    public void mostrarRestringidosUsuario(){
-        this.restringidosUsuario = new frmRestringidosUsuario(this, universal);
-        restringidosUsuario.setVisible(true);
-    }
+//    public void mostrarRestringidosUsuario(){
+//        this.restringidosUsuario = new frmRestringidosUsuario(this, universal);
+//        restringidosUsuario.setVisible(true);
+//    }
     
-    public void mostrarCambiarDatos(){
-        this.cambiarDatos = new frmCambiarDatos(this);
-        cambiarDatos.setVisible(true);
-    }
+//    public void mostrarCambiarDatos(){
+//        this.cambiarDatos = new frmCambiarDatos(this);
+//        cambiarDatos.setVisible(true);
+//    }
 }

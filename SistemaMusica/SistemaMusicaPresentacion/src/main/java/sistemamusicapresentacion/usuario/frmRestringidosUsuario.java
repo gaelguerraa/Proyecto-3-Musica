@@ -4,6 +4,7 @@
  */
 package sistemamusicapresentacion.usuario;
 
+import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
@@ -12,18 +13,19 @@ import sistemamusicapresentacion.main.ControladorUniversal;
  */
 public class frmRestringidosUsuario extends javax.swing.JFrame {
 
-    ControladorUsuario controlador;
-    ControladorUniversal universal;
-    
+//    ControladorUsuario controlador;
+    ControladorUniversal control;
+    UsuarioDTO usuario;
+
     /**
      * Creates new form frmRestringidosUsuario
      */
-    public frmRestringidosUsuario(ControladorUsuario controlador, ControladorUniversal universal) {
+    public frmRestringidosUsuario(ControladorUniversal control, UsuarioDTO usuario) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Restringidos");
-        this.controlador=controlador;
-        this.universal=universal;
+        this.control = control;
+        this.usuario = usuario;
     }
 
     /**
@@ -263,12 +265,12 @@ public class frmRestringidosUsuario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnArtistasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArtistasActionPerformed
-        universal.mostrarModuloArtistas();
+        control.mostrarModuloArtistas();
         this.dispose();
     }//GEN-LAST:event_btnArtistasActionPerformed
 
     private void btnCancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancionesActionPerformed
-        universal.mostrarModuloCanciones();
+        control.mostrarModuloCanciones();
         this.dispose();
     }//GEN-LAST:event_btnCancionesActionPerformed
 
@@ -277,10 +279,9 @@ public class frmRestringidosUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        controlador.mostrarUsuarioPrincipal();
+        control.mostrarModuloPrincipalUsuarios(usuario);
         this.dispose();
     }//GEN-LAST:event_btnAgregarActionPerformed
-
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

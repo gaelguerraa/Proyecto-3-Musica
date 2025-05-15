@@ -5,6 +5,7 @@
 package sistemamusicapresentacion.main;
 
 import javax.swing.JOptionPane;
+import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicanegocio.exception.NegocioException;
 import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
 import sistemamusicanegocio.interfaces.IUsuariosBO;
@@ -155,13 +156,12 @@ public class frmIniciarSesion extends javax.swing.JFrame {
         char[] contraseniaChars = txtContrasenia.getPassword();
         String contrasenia = new String(contraseniaChars);
 
-        System.out.println(contrasenia);
-
         try {
-            usuarioBO.iniciarSesion(username, contrasenia); // Hacer que este metodo busque si existe una cuenta con el mismo username
-            JOptionPane.showMessageDialog(this, "El usuario: " + username
+            UsuarioDTO usuarioSesionIniciada = usuarioBO.iniciarSesion(username, contrasenia); // Hacer que este metodo busque si existe una cuenta con el mismo username
+            JOptionPane.showMessageDialog(this, "El usuario " + username
                     + " ha iniciado sesion", "Info.",
                     JOptionPane.INFORMATION_MESSAGE); // TODO: Eliminar cuando exista pantalla principal
+            control.mostrarModuloPrincipalUsuarios(usuarioSesionIniciada);
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Info.",
                     JOptionPane.INFORMATION_MESSAGE);

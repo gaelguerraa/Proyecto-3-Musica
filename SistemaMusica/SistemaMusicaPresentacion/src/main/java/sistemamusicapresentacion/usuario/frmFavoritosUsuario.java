@@ -4,6 +4,7 @@
  */
 package sistemamusicapresentacion.usuario;
 
+import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
@@ -12,18 +13,19 @@ import sistemamusicapresentacion.main.ControladorUniversal;
  */
 public class frmFavoritosUsuario extends javax.swing.JFrame {
 
-    ControladorUsuario controlador;
-    ControladorUniversal universal;
+//    ControladorUsuario controlador;
+    ControladorUniversal control;
+    UsuarioDTO usuario;
     
     /**
      * Creates new form frmFavoritosUsuario
      */
-    public frmFavoritosUsuario(ControladorUsuario controlador,ControladorUniversal universal) {
+    public frmFavoritosUsuario(ControladorUniversal control, UsuarioDTO usuario) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Favoritos");
-        this.controlador=controlador;
-        this.universal=universal;
+        this.control = control;
+        this.usuario = usuario;
     }
 
     /**
@@ -275,12 +277,12 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnArtistasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArtistasActionPerformed
-        universal.mostrarModuloArtistas();
+        control.mostrarModuloArtistas();
         this.dispose();
     }//GEN-LAST:event_btnArtistasActionPerformed
 
     private void btnCancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancionesActionPerformed
-        universal.mostrarModuloCanciones();
+        control.mostrarModuloCanciones();
         this.dispose();
     }//GEN-LAST:event_btnCancionesActionPerformed
 
@@ -289,12 +291,12 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBorrarFavoritoActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        controlador.mostrarUsuarioPrincipal();
+        control.mostrarModuloPrincipalUsuarios(usuario);
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnAlbumesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlbumesActionPerformed
-        universal.mostrarModuloAlbumes();
+        control.mostrarModuloAlbumes();
         this.dispose();
     }//GEN-LAST:event_btnAlbumesActionPerformed
 
