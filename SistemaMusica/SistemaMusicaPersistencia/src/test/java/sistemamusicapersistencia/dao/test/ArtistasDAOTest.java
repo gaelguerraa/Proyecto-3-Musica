@@ -2,24 +2,29 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit5TestClass.java to edit this template
  */
-package sistemamusicapersistencia.implementaciones;
+package sistemamusicapersistencia.dao.test;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
 import sistemamusica.dtos.ArtistaDTO;
 import sistemamusicadominio.Artista;
 import sistemamusicadominio.Genero;
 import sistemamusicadominio.Integrante;
 import sistemamusicadominio.RolIntegrante;
 import sistemamusicadominio.TipoArtista;
+import sistemamusicapersistencia.implementaciones.ArtistasDAO;
+import sistemamusicapersistencia.implementaciones.ManejadorConexiones;
 
 /**
  *
@@ -32,16 +37,53 @@ public class ArtistasDAOTest {
     private final String CAMPO_NOMBRE = "nombre";
     private final String CAMPO_GENERO = "genero";
     private final String CAMPO_TIPO = "tipo";
+    private Artista artistaGuardado;
+    private Artista artistaGuardado2;
+    private Integrante integranteGuardado;
+    private Integrante integranteGuardado2;
+    private final ArtistasDAO dao = new ArtistasDAO();
     
     public ArtistasDAOTest() {
+    }
+    
+    @BeforeAll
+    public static void activarModoPruebas() {
+        ManejadorConexiones.activateTestMode();
+    }
+
+    @AfterEach
+    public void limpiarBD() {
+        if (artistaGuardado != null) {
+            MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+            MongoCollection<Artista> coleccion = baseDatos.getCollection(
+                    COLECCION, Artista.class);
+
+            coleccion.deleteOne(Filters.eq(CAMPO_ID, artistaGuardado.getId()));
+            artistaGuardado = null;
+
+            if (artistaGuardado2 != null) {
+                coleccion.deleteOne(Filters.eq(CAMPO_ID, artistaGuardado2.getId()));
+                artistaGuardado2 = null;
+            }
+        }
+        
+        if (integranteGuardado != null) {
+            MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+            MongoCollection<Integrante> coleccion = baseDatos.getCollection(
+                    COLECCION, Integrante.class);
+
+            coleccion.deleteOne(Filters.eq(CAMPO_ID, integranteGuardado.getId()));
+            integranteGuardado = null;
+
+            if (integranteGuardado2 != null) {
+                coleccion.deleteOne(Filters.eq(CAMPO_ID, integranteGuardado2.getId()));
+                integranteGuardado2 = null;
+            }
+        }
     }
 
     @Test
     public void testRegistrarSolista() {
-        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
-        MongoCollection<Artista> coleccion = baseDatos.getCollection(COLECCION, Artista.class);
-        ArtistasDAO dao = new ArtistasDAO();
-        
         ArtistaDTO dto = new ArtistaDTO();
         dto.setTipo(TipoArtista.SOLISTA);
         dto.setNombre("Solista Test");
@@ -50,6 +92,7 @@ public class ArtistasDAOTest {
 
 
         Artista registrado = dao.registrarSolista(dto);
+        artistaGuardado = registrado;
         assertNotNull(registrado);
         assertEquals("Solista Test", registrado.getNombre());
         assertEquals(TipoArtista.SOLISTA, registrado.getTipo());
@@ -57,9 +100,6 @@ public class ArtistasDAOTest {
 
     @Test
     public void testRegistrarBanda() {
-         MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
-        MongoCollection<Artista> coleccion = baseDatos.getCollection(COLECCION, Artista.class);
-        ArtistasDAO dao = new ArtistasDAO();
         
         List<Integrante> integrantes = new ArrayList<>();
         
@@ -72,6 +112,7 @@ public class ArtistasDAOTest {
         i1.setFechaIngreso(fechaIngresoDate);
         i1.setFechaIngreso(null);
         i1.setActivo(true);
+        integranteGuardado = i1;
         
         Integrante i2 = new Integrante();
         i2.setNombre("roberto laija");
@@ -79,6 +120,7 @@ public class ArtistasDAOTest {
         i2.setFechaIngreso(fechaIngresoDate);
         i2.setFechaIngreso(null);
         i2.setActivo(true);
+        integranteGuardado2 = i2;
         
         integrantes.add(i1);
         integrantes.add(i2);
@@ -92,6 +134,7 @@ public class ArtistasDAOTest {
         
 
         Artista registrado = dao.registrarBanda(dto);
+        artistaGuardado = registrado;
         assertNotNull(registrado);
         assertEquals("Peso pluma", registrado.getNombre());
         assertEquals(TipoArtista.BANDA, registrado.getTipo());
@@ -100,10 +143,6 @@ public class ArtistasDAOTest {
 
     @Test
     public void testBuscarArtistasPorNombre() {
-         MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
-        MongoCollection<Artista> coleccion = baseDatos.getCollection(COLECCION, Artista.class);
-        
-        ArtistasDAO dao = new ArtistasDAO();
         
         ArtistaDTO dto = new ArtistaDTO();
         dto.setTipo(TipoArtista.SOLISTA);
@@ -113,15 +152,13 @@ public class ArtistasDAOTest {
 
 
         Artista registrado = dao.registrarSolista(dto);
+        artistaGuardado = registrado;
         List<Artista> resultados = dao.buscarArtistasPorNombre("Luis Miguel");
         assertFalse(resultados.isEmpty());
     }
 
     @Test
     public void testBuscarArtistasPorGenero() {
-         MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
-        MongoCollection<Artista> coleccion = baseDatos.getCollection(COLECCION, Artista.class);
-        ArtistasDAO dao = new ArtistasDAO();
         
         ArtistaDTO dto = new ArtistaDTO();
         dto.setTipo(TipoArtista.SOLISTA);
@@ -131,16 +168,13 @@ public class ArtistasDAOTest {
 
 
         Artista registrado = dao.registrarSolista(dto);
+        artistaGuardado = registrado;
         List<Artista> resultados = dao.buscarArtistasPorGenero("MUSICAMEXICANA");
         assertFalse(resultados.isEmpty());
     }
 
     @Test
     public void testBuscarArtistasPorNombreGenero() {
-         MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
-        MongoCollection<Artista> coleccion = baseDatos.getCollection(COLECCION, Artista.class);
-        
-        ArtistasDAO dao = new ArtistasDAO();
         
         ArtistaDTO dto = new ArtistaDTO();
         dto.setTipo(TipoArtista.SOLISTA);
@@ -150,14 +184,13 @@ public class ArtistasDAOTest {
 
 
         Artista registrado = dao.registrarSolista(dto);
+        artistaGuardado = registrado;
         List<Artista> resultados = dao.buscarArtistasPorNombreGenero("Luis Miguel", "MUSICAMEXICANA");
         assertFalse(resultados.isEmpty());
     }
 
     @Test
     public void testBuscarArtistas() {
-         MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
-        MongoCollection<Artista> coleccion = baseDatos.getCollection(COLECCION, Artista.class);
         
         ArtistasDAO dao = new ArtistasDAO();
         
@@ -169,6 +202,7 @@ public class ArtistasDAOTest {
 
 
         Artista registrado = dao.registrarSolista(dto);
+        artistaGuardado = registrado;
         List<Artista> resultados = dao.buscarArtistas();
         assertFalse(resultados.isEmpty());
     }
