@@ -4,6 +4,7 @@
  */
 package sistemamusicanegocio.interfaces;
 
+import java.util.List;
 import sistemamusica.dtos.ArtistaDTO;
 import sistemamusicadominio.Artista;
 import sistemamusicanegocio.exception.NegocioException;
@@ -15,4 +16,8 @@ import sistemamusicanegocio.exception.NegocioException;
 public interface IArtistasBO {
     public abstract Artista registrarSolista(ArtistaDTO nuevoSolista) throws NegocioException;
     public abstract Artista registrarBanda(ArtistaDTO nuevaBanda) throws NegocioException;
+    public abstract List<Artista> buscarArtistasPorNombre(String nombre);
+    public abstract List<Artista> buscarArtistasPorGenero(String genero);
+    public abstract List<Artista> buscarArtistasPorNombreGenero(String nombre, String genero);
+    public abstract List<Artista> buscarArtistas();
 }

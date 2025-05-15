@@ -4,6 +4,7 @@
  */
 package sistemamusicanegocio.implementaciones;
 
+import java.util.List;
 import sistemamusica.dtos.ArtistaDTO;
 import sistemamusicadominio.Artista;
 import sistemamusicanegocio.exception.NegocioException;
@@ -61,6 +62,26 @@ public class ArtistasBO implements IArtistasBO {
             throw new NegocioException("Una banda debe tener integrantes.");
         }
         return artistasDAO.registrarBanda(nuevaBanda);
+    }
+
+    @Override
+    public List<Artista> buscarArtistasPorNombre(String nombre) {
+        return artistasDAO.buscarArtistasPorNombre(nombre);
+    }
+
+    @Override
+    public List<Artista> buscarArtistasPorGenero(String genero) {
+        return artistasDAO.buscarArtistasPorGenero(genero);
+    }
+
+    @Override
+    public List<Artista> buscarArtistasPorNombreGenero(String nombre, String genero) {
+        return artistasDAO.buscarArtistasPorNombreGenero(nombre, genero);
+    }
+
+    @Override
+    public List<Artista> buscarArtistas() {
+        return artistasDAO.buscarArtistas();
     }
     
 }

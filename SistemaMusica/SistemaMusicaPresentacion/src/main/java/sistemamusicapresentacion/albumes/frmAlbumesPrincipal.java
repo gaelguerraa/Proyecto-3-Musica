@@ -155,7 +155,7 @@ public class frmAlbumesPrincipal extends javax.swing.JFrame {
 
         comboboxFiltro.setBackground(new java.awt.Color(30, 215, 96));
         comboboxFiltro.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
-        comboboxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboboxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Genero", "Fecha de Lanzamiento", "Nombre" }));
 
         btnBuscar.setBackground(new java.awt.Color(30, 215, 96));
         btnBuscar.setFont(new java.awt.Font("Gotham Black", 0, 18)); // NOI18N
@@ -167,14 +167,14 @@ public class frmAlbumesPrincipal extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nombre", "Genero", "Artista"
+                "Nombre", "Genero", "Artista", "Fecha Lanzamiento"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {

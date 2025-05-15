@@ -69,8 +69,8 @@
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="145" max="-2" attributes="0"/>
-                          <Component id="labelAlbum" min="-2" pref="174" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
+                          <Component id="labelAlbum" min="-2" pref="406" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                           <Component id="labelMusicio1" min="-2" pref="207" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -333,7 +333,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="60" green="d7" red="1e" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Albumes"/>
+            <Property name="text" type="java.lang.String" value="Canciones Albumes"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="labelFoto">

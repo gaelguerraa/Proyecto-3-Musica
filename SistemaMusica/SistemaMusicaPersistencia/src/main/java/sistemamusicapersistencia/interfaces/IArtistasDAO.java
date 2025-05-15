@@ -4,6 +4,7 @@
  */
 package sistemamusicapersistencia.interfaces;
 
+import java.util.List;
 import sistemamusica.dtos.ArtistaDTO;
 import sistemamusicadominio.Artista;
 
@@ -14,4 +15,8 @@ import sistemamusicadominio.Artista;
 public interface IArtistasDAO {
     public abstract Artista registrarSolista(ArtistaDTO nuevoSolista);
     public abstract Artista registrarBanda(ArtistaDTO nuevaBanda);
+    public abstract List<Artista> buscarArtistasPorNombre(String nombre);
+    public abstract List<Artista> buscarArtistasPorGenero(String genero);
+    public abstract List<Artista> buscarArtistasPorNombreGenero(String nombre, String genero);
+    public abstract List<Artista> buscarArtistas();
 }

@@ -160,7 +160,7 @@ public class frmCanciones extends javax.swing.JFrame {
 
         comboboxFiltro.setBackground(new java.awt.Color(30, 215, 96));
         comboboxFiltro.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
-        comboboxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboboxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "Album", "Artista" }));
 
         btnBuscar.setBackground(new java.awt.Color(30, 215, 96));
         btnBuscar.setFont(new java.awt.Font("Gotham Black", 0, 18)); // NOI18N

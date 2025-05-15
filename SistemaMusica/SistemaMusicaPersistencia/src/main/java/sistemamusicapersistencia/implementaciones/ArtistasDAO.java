@@ -4,8 +4,17 @@
  */
 package sistemamusicapersistencia.implementaciones;
 
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.regex.Pattern;
+import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import sistemamusica.dtos.ArtistaDTO;
 import sistemamusicadominio.Artista;
 import sistemamusicadominio.TipoArtista;
@@ -22,7 +31,6 @@ public class ArtistasDAO implements IArtistasDAO {
     private final String CAMPO_NOMBRE = "nombre";
     private final String CAMPO_GENERO = "genero";
     private final String CAMPO_TIPO = "tipo";
-    private final String CAMPO_IMAGEN = "imagen";
     
     @Override
     public Artista registrarSolista(ArtistaDTO nuevoSolista) {
@@ -56,6 +64,60 @@ public class ArtistasDAO implements IArtistasDAO {
         
         coleccion.insertOne(banda);
         return banda;
+    }
+
+    @Override
+    public List<Artista> buscarArtistasPorNombre(String nombre) {
+        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Artista> coleccion = baseDatos.getCollection(COLECCION, Artista.class);
+        
+        Document filtros = new Document();
+        filtros.append(CAMPO_NOMBRE, nombre);
+        
+        FindIterable<Artista> resultados = coleccion.find();
+        List<Artista> listaArtistas = new LinkedList<>();
+        resultados.into(listaArtistas);
+        return listaArtistas;
+    }
+
+    @Override
+    public List<Artista> buscarArtistasPorGenero(String genero) {
+        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Artista> coleccion = baseDatos.getCollection(COLECCION, Artista.class);
+        
+        Document filtros = new Document();
+        filtros.append(CAMPO_GENERO, genero);
+        
+        FindIterable<Artista> resultados = coleccion.find(filtros);
+        List<Artista> listaArtistas = new ArrayList<>();
+        resultados.into(listaArtistas);
+        return listaArtistas;
+    }
+
+    @Override
+    public List<Artista> buscarArtistasPorNombreGenero(String nombre, String genero) {
+        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Artista> coleccion = baseDatos.getCollection(COLECCION, Artista.class);
+        
+        Document filtros = new Document();
+        filtros.append(CAMPO_NOMBRE, nombre);
+        filtros.append(CAMPO_GENERO, genero);
+        
+        FindIterable<Artista> resultados = coleccion.find(filtros);
+        List<Artista> listaArtistas = new ArrayList<>();
+        resultados.into(listaArtistas);
+        return listaArtistas;
+    }
+
+    @Override
+    public List<Artista> buscarArtistas() {
+        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Artista> coleccion = baseDatos.getCollection(COLECCION, Artista.class);
+        
+        FindIterable<Artista> resultados = coleccion.find();
+        List<Artista> listaArtistas = new ArrayList<>();
+        resultados.into(listaArtistas);
+        return listaArtistas;
     }
     
 }

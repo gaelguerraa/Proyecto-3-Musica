@@ -287,11 +287,10 @@
               <Font name="Gotham Black" size="14" style="1"/>
             </Property>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="4">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
+              <StringArray count="3">
+                <StringItem index="0" value="Genero"/>
+                <StringItem index="1" value="Fecha de Lanzamiento"/>
+                <StringItem index="2" value="Nombre"/>
               </StringArray>
             </Property>
           </Properties>
@@ -322,10 +321,11 @@
                   <Font name="Gotham Black" size="12" style="1"/>
                 </Property>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="3" rowCount="0">
+                  <Table columnCount="4" rowCount="0">
                     <Column editable="false" title="Nombre" type="java.lang.String"/>
                     <Column editable="false" title="Genero" type="java.lang.String"/>
                     <Column editable="false" title="Artista" type="java.lang.String"/>
+                    <Column editable="false" title="Fecha Lanzamiento" type="java.lang.String"/>
                   </Table>
                 </Property>
               </Properties>

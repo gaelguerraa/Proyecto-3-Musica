@@ -4,6 +4,10 @@
  */
 package sistemamusicapresentacion.artistas;
 
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import sistemamusicadominio.Artista;
+import sistemamusicadominio.Genero;
 import sistemamusicanegocio.interfaces.IArtistasBO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
@@ -25,7 +29,45 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
         this.controlador=controlador;
         this.universal=universal;
         this.artistasBO=artistasBO;
+        LlenarCBGenero();
+        this.LlenarTablaArtistas();
     }
+    
+    public void LlenarCBGenero(){
+        for(Genero tipo : Genero.values()){
+                CBGenero.addItem(tipo.toString());
+            }
+    }
+    
+    private void LlenarTablaArtistas() {
+        List<Artista> artistasConsultados;
+
+        String nombreArtista = txtBuscador.getText().trim();
+        String generoSeleccionado = (String) CBGenero.getSelectedItem();
+
+        if (nombreArtista.isEmpty() && generoSeleccionado.equals("CUALQUIERA")) {
+            artistasConsultados = artistasBO.buscarArtistas();
+        } else if (!nombreArtista.isEmpty() && generoSeleccionado.equals("CUALQUIERA")) {
+            artistasConsultados = artistasBO.buscarArtistasPorNombre(nombreArtista);
+        } else if (nombreArtista.isEmpty() && !generoSeleccionado.equals("CUALQUIERA")) {
+            artistasConsultados = artistasBO.buscarArtistasPorGenero(generoSeleccionado);
+        } else {
+            artistasConsultados = artistasBO.buscarArtistasPorNombreGenero(nombreArtista, generoSeleccionado);
+        }
+
+        DefaultTableModel modeloTabla = (DefaultTableModel) tablaArtistas.getModel();
+        modeloTabla.setRowCount(0);
+
+        for (Artista a : artistasConsultados) {
+            Object[] fila = {
+                a.getNombre(),
+                a.getGenero(),
+                a.getTipo()
+            };
+            modeloTabla.addRow(fila);
+        }
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -48,13 +90,15 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
         btnUsuario = new javax.swing.JButton();
         labelMusicio1 = new javax.swing.JLabel();
         labelArtista = new javax.swing.JLabel();
-        comboboxFiltro = new javax.swing.JComboBox<>();
+        CBGenero = new javax.swing.JComboBox<>();
         txtBuscador = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaArtistas = new javax.swing.JTable();
         btnAgregarSolista = new javax.swing.JButton();
         btnAgregarBanda = new javax.swing.JButton();
+        genero = new javax.swing.JLabel();
+        nombre = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(850, 550));
@@ -161,13 +205,18 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
         labelArtista.setForeground(new java.awt.Color(30, 215, 96));
         labelArtista.setText("Artistas");
 
-        comboboxFiltro.setBackground(new java.awt.Color(30, 215, 96));
-        comboboxFiltro.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
-        comboboxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        CBGenero.setBackground(new java.awt.Color(30, 215, 96));
+        CBGenero.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
+        CBGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CUALQUIERA" }));
 
         btnBuscar.setBackground(new java.awt.Color(30, 215, 96));
         btnBuscar.setFont(new java.awt.Font("Gotham Black", 0, 18)); // NOI18N
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         tablaArtistas.setFont(new java.awt.Font("Gotham Black", 1, 12)); // NOI18N
         tablaArtistas.setModel(new javax.swing.table.DefaultTableModel(
@@ -175,14 +224,14 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Imagen", "Nombre", "Genero", "Tipo"
+                "Nombre", "Genero", "Tipo"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -213,6 +262,14 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
             }
         });
 
+        genero.setFont(new java.awt.Font("Gotham Bold", 1, 14)); // NOI18N
+        genero.setForeground(new java.awt.Color(30, 215, 96));
+        genero.setText("genero:");
+
+        nombre.setFont(new java.awt.Font("Gotham Bold", 1, 14)); // NOI18N
+        nombre.setForeground(new java.awt.Color(30, 215, 96));
+        nombre.setText("nombre:");
+
         javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
         panelFondo.setLayout(panelFondoLayout);
         panelFondoLayout.setHorizontalGroup(
@@ -233,32 +290,44 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(panelFondoLayout.createSequentialGroup()
-                                .addComponent(comboboxFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(CBGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(genero))
+                                .addGap(18, 18, 18)
                                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(panelFondoLayout.createSequentialGroup()
+                                        .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(nombre)
+                                            .addGroup(panelFondoLayout.createSequentialGroup()
+                                                .addGap(62, 62, 62)
+                                                .addComponent(labelArtista, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(labelArtista, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(107, 107, 107)
-                                        .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addContainerGap())
+                                        .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(panelFondoLayout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
                                         .addComponent(txtBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addContainerGap(42, Short.MAX_VALUE))))))))
+                                        .addGap(0, 53, Short.MAX_VALUE)))
+                                .addContainerGap())))))
         );
         panelFondoLayout.setVerticalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panelVerde, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelArtista, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16)
+                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelArtista, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(16, 16, 16))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
+                        .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(genero)
+                            .addComponent(nombre))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(comboboxFiltro)
+                    .addComponent(CBGenero)
                     .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -314,8 +383,13 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnUsuarioActionPerformed
 
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        LlenarTablaArtistas();
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> CBGenero;
     private javax.swing.JButton btnAgregarBanda;
     private javax.swing.JButton btnAgregarSolista;
     private javax.swing.JButton btnAlbumes;
@@ -323,7 +397,7 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCanciones;
     private javax.swing.JButton btnUsuario;
-    private javax.swing.JComboBox<String> comboboxFiltro;
+    private javax.swing.JLabel genero;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelAlbumes;
     private javax.swing.JLabel labelArtista;
@@ -331,6 +405,7 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel labelCanciones;
     private javax.swing.JLabel labelMusicio1;
     private javax.swing.JLabel labelUsuario;
+    private javax.swing.JLabel nombre;
     private javax.swing.JPanel panelFondo;
     private javax.swing.JPanel panelVerde;
     private javax.swing.JTable tablaArtistas;

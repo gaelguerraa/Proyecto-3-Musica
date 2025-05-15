@@ -156,7 +156,7 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
 
         comboboxFiltro.setBackground(new java.awt.Color(30, 215, 96));
         comboboxFiltro.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
-        comboboxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboboxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Artistas", "Canciones", "Albumes", "Genero", "Fecha de agregacion" }));
 
         btnBuscar.setBackground(new java.awt.Color(30, 215, 96));
         btnBuscar.setFont(new java.awt.Font("Gotham Black", 0, 18)); // NOI18N
@@ -168,14 +168,14 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Tipo", "Nombre", "Genero"
+                "Tipo", "Nombre", "Genero", "Fecha de Agregacion"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {

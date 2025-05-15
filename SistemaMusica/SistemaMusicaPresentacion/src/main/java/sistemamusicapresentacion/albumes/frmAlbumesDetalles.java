@@ -200,7 +200,7 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
 
         labelAlbum.setFont(new java.awt.Font("Gotham Black", 1, 36)); // NOI18N
         labelAlbum.setForeground(new java.awt.Color(30, 215, 96));
-        labelAlbum.setText("Albumes");
+        labelAlbum.setText("Canciones Albumes");
 
         labelFoto.setForeground(new java.awt.Color(255, 255, 255));
         labelFoto.setText("Mostrar Foto de album aqui");
@@ -228,8 +228,8 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
                                 .addComponent(labelFoto)
                                 .addGap(280, 280, 280))))
                     .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(145, 145, 145)
-                        .addComponent(labelAlbum, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(60, 60, 60)
+                        .addComponent(labelAlbum, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))

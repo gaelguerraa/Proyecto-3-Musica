@@ -15,4 +15,5 @@ public interface IUsuariosBO {
     public Usuario agregarUsuario(UsuarioDTO nuevoUsuario);
     public Usuario consultarPorId(String idUsuario);
     public Usuario modificarUsuario(String idUsuario, UsuarioDTO datosActualizados);
+
 }
