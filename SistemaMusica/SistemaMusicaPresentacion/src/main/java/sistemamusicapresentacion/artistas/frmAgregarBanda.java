@@ -4,19 +4,136 @@
  */
 package sistemamusicapresentacion.artistas;
 
+import java.io.File;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import sistemamusica.dtos.ArtistaDTO;
+import sistemamusica.dtos.IntegranteDTO;
+import sistemamusicadominio.Genero;
+import sistemamusicadominio.Integrante;
+import sistemamusicadominio.RolIntegrante;
+import sistemamusicadominio.TipoArtista;
+import sistemamusicanegocio.exception.NegocioException;
+import sistemamusicanegocio.interfaces.IArtistasBO;
+import sistemamusicanegocio.interfaces.IIntegrantesBO;
+
 /**
  *
  * @author gael_
  */
 public class frmAgregarBanda extends javax.swing.JFrame {
 
+    IArtistasBO artistasBO;
+    IIntegrantesBO integrantesBO;
+    ControladorArtistas controlador;
+    
+    private List<Integrante> integrantes = new ArrayList<>();
+    private String rutaImagenSeleccionada;
+    
     /**
      * Creates new form frmAgregarBanda
      */
-    public frmAgregarBanda() {
+    public frmAgregarBanda(ControladorArtistas controlador, IArtistasBO artistasBO, IIntegrantesBO integrantesBO) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Agregar Banda");
+        this.controlador=controlador;
+        this.artistasBO=artistasBO;
+        this.integrantesBO=integrantesBO;
+        LlenarComboboxGenero();
+        LlenarComboboxRol();
+    }
+    
+    public void LlenarComboboxGenero(){
+        cbGenero.removeAllItems(); // Limpia los elementos actuales, por si ya hay
+        for(Genero genero : Genero.values()){
+            cbGenero.addItem(genero.name());
+        }
+    }
+    
+    public void LlenarComboboxRol(){
+        cbRol.removeAllItems(); // Limpia los elementos actuales, por si ya hay
+        for(RolIntegrante rol : RolIntegrante.values()){
+            cbRol.addItem(rol.name());
+        }
+    }
+    
+    public void guardarIntegrante(){
+        try {
+            String nombre = txtNombreIntegrante.getText().trim();
+            String rolSeleccionado = (String) this.cbRol.getSelectedItem();
+            RolIntegrante rol = RolIntegrante.valueOf(rolSeleccionado);
+            LocalDate fechaIng = fechaIngreso.getDate();
+            LocalDate fechaSal = fechaSalida.getDate(); // Puede ser null si sigue activo
+            boolean activo = checkActivo.isSelected();
+
+            Date fechaIngDate = (fechaIng != null) 
+                ? Date.from(fechaIng.atStartOfDay(ZoneId.systemDefault()).toInstant()) 
+                : null;
+
+            Date fechaSalDate = (fechaSal != null) 
+                ? Date.from(fechaSal.atStartOfDay(ZoneId.systemDefault()).toInstant()) 
+                : null;
+
+            IntegranteDTO integrante = new IntegranteDTO(nombre, rol, fechaIngDate, fechaSalDate, activo);
+            Integrante integrantePersistido = integrantesBO.agregarIntegrante(integrante);
+
+            // Añadirlo a la lista local
+            integrantes.add(integrantePersistido);
+
+            // Mensaje de éxito (opcional)
+            JOptionPane.showMessageDialog(this, "Integrante agregado con éxito.");
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(this, "Error al agregar integrante: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    public String subirImagen(){
+        JFileChooser selector = new JFileChooser();
+        selector.setDialogTitle("Selecciona una imagen");
+
+        // Filtro de archivos de imagen
+        FileNameExtensionFilter filtroImagenes = new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif");
+        selector.setFileFilter(filtroImagenes);
+
+        int resultado = selector.showOpenDialog(null);
+
+        String rutaImagen = null;
+        
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            File archivoSeleccionado = selector.getSelectedFile();
+            rutaImagen = archivoSeleccionado.getAbsolutePath();
+
+        }
+        return rutaImagen;
+    }
+    
+    public void agregarBanda(){
+        String nombre = this.txtNombre.getText().trim();
+        TipoArtista tipo =  TipoArtista.BANDA;
+        
+        String generoSeleccionado = (String) this.cbGenero.getSelectedItem();
+        Genero genero = Genero.valueOf(generoSeleccionado);
+        
+        if (rutaImagenSeleccionada == null) {
+            JOptionPane.showMessageDialog(this, "Debes seleccionar una imagen.");
+            return;
+        }
+        
+        ArtistaDTO nuevaBanda = new ArtistaDTO(tipo,nombre, rutaImagenSeleccionada, genero, integrantes);
+        
+        try {
+                artistasBO.registrarBanda(nuevaBanda);
+                JOptionPane.showMessageDialog(this, "Artista de banda registrado con éxito.");
+            } catch (NegocioException ex) {
+                JOptionPane.showMessageDialog(this, "Error al registrar el artista: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
     }
 
     /**
@@ -42,7 +159,7 @@ public class frmAgregarBanda extends javax.swing.JFrame {
         labelRol = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
         labelAgregarSolista = new javax.swing.JLabel();
-        comboboxGenero = new javax.swing.JComboBox<>();
+        cbGenero = new javax.swing.JComboBox<>();
         labelFotoSubir = new javax.swing.JLabel();
         labelNombre = new javax.swing.JLabel();
         btnFoto = new javax.swing.JButton();
@@ -51,13 +168,13 @@ public class frmAgregarBanda extends javax.swing.JFrame {
         btnAgregarMiembro = new javax.swing.JButton();
         labelNombre1 = new javax.swing.JLabel();
         txtNombreIntegrante = new javax.swing.JTextField();
-        comboboxRol = new javax.swing.JComboBox<>();
+        cbRol = new javax.swing.JComboBox<>();
         labelContrasenia1 = new javax.swing.JLabel();
         labelFechaIngreso = new javax.swing.JLabel();
         fechaIngreso = new com.github.lgooddatepicker.components.DatePicker();
         labelFechaISalida = new javax.swing.JLabel();
         fechaSalida = new com.github.lgooddatepicker.components.DatePicker();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        checkActivo = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(850, 550));
@@ -166,11 +283,11 @@ public class frmAgregarBanda extends javax.swing.JFrame {
         labelAgregarSolista.setFont(new java.awt.Font("Gotham Black", 1, 36)); // NOI18N
         labelAgregarSolista.setForeground(new java.awt.Color(30, 215, 96));
 
-        comboboxGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        comboboxGenero.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
-        comboboxGenero.addActionListener(new java.awt.event.ActionListener() {
+        cbGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbGenero.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
+        cbGenero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboboxGeneroActionPerformed(evt);
+                cbGeneroActionPerformed(evt);
             }
         });
 
@@ -220,11 +337,11 @@ public class frmAgregarBanda extends javax.swing.JFrame {
         labelNombre1.setFont(new java.awt.Font("Gotham Bold", 1, 14)); // NOI18N
         labelNombre1.setForeground(new java.awt.Color(30, 215, 96));
 
-        comboboxRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        comboboxRol.setFont(new java.awt.Font("Gotham Black", 1, 12)); // NOI18N
-        comboboxRol.addActionListener(new java.awt.event.ActionListener() {
+        cbRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbRol.setFont(new java.awt.Font("Gotham Black", 1, 12)); // NOI18N
+        cbRol.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboboxRolActionPerformed(evt);
+                cbRolActionPerformed(evt);
             }
         });
 
@@ -240,10 +357,15 @@ public class frmAgregarBanda extends javax.swing.JFrame {
         labelFechaISalida.setFont(new java.awt.Font("Gotham Bold", 1, 14)); // NOI18N
         labelFechaISalida.setForeground(new java.awt.Color(30, 215, 96));
 
-        jCheckBox1.setText("Miembro Activo?");
-        jCheckBox1.setBackground(new java.awt.Color(0, 0, 0));
-        jCheckBox1.setFont(new java.awt.Font("Gotham Black", 0, 12)); // NOI18N
-        jCheckBox1.setForeground(new java.awt.Color(30, 215, 96));
+        checkActivo.setText("Miembro Activo?");
+        checkActivo.setBackground(new java.awt.Color(0, 0, 0));
+        checkActivo.setFont(new java.awt.Font("Gotham Black", 0, 12)); // NOI18N
+        checkActivo.setForeground(new java.awt.Color(30, 215, 96));
+        checkActivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkActivoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelFondo1Layout = new javax.swing.GroupLayout(panelFondo1);
         panelFondo1.setLayout(panelFondo1Layout);
@@ -258,7 +380,7 @@ public class frmAgregarBanda extends javax.swing.JFrame {
                                 .addGap(56, 56, 56)
                                 .addGroup(panelFondo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(comboboxGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cbGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(labelNombre)
                                     .addComponent(labelContrasenia1)))
                             .addGroup(panelFondo1Layout.createSequentialGroup()
@@ -270,7 +392,7 @@ public class frmAgregarBanda extends javax.swing.JFrame {
                                 .addGroup(panelFondo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(labelNombre1)
                                     .addComponent(txtNombreIntegrante, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(comboboxRol, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cbRol, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(labelRol))
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(panelFondo1Layout.createSequentialGroup()
@@ -292,7 +414,7 @@ public class frmAgregarBanda extends javax.swing.JFrame {
                             .addGroup(panelFondo1Layout.createSequentialGroup()
                                 .addComponent(btnFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jCheckBox1)
+                                .addComponent(checkActivo)
                                 .addGap(141, 141, 141))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondo1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -332,8 +454,8 @@ public class frmAgregarBanda extends javax.swing.JFrame {
                             .addComponent(labelContrasenia1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panelFondo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(comboboxGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(comboboxRol, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cbGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbRol, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(35, 35, 35)
                         .addGroup(panelFondo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(labelFotoSubir)
@@ -352,7 +474,7 @@ public class frmAgregarBanda extends javax.swing.JFrame {
                         .addGap(41, 41, 41))
                     .addGroup(panelFondo1Layout.createSequentialGroup()
                         .addGap(37, 37, 37)
-                        .addComponent(jCheckBox1)
+                        .addComponent(checkActivo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                         .addComponent(btnAgregarMiembro)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -384,33 +506,48 @@ public class frmAgregarBanda extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCancionesActionPerformed
 
-    private void comboboxGeneroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboboxGeneroActionPerformed
+    private void cbGeneroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbGeneroActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_comboboxGeneroActionPerformed
+    }//GEN-LAST:event_cbGeneroActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        // TODO add your handling code here:
+        controlador.mostrarArtistasPrincipal();
+        this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnRegistrarArtistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarArtistaActionPerformed
-        // TODO add your handling code here:
+        agregarBanda();
     }//GEN-LAST:event_btnRegistrarArtistaActionPerformed
 
     private void btnFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFotoActionPerformed
-        // TODO add your handling code here:
+        this.rutaImagenSeleccionada = subirImagen();
+        if (rutaImagenSeleccionada != null) {
+            JOptionPane.showMessageDialog(this, "Imagen seleccionada exitosamente.");
+        } else {
+            JOptionPane.showMessageDialog(this, "No se seleccionó ninguna imagen.");
+        }
     }//GEN-LAST:event_btnFotoActionPerformed
 
     private void btnAgregarMiembroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarMiembroActionPerformed
-        // TODO add your handling code here:
+        guardarIntegrante();
     }//GEN-LAST:event_btnAgregarMiembroActionPerformed
 
     private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnUsuarioActionPerformed
 
-    private void comboboxRolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboboxRolActionPerformed
+    private void cbRolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbRolActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_comboboxRolActionPerformed
+    }//GEN-LAST:event_cbRolActionPerformed
+
+    private void checkActivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkActivoActionPerformed
+        if (checkActivo.isSelected()) {
+            fechaSalida.setEnabled(false);  // Deshabilitar el JDatePicker o JTextField
+            fechaSalida.setDate(null);     // Opcional: Limpiar la fecha seleccionada
+        } else {
+            fechaSalida.setEnabled(true);   // Habilitar el JDatePicker o JTextField
+        }
+    }//GEN-LAST:event_checkActivoActionPerformed
 
 
 
@@ -423,11 +560,11 @@ public class frmAgregarBanda extends javax.swing.JFrame {
     private javax.swing.JButton btnRegistrarArtista;
     private javax.swing.JButton btnUsuario;
     private javax.swing.JButton btnVolver;
-    private javax.swing.JComboBox<String> comboboxGenero;
-    private javax.swing.JComboBox<String> comboboxRol;
+    private javax.swing.JComboBox<String> cbGenero;
+    private javax.swing.JComboBox<String> cbRol;
+    private javax.swing.JCheckBox checkActivo;
     private com.github.lgooddatepicker.components.DatePicker fechaIngreso;
     private com.github.lgooddatepicker.components.DatePicker fechaSalida;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel labelAgregarSolista;
     private javax.swing.JLabel labelAlbumes;
     private javax.swing.JLabel labelArtistas;

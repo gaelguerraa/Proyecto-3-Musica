@@ -5,6 +5,8 @@
 package sistemamusica.dtos;
 
 import java.util.List;
+import sistemamusicadominio.Genero;
+import sistemamusicadominio.Integrante;
 import sistemamusicadominio.TipoArtista;
 
 /**
@@ -16,14 +18,14 @@ public class ArtistaDTO {
     private TipoArtista tipo; 
     private String nombre;
     private String imagen;
-    private String genero;
-    private List<IntegranteDTO> integrantes; // solo si es banda
+    private Genero genero;
+    private List<Integrante> integrantes; // solo si es banda
 
     public ArtistaDTO() {
     }
 
     //para solistas
-    public ArtistaDTO(TipoArtista tipo, String nombre, String imagen, String genero) {
+    public ArtistaDTO(TipoArtista tipo, String nombre, String imagen, Genero genero) {
         this.tipo = tipo;
         this.nombre = nombre;
         this.imagen = imagen;
@@ -32,7 +34,7 @@ public class ArtistaDTO {
     
 
     //para bandas
-    public ArtistaDTO(TipoArtista tipo, String nombre, String imagen, String genero, List<IntegranteDTO> integrantes) {
+    public ArtistaDTO(TipoArtista tipo, String nombre, String imagen, Genero genero, List<Integrante> integrantes) {
         this.tipo = tipo;
         this.nombre = nombre;
         this.imagen = imagen;
@@ -72,19 +74,19 @@ public class ArtistaDTO {
         this.imagen = imagen;
     }
 
-    public String getGenero() {
+    public Genero getGenero() {
         return genero;
     }
 
-    public void setGenero(String genero) {
+    public void setGenero(Genero genero) {
         this.genero = genero;
     }
 
-    public List<IntegranteDTO> getIntegrantes() {
+    public List<Integrante> getIntegrantes() {
         return integrantes;
     }
 
-    public void setIntegrantes(List<IntegranteDTO> integrantes) {
+    public void setIntegrantes(List<Integrante> integrantes) {
         this.integrantes = integrantes;
     }
     

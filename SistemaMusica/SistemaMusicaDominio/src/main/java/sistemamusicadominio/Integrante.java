@@ -5,6 +5,7 @@
 package sistemamusicadominio;
 
 import java.util.Date;
+import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.types.ObjectId;
 
 /**
@@ -14,6 +15,7 @@ import org.bson.types.ObjectId;
  */
 public class Integrante {
 
+    @BsonId
     private ObjectId id;
     private String nombre;
     private RolIntegrante rol;

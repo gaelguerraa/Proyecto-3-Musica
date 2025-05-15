@@ -4,6 +4,7 @@
  */
 package sistemamusicapresentacion.artistas;
 
+import sistemamusicanegocio.interfaces.IArtistasBO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
@@ -12,18 +13,20 @@ import sistemamusicapresentacion.main.ControladorUniversal;
  */
 public class frmArtistasDetalles extends javax.swing.JFrame {
 
+    IArtistasBO artistasBO;
     ControladorArtistas controlador;
     ControladorUniversal universal;
     
     /**
      * Creates new form frmArtistasDetalles
      */
-    public frmArtistasDetalles(ControladorArtistas controlador, ControladorUniversal universal) {
+    public frmArtistasDetalles(ControladorArtistas controlador, ControladorUniversal universal, IArtistasBO artistasBO) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Artistas Detalles");
         this.controlador=controlador;
         this.universal=universal;
+        this.artistasBO=artistasBO;
     }
 
     /**

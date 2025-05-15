@@ -4,6 +4,7 @@
  */
 package sistemamusicapresentacion.artistas;
 
+import sistemamusicanegocio.interfaces.IArtistasBO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
@@ -12,16 +13,18 @@ import sistemamusicapresentacion.main.ControladorUniversal;
  */
 public class frmArtistasPrincipal extends javax.swing.JFrame {
 
+    IArtistasBO artistasBO;
     ControladorArtistas controlador;
     ControladorUniversal universal;
     
     /**
      * Creates new form frmArtistasPrincipal
      */
-    public frmArtistasPrincipal(ControladorArtistas controlador, ControladorUniversal universal) {
+    public frmArtistasPrincipal(ControladorArtistas controlador, ControladorUniversal universal, IArtistasBO artistasBO) {
         initComponents();
         this.controlador=controlador;
         this.universal=universal;
+        this.artistasBO=artistasBO;
     }
 
     /**
@@ -292,11 +295,13 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancionesActionPerformed
 
     private void btnAgregarSolistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarSolistaActionPerformed
-        // TODO add your handling code here:
+        controlador.mostrarAgregarSolista();
+        this.dispose();
     }//GEN-LAST:event_btnAgregarSolistaActionPerformed
 
     private void btnAgregarBandaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarBandaActionPerformed
-        // TODO add your handling code here:
+        controlador.mostrarAgregarBanda();
+        this.dispose();
     }//GEN-LAST:event_btnAgregarBandaActionPerformed
 
     private void btnAlbumesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlbumesActionPerformed

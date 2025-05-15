@@ -4,19 +4,85 @@
  */
 package sistemamusicapresentacion.artistas;
 
+import java.io.File;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import sistemamusica.dtos.ArtistaDTO;
+import sistemamusicadominio.Genero;
+import sistemamusicadominio.TipoArtista;
+import sistemamusicanegocio.exception.NegocioException;
+import sistemamusicanegocio.interfaces.IArtistasBO;
+
 /**
  *
  * @author gael_
  */
 public class frmAgregarSolista extends javax.swing.JFrame {
 
+    ControladorArtistas controlador;
+    IArtistasBO artistasBO; 
+    private String rutaImagenSeleccionada;
+
     /**
      * Creates new form frmAgregarSolista
      */
-    public frmAgregarSolista() {
+    public frmAgregarSolista(ControladorArtistas controlador, IArtistasBO artistasBO) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Agregar Solista");
+        this.controlador=controlador;
+        this.artistasBO=artistasBO;
+        LlenarComboboxGenero();
+    }
+    
+    public void LlenarComboboxGenero(){
+        cbGenero.removeAllItems(); // Limpia los elementos actuales, por si ya hay
+        for(Genero genero : Genero.values()){
+            cbGenero.addItem(genero.name());
+        }
+    }
+    
+    public void agregarSolista(){
+        
+        String nombre = this.txtNombre.getText().trim();
+        TipoArtista tipo =  TipoArtista.SOLISTA;
+        
+        String generoSeleccionado = (String) this.cbGenero.getSelectedItem();
+        Genero genero = Genero.valueOf(generoSeleccionado);
+        
+        if (rutaImagenSeleccionada == null) {
+            JOptionPane.showMessageDialog(this, "Debes seleccionar una imagen.");
+            return;
+        }
+
+        ArtistaDTO nuevoSolista = new ArtistaDTO(tipo, nombre, rutaImagenSeleccionada, genero);
+            try {
+                artistasBO.registrarSolista(nuevoSolista);
+                JOptionPane.showMessageDialog(this, "Artista solista registrado con éxito.");
+            } catch (NegocioException ex) {
+                JOptionPane.showMessageDialog(this, "Error al registrar el artista: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+    }
+    
+    public String subirImagen(){
+        JFileChooser selector = new JFileChooser();
+        selector.setDialogTitle("Selecciona una imagen");
+
+        // Filtro de archivos de imagen
+        FileNameExtensionFilter filtroImagenes = new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif");
+        selector.setFileFilter(filtroImagenes);
+
+        int resultado = selector.showOpenDialog(null);
+
+        String rutaImagen = null;
+        
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            File archivoSeleccionado = selector.getSelectedFile();
+            rutaImagen = archivoSeleccionado.getAbsolutePath();
+
+        }
+        return rutaImagen;
     }
 
     /**
@@ -45,7 +111,7 @@ public class frmAgregarSolista extends javax.swing.JFrame {
         txtNombre = new javax.swing.JTextField();
         labelMusicio1 = new javax.swing.JLabel();
         labelAgregarSolista = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        cbGenero = new javax.swing.JComboBox<>();
         labelFotoSubir = new javax.swing.JLabel();
         btnFoto = new javax.swing.JButton();
 
@@ -143,6 +209,11 @@ public class frmAgregarSolista extends javax.swing.JFrame {
         btnRegistrarArtista.setBackground(new java.awt.Color(30, 215, 96));
         btnRegistrarArtista.setFont(new java.awt.Font("Gotham Black", 1, 18)); // NOI18N
         btnRegistrarArtista.setText("Guardar Artista");
+        btnRegistrarArtista.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarArtistaActionPerformed(evt);
+            }
+        });
 
         btnVolver.setBackground(new java.awt.Color(30, 215, 96));
         btnVolver.setFont(new java.awt.Font("Gotham Black", 1, 18)); // NOI18N
@@ -165,11 +236,11 @@ public class frmAgregarSolista extends javax.swing.JFrame {
         labelAgregarSolista.setForeground(new java.awt.Color(30, 215, 96));
         labelAgregarSolista.setText("Agregar Solista");
 
-        jComboBox2.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+        cbGenero.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
+        cbGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbGenero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox2ActionPerformed(evt);
+                cbGeneroActionPerformed(evt);
             }
         });
 
@@ -178,6 +249,11 @@ public class frmAgregarSolista extends javax.swing.JFrame {
         labelFotoSubir.setText("subir foto");
 
         btnFoto.setText("boton para subir foto");
+        btnFoto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFotoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
         panelFondo.setLayout(panelFondoLayout);
@@ -210,7 +286,7 @@ public class frmAgregarSolista extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(panelFondoLayout.createSequentialGroup()
                         .addGap(225, 225, 225)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panelFondoLayout.createSequentialGroup()
@@ -231,7 +307,7 @@ public class frmAgregarSolista extends javax.swing.JFrame {
                         .addGap(51, 51, 51)
                         .addComponent(labelAgregarSolista, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cbGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(62, 62, 62)
                 .addComponent(labelFotoSubir)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -277,12 +353,28 @@ public class frmAgregarSolista extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancionesActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        // TODO add your handling code here:
+        controlador.mostrarArtistasPrincipal();
+        this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+    
+    
+    private void cbGeneroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbGeneroActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox2ActionPerformed
+    }//GEN-LAST:event_cbGeneroActionPerformed
+
+    private void btnFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFotoActionPerformed
+        this.rutaImagenSeleccionada = subirImagen();
+        if (rutaImagenSeleccionada != null) {
+            JOptionPane.showMessageDialog(this, "Imagen seleccionada exitosamente.");
+        } else {
+            JOptionPane.showMessageDialog(this, "No se seleccionó ninguna imagen.");
+        }
+    }//GEN-LAST:event_btnFotoActionPerformed
+
+    private void btnRegistrarArtistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarArtistaActionPerformed
+        agregarSolista();
+    }//GEN-LAST:event_btnRegistrarArtistaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -293,7 +385,7 @@ public class frmAgregarSolista extends javax.swing.JFrame {
     private javax.swing.JButton btnRegistrarArtista;
     private javax.swing.JButton btnUsuario;
     private javax.swing.JButton btnVolver;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<Object> cbGenero;
     private javax.swing.JLabel labelAgregarSolista;
     private javax.swing.JLabel labelAlbumes;
     private javax.swing.JLabel labelArtistas;
