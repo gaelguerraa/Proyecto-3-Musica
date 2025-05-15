@@ -27,6 +27,8 @@ public class frmUsuarioPrincipal extends javax.swing.JFrame {
         setTitle("Usuario");
         this.control = control;
         this.usuario = usuario;
+        lblUsername.setText(usuario.getUsername());
+        
     }
 
     /**
@@ -49,7 +51,7 @@ public class frmUsuarioPrincipal extends javax.swing.JFrame {
         labelUsuario = new javax.swing.JLabel();
         btnUsuario = new javax.swing.JButton();
         labelMusicio1 = new javax.swing.JLabel();
-        labelArtista = new javax.swing.JLabel();
+        lblUsername = new javax.swing.JLabel();
         btnCambiarDatos = new javax.swing.JButton();
         btnRegistrarMasivamente = new javax.swing.JButton();
         btnFavoritos = new javax.swing.JButton();
@@ -154,9 +156,9 @@ public class frmUsuarioPrincipal extends javax.swing.JFrame {
         labelMusicio1.setForeground(new java.awt.Color(30, 215, 96));
         labelMusicio1.setText("Music.io");
 
-        labelArtista.setFont(new java.awt.Font("Gotham Black", 1, 36)); // NOI18N
-        labelArtista.setForeground(new java.awt.Color(30, 215, 96));
-        labelArtista.setText("Username");
+        lblUsername.setFont(new java.awt.Font("Gotham Black", 1, 36)); // NOI18N
+        lblUsername.setForeground(new java.awt.Color(30, 215, 96));
+        lblUsername.setText("Username");
 
         btnCambiarDatos.setBackground(new java.awt.Color(30, 215, 96));
         btnCambiarDatos.setFont(new java.awt.Font("Gotham Black", 0, 18)); // NOI18N
@@ -226,7 +228,7 @@ public class frmUsuarioPrincipal extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 101, Short.MAX_VALUE)
                         .addComponent(labelFoto)
                         .addGap(46, 46, 46)
-                        .addComponent(labelArtista, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(64, 64, 64)
                         .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelFondo1Layout.createSequentialGroup()
@@ -261,7 +263,7 @@ public class frmUsuarioPrincipal extends javax.swing.JFrame {
                                 .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(panelFondo1Layout.createSequentialGroup()
                                 .addGap(52, 52, 52)
-                                .addComponent(labelArtista, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(lblUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(panelFondo1Layout.createSequentialGroup()
                                 .addGap(67, 67, 67)
                                 .addComponent(labelFoto)))
@@ -339,13 +341,13 @@ public class frmUsuarioPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel labelAlbumes;
-    private javax.swing.JLabel labelArtista;
     private javax.swing.JLabel labelArtistas;
     private javax.swing.JLabel labelCanciones;
     private javax.swing.JLabel labelEmail;
     private javax.swing.JLabel labelFoto;
     private javax.swing.JLabel labelMusicio1;
     private javax.swing.JLabel labelUsuario;
+    private javax.swing.JLabel lblUsername;
     private javax.swing.JPanel panelFondo1;
     private javax.swing.JPanel panelVerde1;
     // End of variables declaration//GEN-END:variables

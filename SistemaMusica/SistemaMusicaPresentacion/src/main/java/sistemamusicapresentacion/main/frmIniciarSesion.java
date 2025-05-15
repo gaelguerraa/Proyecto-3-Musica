@@ -157,11 +157,9 @@ public class frmIniciarSesion extends javax.swing.JFrame {
         String contrasenia = new String(contraseniaChars);
 
         try {
-            UsuarioDTO usuarioSesionIniciada = usuarioBO.iniciarSesion(username, contrasenia); // Hacer que este metodo busque si existe una cuenta con el mismo username
-            JOptionPane.showMessageDialog(this, "El usuario " + username
-                    + " ha iniciado sesion", "Info.",
-                    JOptionPane.INFORMATION_MESSAGE); // TODO: Eliminar cuando exista pantalla principal
+            UsuarioDTO usuarioSesionIniciada = usuarioBO.iniciarSesion(username, contrasenia);
             control.mostrarModuloPrincipalUsuarios(usuarioSesionIniciada);
+            this.dispose();
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Info.",
                     JOptionPane.INFORMATION_MESSAGE);

@@ -102,6 +102,33 @@ public class UsuariosDAOTest {
         assertEquals(CONTRASENIA_ENCRIPTADA, usuarioObtenido.getContrasenia());
         assertEquals(DIRECTORIO_IMAGEN_PLACEHOLDER, usuarioObtenido.getImagenPerfil());
     }
+    
+    @Test
+    public void testConsultarUsuarioPorUsername(){
+        final String USERNAME_BUSCADO = "BartoloXD";
+        
+        UsuarioDTO nuevoUsuario = new UsuarioDTO(
+                "BartoloXD",
+                "bartoloSabritones@gmail.com",
+                "123contrasenia123",
+                null,
+                null,
+                null
+        );
+        
+        Usuario usuarioAgregado = usuariosDAO.agregarUsuario(nuevoUsuario);
+        usuarioGuardado = usuarioAgregado; // Comentar esta linea para ver en MongoDB
+        
+        System.out.println(usuarioAgregado.getUsername());
+        
+        Usuario usuarioObtenido = usuariosDAO.consultarPorUsername(USERNAME_BUSCADO);
+        
+        String USERNAME_OBTENIDO = usuarioObtenido.getUsername();
+        
+        assertNotNull(usuarioObtenido);
+        assertEquals(USERNAME_BUSCADO, USERNAME_OBTENIDO);
+    }
+        
 
     @Test
     public void testModificarUsuario() {

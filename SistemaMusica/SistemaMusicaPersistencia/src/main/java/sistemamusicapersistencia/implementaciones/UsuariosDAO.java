@@ -90,6 +90,27 @@ public class UsuariosDAO implements IUsuariosDAO {
 
         return usuario;
     }
+    
+    /**
+     * Metodo para consultar un usuario en base a un username en la base de
+     * datos
+     *
+     * @param username Nombre del usuario
+     * @return Usuario obtenido con el username mencionado
+     */
+    @Override
+    public Usuario consultarPorUsername(String username){
+        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Usuario> coleccion = baseDatos.getCollection(
+                COLECCION, Usuario.class);
+        
+        Document filtros = new Document();
+        filtros.append(CAMPO_USERNAME, username);
+        FindIterable<Usuario> usuarios = coleccion.find(filtros);
+        Usuario usuario = usuarios.first();
+        
+        return usuario;
+    }
 
     /**
      * Metodo para modificar un usuario especificado por su id

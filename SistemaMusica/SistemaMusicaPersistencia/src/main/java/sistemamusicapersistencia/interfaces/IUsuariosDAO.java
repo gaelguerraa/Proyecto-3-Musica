@@ -28,6 +28,15 @@ public interface IUsuariosDAO {
      * @return Usuario obtenido con el id mencionado
      */
     public Usuario consultarPorId(String idUsuario);
+    
+    /**
+     * Metodo para consultar un usuario en base a un username en la base de
+     * datos
+     *
+     * @param username Nombre del usuario
+     * @return Usuario obtenido con el username mencionado
+     */
+    public Usuario consultarPorUsername(String username);
 
     /**
      * Metodo para modificar un usuario especificado por su id

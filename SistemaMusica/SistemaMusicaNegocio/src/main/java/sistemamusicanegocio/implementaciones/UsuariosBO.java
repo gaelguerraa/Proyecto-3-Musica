@@ -36,21 +36,28 @@ public class UsuariosBO implements IUsuariosBO {
         validarUsername(username);
         validarContrasenia(contrasenia);
 
-        Usuario usuario = usuariosDAO.consultarInicioSesion(username, contrasenia);
+        Usuario usuarioExistente = usuariosDAO.consultarPorUsername(username);
 
-        if (usuario != null) {
-            UsuarioDTO usuarioObtenido = new UsuarioDTO();
-            usuarioObtenido.setId(usuario.getId().toString()); // Esto estaba en toHexString() si hay un error cambiarlo nuevamente
-            usuarioObtenido.setUsername(usuario.getUsername());
-            usuarioObtenido.setEmail(usuario.getEmail());
-            usuarioObtenido.setContrasenia(usuario.getContrasenia());
-            usuarioObtenido.setImagenPerfil(usuario.getImagenPerfil());
-            usuarioObtenido.setFavoritos(usuario.getFavoritos());
-            usuarioObtenido.setRestricciones(usuario.getRestricciones());
+        if (usuarioExistente != null) {
 
-            return usuarioObtenido;
+            Usuario usuario = usuariosDAO.consultarInicioSesion(username, contrasenia);
+
+            if (usuario != null) {
+                UsuarioDTO usuarioObtenido = new UsuarioDTO();
+                usuarioObtenido.setId(usuario.getId().toString()); // Esto estaba en toHexString() si hay un error cambiarlo nuevamente
+                usuarioObtenido.setUsername(usuario.getUsername());
+                usuarioObtenido.setEmail(usuario.getEmail());
+                usuarioObtenido.setContrasenia(usuario.getContrasenia());
+                usuarioObtenido.setImagenPerfil(usuario.getImagenPerfil());
+                usuarioObtenido.setFavoritos(usuario.getFavoritos());
+                usuarioObtenido.setRestricciones(usuario.getRestricciones());
+
+                return usuarioObtenido;
+            } else {
+                throw new NegocioException("Credenciales invalidas: usuario o contraseña incorrectos.");
+            }
         } else {
-            throw new NegocioException("Credenciales invalidas: usuario o contraseña incorrectos.");
+            throw new NegocioException("El usuario no esta registrado");
         }
     }
 
@@ -71,20 +78,29 @@ public class UsuariosBO implements IUsuariosBO {
         validarEmail(email);
         validarContrasenia(contrasenia);
 
-        Usuario usuario = usuariosDAO.agregarUsuario(nuevoUsuario);
+        Usuario usuarioExistente = usuariosDAO.consultarPorUsername(username);
 
-        if (usuario != null) {
-            UsuarioDTO usuarioObtenido = new UsuarioDTO();
-            usuarioObtenido.setUsername(usuario.getUsername());
-            usuarioObtenido.setEmail(usuario.getEmail());
-            usuarioObtenido.setContrasenia(usuario.getContrasenia());
-            usuarioObtenido.setImagenPerfil(usuario.getImagenPerfil());
-            usuarioObtenido.setFavoritos(usuario.getFavoritos());
-            usuarioObtenido.setRestricciones(usuario.getRestricciones());
+        if (usuarioExistente == null) {
+            
+            Usuario usuario = usuariosDAO.agregarUsuario(nuevoUsuario);
 
-            return usuarioObtenido;
+            if (usuario != null) {
+                UsuarioDTO usuarioObtenido = new UsuarioDTO();
+                usuarioObtenido.setUsername(usuario.getUsername());
+                usuarioObtenido.setEmail(usuario.getEmail());
+                usuarioObtenido.setContrasenia(usuario.getContrasenia());
+                usuarioObtenido.setImagenPerfil(usuario.getImagenPerfil());
+                usuarioObtenido.setFavoritos(usuario.getFavoritos());
+                usuarioObtenido.setRestricciones(usuario.getRestricciones());
+
+                return usuarioObtenido;
+            } else {
+                throw new NegocioException("No se pudo agregar al usuario a la base de datos.");
+            }
+            
         } else {
-            throw new NegocioException("No se pudo agregar al usuario a la base de datos.");
+            throw new NegocioException("El usuario con el username "
+                    + username + " ya existe");
         }
     }
 
@@ -117,8 +133,8 @@ public class UsuariosBO implements IUsuariosBO {
             throw new NegocioException("El nombre de usuario debe tener al menos 5 caracteres.");
         }
 
-        if (!username.matches("^[A-Za-z]+$")) {
-            throw new NegocioException("El nombre de usuario solo puede contener letras (sin numeros ni caracteres especiales).");
+        if (!username.matches("^[A-Za-z0-9]+$")) {
+            throw new NegocioException("El nombre de usuario no puede contener caracteres especiales.");
         }
     }
 
