@@ -7,7 +7,6 @@ package sistemamusicapresentacion.main;
 import sistemamusicapresentacion.albumes.ControladorAlbumes;
 import sistemamusicapresentacion.artistas.ControladorArtistas;
 import sistemamusicapresentacion.canciones.ControladorCanciones;
-import sistemamusicapresentacion.usuario.ControladorUsuario;
 
 /**
  *
@@ -22,10 +21,9 @@ public class ControladorMain {
 
         ControladorArtistas controladorArtistas = new ControladorArtistas();
         ControladorAlbumes controladorAlbumes = new ControladorAlbumes();
-        ControladorUsuario controladorUsuario = new ControladorUsuario();
         ControladorCanciones controladorCanciones = new ControladorCanciones();
 
-        ControladorUniversal control = new ControladorUniversal(controladorArtistas, controladorAlbumes, controladorUsuario, controladorCanciones);
+        ControladorUniversal control = new ControladorUniversal(controladorArtistas, controladorAlbumes, controladorCanciones);
         control.mostrarModuloIniciarSesion();
 
     }

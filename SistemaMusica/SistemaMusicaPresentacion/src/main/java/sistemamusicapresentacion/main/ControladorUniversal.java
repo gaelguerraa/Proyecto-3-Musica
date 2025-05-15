@@ -8,7 +8,6 @@ import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicapresentacion.albumes.ControladorAlbumes;
 import sistemamusicapresentacion.artistas.ControladorArtistas;
 import sistemamusicapresentacion.canciones.ControladorCanciones;
-import sistemamusicapresentacion.usuario.ControladorUsuario;
 import sistemamusicapresentacion.usuario.frmCambiarDatos;
 import sistemamusicapresentacion.usuario.frmFavoritosUsuario;
 import sistemamusicapresentacion.usuario.frmRestringidosUsuario;
@@ -22,7 +21,6 @@ public class ControladorUniversal {
 
     private final ControladorArtistas controladorArtistas;
     private final ControladorAlbumes controladorAlbumes;
-    private final ControladorUsuario controladorUsuario;
     private final ControladorCanciones controladorCanciones;
     private frmIniciarSesion mostrarIniciarSesion;
     private frmRegistrarUsuario mostrarRegistrarUsuario;
@@ -33,13 +31,11 @@ public class ControladorUniversal {
      *
      * @param controladorArtistas clase control de Artistas
      * @param controladorAlbumes clase control de Albumes
-     * @param controladorUsuario clase control de Usuarios
      * @param controladorCanciones clase control de Canciones
      */
-    public ControladorUniversal(ControladorArtistas controladorArtistas, ControladorAlbumes controladorAlbumes, ControladorUsuario controladorUsuario, ControladorCanciones controladorCanciones) {
+    public ControladorUniversal(ControladorArtistas controladorArtistas, ControladorAlbumes controladorAlbumes, ControladorCanciones controladorCanciones) {
         this.controladorArtistas = new ControladorArtistas();
         this.controladorAlbumes = new ControladorAlbumes();
-        this.controladorUsuario = new ControladorUsuario();
         this.controladorCanciones = new ControladorCanciones();
     }
 

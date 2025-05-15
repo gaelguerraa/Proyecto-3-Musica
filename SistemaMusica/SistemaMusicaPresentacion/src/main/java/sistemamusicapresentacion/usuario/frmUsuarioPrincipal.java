@@ -13,13 +13,12 @@ import sistemamusicapresentacion.main.ControladorUniversal;
  */
 public class frmUsuarioPrincipal extends javax.swing.JFrame {
 
-    //ControladorUsuario controlador;
     ControladorUniversal control;
     private UsuarioDTO usuario;
-    
+
     /**
      * Creates new form frmUsuarioPrincipal
-     * @param universal
+     *
      * @param usuario
      */
     public frmUsuarioPrincipal(ControladorUniversal control, UsuarioDTO usuario) {

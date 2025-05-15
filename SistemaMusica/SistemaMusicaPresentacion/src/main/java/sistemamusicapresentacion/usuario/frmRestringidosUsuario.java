@@ -13,7 +13,6 @@ import sistemamusicapresentacion.main.ControladorUniversal;
  */
 public class frmRestringidosUsuario extends javax.swing.JFrame {
 
-//    ControladorUsuario controlador;
     ControladorUniversal control;
     UsuarioDTO usuario;
 

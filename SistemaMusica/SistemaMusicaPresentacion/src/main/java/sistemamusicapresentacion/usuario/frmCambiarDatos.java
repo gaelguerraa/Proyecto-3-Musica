@@ -13,10 +13,9 @@ import sistemamusicapresentacion.main.ControladorUniversal;
  */
 public class frmCambiarDatos extends javax.swing.JFrame {
 
-//    ControladorUsuario controlador; 
     ControladorUniversal control;
     UsuarioDTO usuario;
-    
+
     /**
      * Creates new form frmCambiarDatos
      */
