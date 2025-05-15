@@ -14,10 +14,12 @@ import sistemamusicapresentacion.usuario.ControladorUsuario;
  * @author gael_
  */
 public class ControladorUniversal {
+
     private final ControladorArtistas controladorArtistas;
     private final ControladorAlbumes controladorAlbumes;
     private final ControladorUsuario controladorUsuario;
     private final ControladorCanciones controladorCanciones;
+    private frmIniciarSesion mostrarIniciarSesion;
 
     public ControladorUniversal(ControladorArtistas controladorArtistas, ControladorAlbumes controladorAlbumes, ControladorUsuario controladorUsuario, ControladorCanciones controladorCanciones) {
         this.controladorArtistas = new ControladorArtistas();
@@ -25,8 +27,13 @@ public class ControladorUniversal {
         this.controladorUsuario = new ControladorUsuario();
         this.controladorCanciones = new ControladorCanciones();
     }
+
+    public void mostrarModuloIniciarSesion() {
+        this.mostrarIniciarSesion = new frmIniciarSesion(this);
+        this.mostrarIniciarSesion.setVisible(true);
+    }
     
-     public void mostrarModuloUsuarios() {
+    public void mostrarModuloUsuarios() {
         controladorUsuario.mostrarUsuarioPrincipal();
     }
 
@@ -41,7 +48,5 @@ public class ControladorUniversal {
     public void mostrarModuloCanciones() {
         controladorCanciones.mostrarCanciones();
     }
-    
-    
-    
+
 }

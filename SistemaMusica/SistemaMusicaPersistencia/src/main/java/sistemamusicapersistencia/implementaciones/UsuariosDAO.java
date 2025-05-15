@@ -14,6 +14,7 @@ import java.security.NoSuchAlgorithmException;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import sistemamusica.dtos.UsuarioDTO;
+import sistemamusica.exception.PersistenciaException;
 import sistemamusicadominio.Usuario;
 import sistemamusicapersistencia.interfaces.IUsuariosDAO;
 
@@ -132,8 +133,46 @@ public class UsuariosDAO implements IUsuariosDAO {
         Document actualizacion = new Document("$set", camposActualizar);
 
         coleccion.updateOne(Filters.eq(CAMPO_ID, new ObjectId(idUsuario)), actualizacion);
-        
+
         return consultarPorId(idUsuario);
+    }
+
+    /**
+     * Metodo para obtener un usuario en base a un nombre de usuario y una
+     * contrasenia
+     *
+     * @param username Nombre de usuario
+     * @param contrasenia Contrasenia del usuario
+     * @return Un usuario que coincida con ambos filtros
+     */
+    @Override
+    public Usuario consultarInicioSesion(String username, String contrasenia) {
+        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Usuario> coleccion = baseDatos.getCollection(
+                COLECCION, Usuario.class);
+        
+        Document filtro = new Document(CAMPO_USERNAME, username);
+        FindIterable<Usuario> resultado = coleccion.find(filtro);
+        Usuario usuario = resultado.first();
+        
+        if (usuario != null){
+            try {
+                String contraseniaBD = usuario.getContrasenia();
+                String contraseniaEncriptadaIngresada = encriptarContrasenia(contrasenia);
+                
+                if (contraseniaBD.equals(contraseniaEncriptadaIngresada)){
+                    return usuario;
+                } else {
+                    System.err.println("Contrasenia incorrecta.");
+                }
+            } catch (NoSuchAlgorithmException e){
+                System.err.println("Error al encriptar la contrasenia: " + e.getMessage());
+            }
+        } else {
+            System.err.println("Correo no registrado.");
+        }
+        
+        return null;
     }
 
     /**
