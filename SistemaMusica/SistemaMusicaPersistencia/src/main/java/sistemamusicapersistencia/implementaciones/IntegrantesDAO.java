@@ -7,12 +7,15 @@ package sistemamusicapersistencia.implementaciones;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import sistemamusica.dtos.IntegranteDTO;
+import sistemamusicadominio.Artista;
 import sistemamusicadominio.Integrante;
+import sistemamusicadominio.RolIntegrante;
 import sistemamusicapersistencia.interfaces.IIntegrantesDAO;
 
 /**
@@ -23,6 +26,7 @@ import sistemamusicapersistencia.interfaces.IIntegrantesDAO;
 public class IntegrantesDAO implements IIntegrantesDAO {
 
     private final String COLECCION = "integrantes";
+    private final String COLECCION_ARTISTAS = "artistas";
     private final String CAMPO_ID = "_id";
 
     /**
@@ -86,6 +90,69 @@ public class IntegrantesDAO implements IIntegrantesDAO {
         FindIterable<Integrante> integrantes = coleccion.find(filtros);
         Integrante integrante = integrantes.first();
 
+        return integrante;
+    }
+
+    @Override
+    public List<Integrante> consultarTodosLosIntegrantes(String idArtista) {
+        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Document> coleccion = baseDatos.getCollection("artistas");
+
+        Document filtro = new Document("_id", new ObjectId(idArtista));
+        Document proyeccion = new Document("integrantes", 1).append("_id", 0);
+
+        Document resultado = coleccion.find(filtro).projection(proyeccion).first();
+
+        List<Integrante> lista = new ArrayList<>();
+
+        if (resultado != null && resultado.containsKey("integrantes")) {
+            List<Document> docs = (List<Document>) resultado.get("integrantes");
+
+            for (Document doc : docs) {
+                Integrante integrante = convertirDocumentoAIntegrante(doc);
+                lista.add(integrante);
+            }
+        }
+
+        return lista;
+    }
+
+    @Override
+    public List<Integrante> consultarIntegrantesActivos(String idArtista) {
+        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Document> coleccion = baseDatos.getCollection("artistas");
+
+        Document filtro = new Document("_id", new ObjectId(idArtista));
+        Document proyeccion = new Document("integrantes", 1).append("_id", 0);
+
+        Document resultado = coleccion.find(filtro).projection(proyeccion).first();
+
+        List<Integrante> lista = new ArrayList<>();
+
+        if (resultado != null && resultado.containsKey("integrantes")) {
+            List<Document> docs = (List<Document>) resultado.get("integrantes");
+
+            for (Document doc : docs) {
+                if (doc.getBoolean("activo", false)) {
+                    Integrante integrante = convertirDocumentoAIntegrante(doc);
+                    lista.add(integrante);
+                }
+            }
+        }
+
+        return lista;
+    }
+
+    
+    public Integrante convertirDocumentoAIntegrante(Document doc) {
+        Integrante integrante = new Integrante();
+        
+        integrante.setNombre(doc.getString("nombre"));
+        integrante.setRol(RolIntegrante.valueOf(doc.getString("rol")));
+        integrante.setActivo(doc.getBoolean("activo", false));
+        integrante.setFechaIngreso(doc.getDate("fechaIngreso"));
+        integrante.setFechaSalida(doc.getDate("fechaSalida")); // puede ser null
+        
         return integrante;
     }
 

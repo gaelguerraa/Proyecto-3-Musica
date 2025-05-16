@@ -139,6 +139,17 @@ public class frmAgregarBanda extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Error al registrar el artista: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
     }
+    
+    public void limpiarFormularioIntegrantes(){
+        this.txtNombreIntegrante.setText("");
+        this.fechaIngreso.setDateToToday();
+        this.fechaSalida.setDateToToday();
+    }
+    
+    public void limpiarFormulario(){
+        this.txtNombreIntegrante.setText("");
+        this.txtNombre.setText("");
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -514,11 +525,13 @@ public class frmAgregarBanda extends javax.swing.JFrame {
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         controlador.mostrarArtistasPrincipal(usuarioActual);
+        limpiarFormulario();
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnRegistrarArtistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarArtistaActionPerformed
         agregarBanda();
+        limpiarFormulario();
     }//GEN-LAST:event_btnRegistrarArtistaActionPerformed
 
     private void btnFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFotoActionPerformed
@@ -532,6 +545,7 @@ public class frmAgregarBanda extends javax.swing.JFrame {
 
     private void btnAgregarMiembroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarMiembroActionPerformed
         guardarIntegrante();
+        limpiarFormularioIntegrantes();
     }//GEN-LAST:event_btnAgregarMiembroActionPerformed
 
     private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioActionPerformed

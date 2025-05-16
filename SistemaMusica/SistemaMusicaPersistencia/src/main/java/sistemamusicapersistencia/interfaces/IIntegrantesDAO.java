@@ -36,5 +36,8 @@ public interface IIntegrantesDAO {
      * @return Integrante con el id solicitada
      */
     public Integrante consultarPorId(String idIntegrante);
+    
+    public abstract List<Integrante> consultarTodosLosIntegrantes(String idArtista);
+    public abstract List<Integrante> consultarIntegrantesActivos(String idArtista);
 
 }

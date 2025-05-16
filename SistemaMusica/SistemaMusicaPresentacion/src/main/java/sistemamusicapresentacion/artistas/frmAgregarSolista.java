@@ -87,6 +87,10 @@ public class frmAgregarSolista extends javax.swing.JFrame {
         }
         return rutaImagen;
     }
+    
+    private void limpiarFormulario(){
+        this.txtNombre.setText("");
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -357,6 +361,7 @@ public class frmAgregarSolista extends javax.swing.JFrame {
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         controlador.mostrarArtistasPrincipal(usuarioActual);
+        limpiarFormulario();
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
@@ -377,6 +382,7 @@ public class frmAgregarSolista extends javax.swing.JFrame {
 
     private void btnRegistrarArtistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarArtistaActionPerformed
         agregarSolista();
+        limpiarFormulario();
     }//GEN-LAST:event_btnRegistrarArtistaActionPerformed
 
 

@@ -40,12 +40,22 @@ public class IntegrantesBO implements IIntegrantesBO {
 
     @Override
     public List<Integrante> consultarTodos() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return integrantesDAO.consultarTodos();
     }
 
     @Override
     public Integrante consultarPorId(String idIntegrante) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return integrantesDAO.consultarPorId(idIntegrante);
+    }
+
+    @Override
+    public List<Integrante> consultarTodosLosIntegrantes(String idArtista) {
+        return integrantesDAO.consultarTodosLosIntegrantes(idArtista);
+    }
+
+    @Override
+    public List<Integrante> consultarIntegrantesActivos(String idArtista) {
+        return integrantesDAO.consultarIntegrantesActivos(idArtista);
     }
     
 }

@@ -4,10 +4,20 @@
  */
 package sistemamusicapresentacion.artistas;
 
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.table.DefaultTableModel;
 import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicadominio.Artista;
+import sistemamusicadominio.Integrante;
 import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
 import sistemamusicanegocio.interfaces.IArtistasBO;
+import sistemamusicanegocio.interfaces.IIntegrantesBO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
@@ -18,6 +28,7 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
 
     UsuarioDTO usuarioActual;
     private IArtistasBO artistasBO = FabricaObjetosNegocio.crearArtistasBO();
+    private IIntegrantesBO integrantesBO = FabricaObjetosNegocio.crearIntegrantesBO();
     ControladorUniversal universal;
     Artista artistaSeleccionado;
     
@@ -31,13 +42,94 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
         this.universal=universal;
         this.artistaSeleccionado=artistasBO.buscarArtistaPorNombre(artistaSeleccionado.getNombre());
         this.mostrarInfoArtista(artistaSeleccionado);
+        cbMostrarInactivos.addItemListener(new ItemListener() {
+        @Override
+        public void itemStateChanged(ItemEvent e) {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                if (cbMostrarInactivos.getSelectedItem().toString().equalsIgnoreCase("si")) {
+                    LlenarTablaIntegrantesTodos();
+                } else {
+                    LlenarTablaIntegrantesActivos();
+                }
+            }
+        }
+        });
+        if (cbMostrarInactivos.getSelectedItem().toString().equalsIgnoreCase("si")) {
+            LlenarTablaIntegrantesTodos();
+        } else {
+            LlenarTablaIntegrantesActivos();
+        }
+
     }
     
     public void mostrarInfoArtista(Artista artista){
         this.txtNombreArtista.setText(artista.getNombre());
         this.txtGenero.setText(artista.getGenero().toString());
-        //this.labelFoto
+        
+        try {
+            String rutaImagen = artista.getImagen();
+
+            if (rutaImagen == null || rutaImagen.isEmpty()) {
+                labelFoto.setIcon(null); // Limpiar si no hay imagen
+                labelFoto.setText("Sin imagen");
+                return;
+            }
+
+            ImageIcon imagenOriginal = new ImageIcon(rutaImagen);
+
+            Image imagenEscalada = imagenOriginal.getImage()
+                    .getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+
+            labelFoto.setIcon(new ImageIcon(imagenEscalada));
+            labelFoto.setPreferredSize(new Dimension(60, 60));
+            labelFoto.setText(""); // Quitar texto por si había "Sin imagen"
+
+        } catch (Exception e) {
+            labelFoto.setIcon(null);
+            labelFoto.setText("Error al cargar imagen");
+            System.err.println("Error al mostrar imagen del artista: " + e.getMessage());
+        }
     } 
+    
+    private void LlenarTablaIntegrantesTodos(){
+        String idArtista = artistaSeleccionado.getId().toString();
+        List<Integrante> integrantes = integrantesBO.consultarTodosLosIntegrantes(idArtista);
+        
+        DefaultTableModel modelo = (DefaultTableModel) tablaArtistas.getModel();
+        modelo.setRowCount(0); // Limpiar tabla
+
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+        
+        for(Integrante i : integrantes){
+            Object[] fila = {
+                i.getNombre(),
+                i.getRol(),
+                i.getFechaIngreso() != null ? formatoFecha.format(i.getFechaIngreso()) : "N/A",
+                i.getFechaSalida() != null ? formatoFecha.format(i.getFechaSalida()) : "N/A"
+            };
+            modelo.addRow(fila);
+        }
+    }
+    
+    private void LlenarTablaIntegrantesActivos(){
+        String idArtista = artistaSeleccionado.getId().toString();
+        List<Integrante> integrantes = integrantesBO.consultarIntegrantesActivos(idArtista);
+        
+        DefaultTableModel modelo = (DefaultTableModel) tablaArtistas.getModel();
+        modelo.setRowCount(0); // Limpiar tabla
+
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+        
+        for(Integrante i : integrantes){
+            Object[] fila = {
+                i.getNombre(),
+                i.getRol(),
+                i.getFechaIngreso() != null ? formatoFecha.format(i.getFechaIngreso()) : "N/A",
+                i.getFechaSalida() != null ? formatoFecha.format(i.getFechaSalida()) : "N/A"
+            };
+            modelo.addRow(fila);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -64,7 +156,7 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
         btnVolver = new javax.swing.JButton();
         txtNombreArtista = new javax.swing.JTextField();
         txtGenero = new javax.swing.JTextField();
-        comboboxMostrarInactcivos = new javax.swing.JComboBox<>();
+        cbMostrarInactivos = new javax.swing.JComboBox<>();
         labelArtista = new javax.swing.JLabel();
         labelPregunta = new javax.swing.JLabel();
         labelFoto = new javax.swing.JLabel();
@@ -172,14 +264,14 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nombre", "Rol", "Estado", "Fecha de Ingreso", "Fecha de Salida "
+                "Nombre", "Rol", "Fecha de Ingreso", "Fecha de Salida "
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -213,8 +305,8 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
         txtGenero.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
         txtGenero.setText("Genero Artista");
 
-        comboboxMostrarInactcivos.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
-        comboboxMostrarInactcivos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SI", "NO" }));
+        cbMostrarInactivos.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
+        cbMostrarInactivos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SI", "NO" }));
 
         labelArtista.setFont(new java.awt.Font("Gotham Black", 1, 36)); // NOI18N
         labelArtista.setForeground(new java.awt.Color(30, 215, 96));
@@ -259,7 +351,7 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
                     .addGroup(panelFondoLayout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(comboboxMostrarInactcivos, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbMostrarInactivos, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(labelPregunta)))))
         );
         panelFondoLayout.setVerticalGroup(
@@ -283,7 +375,7 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(labelPregunta)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(comboboxMostrarInactcivos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cbMostrarInactivos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -302,7 +394,8 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnArtistasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArtistasActionPerformed
-        // TODO add your handling code here:
+        universal.mostrarArtistasPrincipal(usuarioActual);
+        this.dispose();
     }//GEN-LAST:event_btnArtistasActionPerformed
 
     private void btnCancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancionesActionPerformed
@@ -332,7 +425,7 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
     private javax.swing.JButton btnCanciones;
     private javax.swing.JButton btnUsuario;
     private javax.swing.JButton btnVolver;
-    private javax.swing.JComboBox<String> comboboxMostrarInactcivos;
+    private javax.swing.JComboBox<String> cbMostrarInactivos;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelAlbumes;
     private javax.swing.JLabel labelArtista;

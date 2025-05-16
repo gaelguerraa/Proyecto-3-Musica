@@ -17,4 +17,6 @@ public interface IIntegrantesBO {
     public Integrante agregarIntegrante(IntegranteDTO nuevoIntegrante) throws NegocioException;
     public List<Integrante> consultarTodos();
     public Integrante consultarPorId(String idIntegrante);
+    public abstract List<Integrante> consultarTodosLosIntegrantes(String idArtista);
+    public abstract List<Integrante> consultarIntegrantesActivos(String idArtista);
 }

@@ -55,6 +55,7 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
                     this.artistaSeleccionado = this.artistasBO.buscarArtistaPorNombre(this.nombreArtista);
                     universal.mostrarArtistasDetalles(artistaSeleccionado);
                     System.out.println(nombreArtista);
+                    this.dispose();
                 }
             }
         });
@@ -63,10 +64,10 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
     private void LlenarTablaArtistas() {
         List<Artista> artistasConsultados;
 
-        String nombreArtista = txtBuscador.getText().trim();
+        String nombreBuscado = txtBuscador.getText().trim();
         String generoSeleccionado = (String) CBGenero.getSelectedItem();
 
-        if (nombreArtista.isEmpty() && generoSeleccionado.equals("CUALQUIERA")) {
+        if (nombreBuscado.isEmpty() && generoSeleccionado.equals("CUALQUIERA")) {
             artistasConsultados = artistasBO.buscarArtistas();
             DefaultTableModel modeloTabla = (DefaultTableModel) tablaArtistas.getModel();
             modeloTabla.setRowCount(0);
@@ -78,8 +79,8 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
             };
             modeloTabla.addRow(fila);
         }
-        } else if (!nombreArtista.isEmpty() && generoSeleccionado.equals("CUALQUIERA")) {
-            artistasConsultados = artistasBO.buscarArtistasPorNombre(nombreArtista);
+        } else if (!nombreBuscado.isEmpty() && generoSeleccionado.equals("CUALQUIERA")) {
+            artistasConsultados = artistasBO.buscarArtistasPorNombre(nombreBuscado);
             DefaultTableModel modeloTabla = (DefaultTableModel) tablaArtistas.getModel();
             modeloTabla.setRowCount(0);
             for (Artista a : artistasConsultados) {
@@ -90,7 +91,7 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
                 };
                 modeloTabla.addRow(fila);
             }
-        } else if (nombreArtista.isEmpty() && !generoSeleccionado.equals("CUALQUIERA")) {
+        } else if (nombreBuscado.isEmpty() && !generoSeleccionado.equals("CUALQUIERA")) {
             artistasConsultados = artistasBO.buscarArtistasPorGenero(generoSeleccionado);
             DefaultTableModel modeloTabla = (DefaultTableModel) tablaArtistas.getModel();
             modeloTabla.setRowCount(0);
@@ -103,7 +104,7 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
                 modeloTabla.addRow(fila);
             }
         } else {
-            artistasConsultados = artistasBO.buscarArtistasPorNombreGenero(nombreArtista, generoSeleccionado);
+            artistasConsultados = artistasBO.buscarArtistasPorNombreGenero(nombreBuscado, generoSeleccionado);
             DefaultTableModel modeloTabla = (DefaultTableModel) tablaArtistas.getModel();
             modeloTabla.setRowCount(0);
             for (Artista a : artistasConsultados) {

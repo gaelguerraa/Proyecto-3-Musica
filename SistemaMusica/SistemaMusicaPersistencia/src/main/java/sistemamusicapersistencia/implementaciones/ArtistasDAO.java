@@ -72,9 +72,9 @@ public class ArtistasDAO implements IArtistasDAO {
         MongoCollection<Artista> coleccion = baseDatos.getCollection(COLECCION, Artista.class);
         
         Document filtros = new Document();
-        filtros.append(CAMPO_NOMBRE, nombre);
+        filtros.append(CAMPO_NOMBRE, new Document("$regex", nombre).append("$options", "i"));
         
-        FindIterable<Artista> resultados = coleccion.find();
+        FindIterable<Artista> resultados = coleccion.find(filtros);
         List<Artista> listaArtistas = new LinkedList<>();
         resultados.into(listaArtistas);
         return listaArtistas;
@@ -100,7 +100,7 @@ public class ArtistasDAO implements IArtistasDAO {
         MongoCollection<Artista> coleccion = baseDatos.getCollection(COLECCION, Artista.class);
         
         Document filtros = new Document();
-        filtros.append(CAMPO_NOMBRE, nombre);
+        filtros.append(CAMPO_NOMBRE, new Document("$regex", nombre).append("$options", "i"));
         filtros.append(CAMPO_GENERO, genero);
         
         FindIterable<Artista> resultados = coleccion.find(filtros);

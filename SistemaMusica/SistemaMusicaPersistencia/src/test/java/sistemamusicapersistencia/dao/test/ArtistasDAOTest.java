@@ -162,8 +162,8 @@ public class ArtistasDAOTest {
         
         ArtistaDTO dto = new ArtistaDTO();
         dto.setTipo(TipoArtista.SOLISTA);
-        dto.setNombre("Luis Miguel");
-        dto.setImagen("sol.jpg");
+        dto.setNombre("Jose Jose");
+        dto.setImagen("josejose.jpg");
         dto.setGenero(Genero.MUSICAMEXICANA);
 
 
@@ -178,14 +178,14 @@ public class ArtistasDAOTest {
         
         ArtistaDTO dto = new ArtistaDTO();
         dto.setTipo(TipoArtista.SOLISTA);
-        dto.setNombre("Luis Miguel");
-        dto.setImagen("sol.jpg");
+        dto.setNombre("Vicente Fernandez");
+        dto.setImagen("elcharro.jpg");
         dto.setGenero(Genero.MUSICAMEXICANA);
 
 
         Artista registrado = dao.registrarSolista(dto);
         artistaGuardado = registrado;
-        List<Artista> resultados = dao.buscarArtistasPorNombreGenero("Luis Miguel", "MUSICAMEXICANA");
+        List<Artista> resultados = dao.buscarArtistasPorNombreGenero("Vicente Fernandez", "MUSICAMEXICANA");
         assertFalse(resultados.isEmpty());
     }
 
@@ -196,8 +196,8 @@ public class ArtistasDAOTest {
         
         ArtistaDTO dto = new ArtistaDTO();
         dto.setTipo(TipoArtista.SOLISTA);
-        dto.setNombre("Luis Miguel");
-        dto.setImagen("sol.jpg");
+        dto.setNombre("Raphael");
+        dto.setImagen("raphael.jpg");
         dto.setGenero(Genero.MUSICAMEXICANA);
 
 
@@ -205,6 +205,23 @@ public class ArtistasDAOTest {
         artistaGuardado = registrado;
         List<Artista> resultados = dao.buscarArtistas();
         assertFalse(resultados.isEmpty());
+    }
+    
+    @Test
+    public void testBuscarArtistaPorNombre(){
+        ArtistasDAO dao = new ArtistasDAO();
+        
+        ArtistaDTO dto = new ArtistaDTO();
+        dto.setTipo(TipoArtista.SOLISTA);
+        dto.setNombre("Christian Nodal");
+        dto.setImagen("nodal.jpg");
+        dto.setGenero(Genero.MUSICAMEXICANA);
+        
+        Artista registrado = dao.registrarSolista(dto);
+        artistaGuardado = registrado;
+        
+        Artista artista = dao.buscarArtistaPorNombre("Christian Nodal");
+        assertNotNull(artista);
     }
     
 }
