@@ -10,8 +10,10 @@ import com.mongodb.client.model.Filters;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import org.bson.Document;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -176,5 +178,73 @@ public class IntegrantesDAOTest {
         assertNotNull(integranteObtenido);
         assertEquals(ID_OBTENIDA, integranteObtenido.getId().toString());
     }
+    
+    @Test
+    public void consultarTodosLosIntegrantes(){
+  
+        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Document> coleccion = baseDatos.getCollection("artistas");
 
+        Document integrante1 = new Document("nombre", "Ana")
+                .append("rol", "VOCALISTA")
+                .append("activo", true)
+                .append("fechaIngreso", new Date());
+
+        Document integrante2 = new Document("nombre", "Luis")
+                .append("rol", "ARREGLISTA")
+                .append("activo", false)
+                .append("fechaIngreso", new Date())
+                .append("fechaSalida", new Date());
+
+        Document artista = new Document("nombre", "Banda de Prueba")
+                .append("genero", "ROCK")
+                .append("integrantes", Arrays.asList(integrante1, integrante2));
+
+        coleccion.insertOne(artista);
+
+        String idArtista = artista.getObjectId("_id").toHexString();
+
+        List<Integrante> integrantes = integrantesDAO.consultarTodosLosIntegrantes(idArtista);
+
+        assertEquals(2, integrantes.size());
+        assertTrue(integrantes.stream().anyMatch(i -> i.getNombre().equals("Ana")));
+        assertTrue(integrantes.stream().anyMatch(i -> i.getNombre().equals("Luis")));
+
+        // Limpieza
+        coleccion.deleteOne(Filters.eq("_id", artista.getObjectId("_id")));
+    }
+
+    @Test
+    public void consultarIntegrantesActivos(){
+        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Document> coleccion = baseDatos.getCollection("artistas");
+
+        Document integrante1 = new Document("nombre", "Ana")
+                .append("rol", "VOCALISTA")
+                .append("activo", true)
+                .append("fechaIngreso", new Date());
+
+        Document integrante2 = new Document("nombre", "Luis")
+                .append("rol", "ARREGLISTA")
+                .append("activo", false)
+                .append("fechaIngreso", new Date())
+                .append("fechaSalida", new Date());
+
+        Document artista = new Document("nombre", "Banda de Prueba")
+                .append("genero", "ROCK")
+                .append("integrantes", Arrays.asList(integrante1, integrante2));
+
+        coleccion.insertOne(artista);
+
+        String idArtista = artista.getObjectId("_id").toHexString();
+
+        List<Integrante> integrantes = integrantesDAO.consultarIntegrantesActivos(idArtista);
+
+        assertEquals(1, integrantes.size());
+        assertEquals("Ana", integrantes.get(0).getNombre());
+        assertTrue(integrantes.get(0).isActivo());
+
+        // Limpieza
+        coleccion.deleteOne(Filters.eq("_id", artista.getObjectId("_id")));
+    }
 }

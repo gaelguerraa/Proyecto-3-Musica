@@ -93,6 +93,17 @@ public class IntegrantesDAO implements IIntegrantesDAO {
         return integrante;
     }
 
+    /**
+     * Metodo que recupera todos los integrantes de un artista con el id del artista
+     * 1. Accede a la coleccion "artistas", creando un filtro para buscar el documento que coincida con el id proporcionado
+     * 2. Selecciona el campo "integrantes" y excluye el campo "_id" del documento,
+     * 3. Ejecuta la consulta con el filtro y la proyeccion y agarra el primer resultado (solo hay uno),
+     * 4. Verifica que existe el resultado y que es de tipo "integrantes"
+     * 5. Extrae los documentos que contienen los integrantes y por cada documento integrante lo convierte a a un objeto Integrante
+     * 6. Agrega los resultados a la lista y la devuelve
+     * @param idArtista
+     * @return lista de integrantes
+     */
     @Override
     public List<Integrante> consultarTodosLosIntegrantes(String idArtista) {
         MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
@@ -117,6 +128,18 @@ public class IntegrantesDAO implements IIntegrantesDAO {
         return lista;
     }
 
+    /**
+     * Metodo que recupera todos los integrantes que estan activos de un artista con el id del artista
+     * 1. Accede a la coleccion "artistas", creando un filtro para buscar el documento que coincida con el id proporcionado
+     * 2. Selecciona el campo "integrantes" y excluye el campo "_id" del documento,
+     * 3. Ejecuta la consulta con el filtro y la proyeccion y agarra el primer resultado (solo hay uno),
+     * 4. Verifica que existe el resultado y que es de tipo "integrantes"
+     * 5. Extrae los documentos que contienen los integrantes y verifica que su estado sea activo, si no tiene estado lo tomara como no activo(false)  
+     *    y por cada documento integrante que su estado sea activo lo convierte a a un objeto Integrante
+     * 6. Agrega los resultados a la lista y la devuelve
+     * @param idArtista
+     * @return lista de integrantes
+     */
     @Override
     public List<Integrante> consultarIntegrantesActivos(String idArtista) {
         MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
@@ -143,7 +166,12 @@ public class IntegrantesDAO implements IIntegrantesDAO {
         return lista;
     }
 
-    
+    /**
+     * Metodo de soporte para realizar la conversion de documento integrante a objeto integrante
+     * Crea un objeto integrante con todos los datos del documento integrante y devuelve el objeto integrante
+     * @param doc
+     * @return integrante
+     */
     public Integrante convertirDocumentoAIntegrante(Document doc) {
         Integrante integrante = new Integrante();
         
