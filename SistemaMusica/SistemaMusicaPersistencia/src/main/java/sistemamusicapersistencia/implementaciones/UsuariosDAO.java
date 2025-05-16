@@ -15,6 +15,7 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import sistemamusica.dtos.UsuarioDTO;
 import sistemamusica.exception.PersistenciaException;
+import sistemamusicadominio.Favorito;
 import sistemamusicadominio.Usuario;
 import sistemamusicapersistencia.interfaces.IUsuariosDAO;
 
@@ -32,6 +33,10 @@ public class UsuariosDAO implements IUsuariosDAO {
     private final String CAMPO_IMAGEN_PERFIL = "imagenPerfil";
     private final String CAMPO_FAVORITOS = "favoritos";
     private final String CAMPO_RESTRICCIONES = "restricciones";
+    
+    private final String CAMPO_IDFAVORITO = "idContenido";
+    private final String CAMPO_TIPO_CONTENIDO = "tipoContenido";
+    private final String CAMPO_FECHA_AGREGACION = "fechaAgregacion";
 
     /**
      * Metodo para agregar un nuevo usuario a la base de datos
@@ -194,6 +199,16 @@ public class UsuariosDAO implements IUsuariosDAO {
         }
         
         return null;
+    }
+    
+    public boolean agregarFavorito(String idUsuario, Favorito favorito){
+        MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Document> usuarios = db.getCollection(COLECCION);
+        
+        Document nuevoFavorito = new Document()
+                //.append("idContenido", new ObjectId(favorito.getIdContenido()))
+                .append("tipo", favorito.getTipo())
+                .append("fechaAgregacion", favorito.getFechaAgregacion());
     }
 
     /**

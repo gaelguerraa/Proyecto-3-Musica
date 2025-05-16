@@ -91,7 +91,7 @@ public class frmAgregarBanda extends javax.swing.JFrame {
             // Añadirlo a la lista local
             integrantes.add(integrantePersistido);
 
-            // Mensaje de éxito (opcional)
+            // Mensaje de éxito 
             JOptionPane.showMessageDialog(this, "Integrante agregado con éxito.");
         } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(this, "Error al agregar integrante: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

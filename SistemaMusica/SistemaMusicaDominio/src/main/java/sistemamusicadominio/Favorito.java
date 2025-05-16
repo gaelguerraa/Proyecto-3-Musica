@@ -16,7 +16,7 @@ public class Favorito {
 
     private TipoContenido tipo;
     private ObjectId idContenido;
-    private Date fecha;
+    private Date fechaAgregacion;
 
     /**
      * Constructor por omision
@@ -30,12 +30,12 @@ public class Favorito {
      *
      * @param tipo Tipo de contenido
      * @param idContenido ID del contenido
-     * @param fecha Fecha en la que se agrego a favoritos
+     * @param fechaAgregacion Fecha en la que se agrego a favoritos
      */
-    public Favorito(TipoContenido tipo, ObjectId idContenido, Date fecha) {
+    public Favorito(TipoContenido tipo, ObjectId idContenido, Date fechaAgregacion) {
         this.tipo = tipo;
         this.idContenido = idContenido;
-        this.fecha = fecha;
+        this.fechaAgregacion = fechaAgregacion;
     }
 
     public TipoContenido getTipo() {
@@ -54,12 +54,12 @@ public class Favorito {
         this.idContenido = idContenido;
     }
 
-    public Date getFecha() {
-        return fecha;
+    public Date getFechaAgregacion() {
+        return fechaAgregacion;
     }
 
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
+    public void setFechaAgregacion(Date fechaAgregacion) {
+        this.fechaAgregacion = fechaAgregacion;
     }
 
 }
