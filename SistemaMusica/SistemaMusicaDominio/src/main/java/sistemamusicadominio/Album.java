@@ -21,7 +21,7 @@ public class Album {
     private Genero genero;
     private String imagenPortada;
     private ObjectId idArtista;
-    private List<ObjectId> canciones;
+    private List<Cancion> canciones;
 
     /**
      * Constructor por omision
@@ -29,7 +29,7 @@ public class Album {
     public Album() {
     }
 
-    public Album(String nombre, Date fechaLanzamiento, Genero genero, String imagenPortada, ObjectId idArtista, List<ObjectId> canciones) {
+    public Album(String nombre, Date fechaLanzamiento, Genero genero, String imagenPortada, ObjectId idArtista, List<Cancion> canciones) {
         this.nombre = nombre;
         this.fechaLanzamiento = fechaLanzamiento;
         this.genero = genero;
@@ -86,11 +86,11 @@ public class Album {
         this.idArtista = idArtista;
     }
 
-    public List<ObjectId> getCanciones() {
+    public List<Cancion> getCanciones() {
         return canciones;
     }
 
-    public void setCanciones(List<ObjectId> canciones) {
+    public void setCanciones(List<Cancion> canciones) {
         this.canciones = canciones;
     }
 

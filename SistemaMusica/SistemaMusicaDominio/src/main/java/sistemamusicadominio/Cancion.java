@@ -16,7 +16,6 @@ public class Cancion {
     private ObjectId id;
     private String titulo;
     private float duracion;
-    private ObjectId idAlbum;
     private ObjectId idArtista;
 
     /**
@@ -25,10 +24,9 @@ public class Cancion {
     public Cancion() {
     }
 
-    public Cancion(String titulo, float duracion, ObjectId idAlbum, ObjectId idArtista) {
+    public Cancion(String titulo, float duracion, ObjectId idArtista) {
         this.titulo = titulo;
         this.duracion = duracion;
-        this.idAlbum = idAlbum;
         this.idArtista = idArtista;
     }
 
@@ -56,14 +54,6 @@ public class Cancion {
         this.duracion = duracion;
     }
 
-    public ObjectId getIdAlbum() {
-        return idAlbum;
-    }
-
-    public void setIdAlbum(ObjectId idAlbum) {
-        this.idAlbum = idAlbum;
-    }
-
     public ObjectId getIdArtista() {
         return idArtista;
     }
@@ -71,7 +61,5 @@ public class Cancion {
     public void setIdArtista(ObjectId idArtista) {
         this.idArtista = idArtista;
     }
-
-    
 
 }
