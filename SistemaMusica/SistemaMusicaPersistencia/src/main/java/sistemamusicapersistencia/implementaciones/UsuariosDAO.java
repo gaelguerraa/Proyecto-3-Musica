@@ -200,16 +200,17 @@ public class UsuariosDAO implements IUsuariosDAO {
         
         return null;
     }
-    
-    public boolean agregarFavorito(String idUsuario, Favorito favorito){
-        MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
-        MongoCollection<Document> usuarios = db.getCollection(COLECCION);
-        
-        Document nuevoFavorito = new Document()
-                //.append("idContenido", new ObjectId(favorito.getIdContenido()))
-                .append("tipo", favorito.getTipo())
-                .append("fechaAgregacion", favorito.getFechaAgregacion());
-    }
+
+    // TODO
+//    public boolean agregarFavorito(String idUsuario, Favorito favorito){
+//        MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
+//        MongoCollection<Document> usuarios = db.getCollection(COLECCION);
+//        
+//        Document nuevoFavorito = new Document()
+//                //.append("idContenido", new ObjectId(favorito.getIdContenido()))
+//                .append("tipo", favorito.getTipo())
+//                .append("fechaAgregacion", favorito.getFechaAgregacion());
+//    }
 
     /**
      * Metodo para encriptar la contrasenia utilizando SHA-256
