@@ -31,11 +31,12 @@ public class frmAgregarSolista extends javax.swing.JFrame {
     /**
      * Creates new form frmAgregarSolista
      */
-    public frmAgregarSolista(ControladorUniversal controlador) {
+    public frmAgregarSolista(ControladorUniversal controlador, UsuarioDTO usuarioActual) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Agregar Solista");
         this.controlador=controlador;
+        this.usuarioActual=usuarioActual;
         LlenarComboboxGenero();
     }
     
@@ -61,7 +62,7 @@ public class frmAgregarSolista extends javax.swing.JFrame {
 
         ArtistaDTO nuevoSolista = new ArtistaDTO(tipo, nombre, rutaImagenSeleccionada, genero);
             try {
-                artistasBO.registrarSolista(nuevoSolista);
+                artistasBO.registrarArtista(nuevoSolista);
                 JOptionPane.showMessageDialog(this, "Artista solista registrado con éxito.");
             } catch (NegocioException ex) {
                 JOptionPane.showMessageDialog(this, "Error al registrar el artista: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

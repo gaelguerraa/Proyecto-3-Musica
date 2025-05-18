@@ -53,7 +53,7 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
                 if (selectedRow != -1) {
                     this.nombreArtista = (String) tablaArtistas.getValueAt(selectedRow, 0);
                     this.artistaSeleccionado = this.artistasBO.buscarArtistaPorNombre(this.nombreArtista);
-                    universal.mostrarArtistasDetalles(artistaSeleccionado);
+                    universal.mostrarArtistasDetalles(artistaSeleccionado, usuarioActual);
                     System.out.println(nombreArtista);
                     this.dispose();
                 }
@@ -416,12 +416,12 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancionesActionPerformed
 
     private void btnAgregarSolistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarSolistaActionPerformed
-        universal.mostrarAgregarSolista();
+        universal.mostrarAgregarSolista(usuarioActual);
         this.dispose();
     }//GEN-LAST:event_btnAgregarSolistaActionPerformed
 
     private void btnAgregarBandaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarBandaActionPerformed
-        universal.mostrarAgregarBanda();
+        universal.mostrarAgregarBanda(usuarioActual);
         this.dispose();
     }//GEN-LAST:event_btnAgregarBandaActionPerformed
 

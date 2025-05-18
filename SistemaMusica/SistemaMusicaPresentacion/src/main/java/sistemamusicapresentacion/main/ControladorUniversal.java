@@ -11,6 +11,7 @@ import sistemamusicapresentacion.albumes.frmAgregarCancionesAlbum;
 import sistemamusicapresentacion.albumes.frmAlbumesDetalles;
 import sistemamusicapresentacion.albumes.frmAlbumesPrincipal;
 import sistemamusicapresentacion.artistas.frmAgregarBanda;
+import sistemamusicapresentacion.artistas.frmAgregarIntegrante;
 import sistemamusicapresentacion.artistas.frmAgregarSolista;
 import sistemamusicapresentacion.artistas.frmArtistasDetalles;
 import sistemamusicapresentacion.artistas.frmArtistasPrincipal;
@@ -98,18 +99,23 @@ public class ControladorUniversal {
         artistasPrincipal.setVisible(true);
     }
     
-    public void mostrarAgregarSolista(){
-        frmAgregarSolista agregarSolista = new frmAgregarSolista(this);
+    public void mostrarAgregarSolista(UsuarioDTO usuario){
+        frmAgregarSolista agregarSolista = new frmAgregarSolista(this, usuario);
         agregarSolista.setVisible(true);
     }
     
-    public void mostrarAgregarBanda(){
-        frmAgregarBanda agregarBanda = new frmAgregarBanda(this);
+    public void mostrarAgregarBanda(UsuarioDTO usuario){
+        frmAgregarBanda agregarBanda = new frmAgregarBanda(this, usuario);
         agregarBanda.setVisible(true);
     }
     
-    public void mostrarArtistasDetalles(Artista artistaSeleccionado){
-        frmArtistasDetalles artistasDetalles = new frmArtistasDetalles(this, artistaSeleccionado);
+    public void mostrarAgregarIntegrante(Artista banda, UsuarioDTO usuario){
+        frmAgregarIntegrante agregarIntegrante = new frmAgregarIntegrante(this, banda, usuario);
+        agregarIntegrante.setVisible(true);
+    }
+    
+    public void mostrarArtistasDetalles(Artista artistaSeleccionado, UsuarioDTO usuario){
+        frmArtistasDetalles artistasDetalles = new frmArtistasDetalles(this, artistaSeleccionado, usuario);
         artistasDetalles.setVisible(true);
     }
 

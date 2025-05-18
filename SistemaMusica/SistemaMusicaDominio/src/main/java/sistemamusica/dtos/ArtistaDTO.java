@@ -24,7 +24,7 @@ public class ArtistaDTO {
     public ArtistaDTO() {
     }
 
-    //para solistas
+
     public ArtistaDTO(TipoArtista tipo, String nombre, String imagen, Genero genero) {
         this.tipo = tipo;
         this.nombre = nombre;
@@ -32,15 +32,6 @@ public class ArtistaDTO {
         this.genero = genero;
     }
     
-
-    //para bandas
-    public ArtistaDTO(TipoArtista tipo, String nombre, String imagen, Genero genero, List<Integrante> integrantes) {
-        this.tipo = tipo;
-        this.nombre = nombre;
-        this.imagen = imagen;
-        this.genero = genero;
-        this.integrantes = integrantes;
-    }
 
     public String getId() {
         return id;

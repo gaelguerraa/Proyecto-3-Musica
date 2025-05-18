@@ -6,7 +6,9 @@ package sistemamusicanegocio.interfaces;
 
 import java.util.List;
 import sistemamusica.dtos.ArtistaDTO;
+import sistemamusica.dtos.IntegranteDTO;
 import sistemamusicadominio.Artista;
+import sistemamusicadominio.Integrante;
 import sistemamusicanegocio.exception.NegocioException;
 
 /**
@@ -14,11 +16,15 @@ import sistemamusicanegocio.exception.NegocioException;
  * @author gael_
  */
 public interface IArtistasBO {
-    public abstract Artista registrarSolista(ArtistaDTO nuevoSolista) throws NegocioException;
-    public abstract Artista registrarBanda(ArtistaDTO nuevaBanda) throws NegocioException;
+
+    public abstract Artista registrarArtista(ArtistaDTO nuevoArtista) throws NegocioException;
     public abstract List<Artista> buscarArtistasPorNombre(String nombre);
     public abstract List<Artista> buscarArtistasPorGenero(String genero);
     public abstract List<Artista> buscarArtistasPorNombreGenero(String nombre, String genero);
     public abstract List<Artista> buscarArtistas();
     public abstract Artista buscarArtistaPorNombre(String nombre);
+    
+    public abstract Integrante agregarIntegrante(String idArtista, IntegranteDTO nuevoIntegrante) throws NegocioException;
+    public abstract List<Integrante> consultarTodosLosIntegrantes(String idArtista);
+    public abstract List<Integrante> consultarIntegrantesActivos(String idArtista);
 }

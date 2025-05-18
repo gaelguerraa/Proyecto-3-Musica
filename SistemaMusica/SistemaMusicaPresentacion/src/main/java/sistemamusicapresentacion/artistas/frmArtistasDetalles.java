@@ -17,7 +17,6 @@ import sistemamusicadominio.Artista;
 import sistemamusicadominio.Integrante;
 import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
 import sistemamusicanegocio.interfaces.IArtistasBO;
-import sistemamusicanegocio.interfaces.IIntegrantesBO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
@@ -28,18 +27,18 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
 
     UsuarioDTO usuarioActual;
     private IArtistasBO artistasBO = FabricaObjetosNegocio.crearArtistasBO();
-    private IIntegrantesBO integrantesBO = FabricaObjetosNegocio.crearIntegrantesBO();
     ControladorUniversal universal;
     Artista artistaSeleccionado;
     
     /**
      * Creates new form frmArtistasDetalles
      */
-    public frmArtistasDetalles(ControladorUniversal universal, Artista artistaSeleccionado) {
+    public frmArtistasDetalles(ControladorUniversal universal, Artista artistaSeleccionado, UsuarioDTO usuarioActual) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Artistas Detalles");
         this.universal=universal;
+        this.usuarioActual = usuarioActual;
         this.artistaSeleccionado=artistasBO.buscarArtistaPorNombre(artistaSeleccionado.getNombre());
         this.mostrarInfoArtista(artistaSeleccionado);
         cbMostrarInactivos.addItemListener(new ItemListener() {
@@ -93,7 +92,7 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
     
     private void LlenarTablaIntegrantesTodos(){
         String idArtista = artistaSeleccionado.getId().toString();
-        List<Integrante> integrantes = integrantesBO.consultarTodosLosIntegrantes(idArtista);
+        List<Integrante> integrantes = artistasBO.consultarTodosLosIntegrantes(idArtista);
         
         DefaultTableModel modelo = (DefaultTableModel) tablaArtistas.getModel();
         modelo.setRowCount(0); // Limpiar tabla
@@ -113,7 +112,7 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
     
     private void LlenarTablaIntegrantesActivos(){
         String idArtista = artistaSeleccionado.getId().toString();
-        List<Integrante> integrantes = integrantesBO.consultarIntegrantesActivos(idArtista);
+        List<Integrante> integrantes = artistasBO.consultarIntegrantesActivos(idArtista);
         
         DefaultTableModel modelo = (DefaultTableModel) tablaArtistas.getModel();
         modelo.setRowCount(0); // Limpiar tabla

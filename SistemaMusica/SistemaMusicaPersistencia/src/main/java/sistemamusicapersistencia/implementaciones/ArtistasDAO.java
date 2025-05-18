@@ -8,6 +8,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,7 +17,10 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import sistemamusica.dtos.ArtistaDTO;
+import sistemamusica.dtos.IntegranteDTO;
 import sistemamusicadominio.Artista;
+import sistemamusicadominio.Integrante;
+import sistemamusicadominio.RolIntegrante;
 import sistemamusicadominio.TipoArtista;
 import sistemamusicapersistencia.interfaces.IArtistasDAO;
 
@@ -32,53 +36,31 @@ public class ArtistasDAO implements IArtistasDAO {
     private final String CAMPO_GENERO = "genero";
     private final String CAMPO_TIPO = "tipo";
     
-    /**
-     * Metodo que registra a un nuevo artista de tipo solista
-     * Accede a la coleccion "artistas" y mapea en ella los atributos especificados en la clase POJO "Artista"
-     * Crea un objeto artista, le da los datos del artistaDTO y persiste al nuevo artista solista
-     * @param nuevoSolista
-     * @return 
-     */
-    @Override
-    public Artista registrarSolista(ArtistaDTO nuevoSolista) {
-        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
-        MongoCollection<Artista> coleccion = baseDatos.getCollection(
-                COLECCION, Artista.class);
-        
-        Artista solista = new Artista();
-        solista.setNombre(nuevoSolista.getNombre());
-        solista.setGenero(nuevoSolista.getGenero());
-        solista.setTipo(TipoArtista.SOLISTA);
-        solista.setImagen(nuevoSolista.getImagen());
-        
-        coleccion.insertOne(solista);
-        return solista;
-    }
+   
 
     /**
-     * Metodo que registra a un nuevo artista de tipo banda
+     * Metodo que registra a un nuevo artista 
      * Accede a la coleccion "artistas" y mapea en ella los atributos especificados en la clase POJO "Artista"
      * Crea un objeto artista, le da los datos del artistaDTO y persiste al nuevo artista banda
      * 
-     * @param nuevaBanda
+     * @param nuevoArtista
      * @return 
      */
     @Override
-    public Artista registrarBanda(ArtistaDTO nuevaBanda) {
+    public Artista registrarArtista(ArtistaDTO nuevoArtista) {
         MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Artista> coleccion = baseDatos.getCollection(
                 COLECCION, Artista.class);
         
-        Artista banda = new Artista();
-        banda.setNombre(nuevaBanda.getNombre());
-        banda.setGenero(nuevaBanda.getGenero());
-        banda.setTipo(TipoArtista.BANDA);
-        banda.setImagen(nuevaBanda.getImagen());
-        banda.setIntegrantes(nuevaBanda.getIntegrantes());
+        Artista artista = new Artista();
+        artista.setNombre(nuevoArtista.getNombre());
+        artista.setGenero(nuevoArtista.getGenero());
+        artista.setTipo(nuevoArtista.getTipo());
+        artista.setImagen(nuevoArtista.getImagen());
+       
         
-        
-        coleccion.insertOne(banda);
-        return banda;
+        coleccion.insertOne(artista);
+        return artista;
     }
 
     /**
@@ -190,5 +172,130 @@ public class ArtistasDAO implements IArtistasDAO {
             return null;
         }
     }
+    
+    @Override
+    public Integrante agregarIntegrante(String idArtista, IntegranteDTO nuevoIntegrante) {
+        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Document> coleccion = baseDatos.getCollection("artistas");
+
+        // Crear el documento del integrante
+        Document integranteDoc = new Document("nombre", nuevoIntegrante.getNombre())
+                .append("rol", nuevoIntegrante.getRol().toString())
+                .append("fechaIngreso", nuevoIntegrante.getFechaIngreso())
+                .append("activo", nuevoIntegrante.isActivo());
+
+        if (nuevoIntegrante.getFechaSalida() != null) {
+            integranteDoc.append("fechaSalida", nuevoIntegrante.getFechaSalida());
+        }
+
+        // Realizar el push dentro del documento del artista
+        ObjectId id = new ObjectId(idArtista);
+        coleccion.updateOne(Filters.eq("_id", id), Updates.push("integrantes", integranteDoc));
+
+        // Puedes devolver una instancia de Integrante si necesitas
+        Integrante integrante = new Integrante();
+        integrante.setNombre(nuevoIntegrante.getNombre());
+        integrante.setRol(nuevoIntegrante.getRol());
+        integrante.setFechaIngreso(nuevoIntegrante.getFechaIngreso());
+        integrante.setFechaSalida(nuevoIntegrante.getFechaSalida());
+        integrante.setActivo(nuevoIntegrante.isActivo());
+
+        return integrante;
+    }
+
+    
+    
+    /**
+     * Metodo que recupera todos los integrantes de un artista con el id del artista
+     * 1. Accede a la coleccion "artistas", creando un filtro para buscar el documento que coincida con el id proporcionado
+     * 2. Selecciona el campo "integrantes" y excluye el campo "_id" del documento,
+     * 3. Ejecuta la consulta con el filtro y la proyeccion y agarra el primer resultado (solo hay uno),
+     * 4. Verifica que existe el resultado y que es de tipo "integrantes"
+     * 5. Extrae los documentos que contienen los integrantes y por cada documento integrante lo convierte a a un objeto Integrante
+     * 6. Agrega los resultados a la lista y la devuelve
+     * @param idArtista
+     * @return lista de integrantes
+     */
+    @Override
+    public List<Integrante> consultarTodosLosIntegrantes(String idArtista) {
+        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Document> coleccion = baseDatos.getCollection("artistas");
+
+        Document filtro = new Document("_id", new ObjectId(idArtista));
+        Document proyeccion = new Document("integrantes", 1).append("_id", 0);
+
+        Document resultado = coleccion.find(filtro).projection(proyeccion).first();
+
+        List<Integrante> lista = new ArrayList<>();
+
+        if (resultado != null && resultado.containsKey("integrantes")) {
+            List<Document> docs = (List<Document>) resultado.get("integrantes");
+
+            for (Document doc : docs) {
+                Integrante integrante = convertirDocumentoAIntegrante(doc);
+                lista.add(integrante);
+            }
+        }
+
+        return lista;
+    }
+
+    /**
+     * Metodo que recupera todos los integrantes que estan activos de un artista con el id del artista
+     * 1. Accede a la coleccion "artistas", creando un filtro para buscar el documento que coincida con el id proporcionado
+     * 2. Selecciona el campo "integrantes" y excluye el campo "_id" del documento,
+     * 3. Ejecuta la consulta con el filtro y la proyeccion y agarra el primer resultado (solo hay uno),
+     * 4. Verifica que existe el resultado y que es de tipo "integrantes"
+     * 5. Extrae los documentos que contienen los integrantes y verifica que su estado sea activo, si no tiene estado lo tomara como no activo(false)  
+     *    y por cada documento integrante que su estado sea activo lo convierte a a un objeto Integrante
+     * 6. Agrega los resultados a la lista y la devuelve
+     * @param idArtista
+     * @return lista de integrantes
+     */
+    @Override
+    public List<Integrante> consultarIntegrantesActivos(String idArtista) {
+        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Document> coleccion = baseDatos.getCollection("artistas");
+
+        Document filtro = new Document("_id", new ObjectId(idArtista));
+        Document proyeccion = new Document("integrantes", 1).append("_id", 0);
+
+        Document resultado = coleccion.find(filtro).projection(proyeccion).first();
+
+        List<Integrante> lista = new ArrayList<>();
+
+        if (resultado != null && resultado.containsKey("integrantes")) {
+            List<Document> docs = (List<Document>) resultado.get("integrantes");
+
+            for (Document doc : docs) {
+                if (doc.getBoolean("activo", false)) {
+                    Integrante integrante = convertirDocumentoAIntegrante(doc);
+                    lista.add(integrante);
+                }
+            }
+        }
+
+        return lista;
+    }
+
+    /**
+     * Metodo de soporte para realizar la conversion de documento integrante a objeto integrante
+     * Crea un objeto integrante con todos los datos del documento integrante y devuelve el objeto integrante
+     * @param doc
+     * @return integrante
+     */
+    public Integrante convertirDocumentoAIntegrante(Document doc) {
+        Integrante integrante = new Integrante();
+        
+        integrante.setNombre(doc.getString("nombre"));
+        integrante.setRol(RolIntegrante.valueOf(doc.getString("rol")));
+        integrante.setActivo(doc.getBoolean("activo", false));
+        integrante.setFechaIngreso(doc.getDate("fechaIngreso"));
+        integrante.setFechaSalida(doc.getDate("fechaSalida")); // puede ser null
+        
+        return integrante;
+    }
+    
+    
     
 }
