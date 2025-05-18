@@ -9,14 +9,20 @@ import java.awt.Image;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import sistemamusica.dtos.FavoritoDTO;
 import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicadominio.Artista;
 import sistemamusicadominio.Integrante;
+import sistemamusicadominio.TipoContenido;
+import sistemamusicanegocio.exception.NegocioException;
 import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
 import sistemamusicanegocio.interfaces.IArtistasBO;
+import sistemamusicanegocio.interfaces.IUsuariosBO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
@@ -26,6 +32,7 @@ import sistemamusicapresentacion.main.ControladorUniversal;
 public class frmArtistasDetalles extends javax.swing.JFrame {
 
     UsuarioDTO usuarioActual;
+    private IUsuariosBO usuariosBO = FabricaObjetosNegocio.crearUsuariosBO();
     private IArtistasBO artistasBO = FabricaObjetosNegocio.crearArtistasBO();
     ControladorUniversal universal;
     Artista artistaSeleccionado;
@@ -77,10 +84,10 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
             ImageIcon imagenOriginal = new ImageIcon(rutaImagen);
 
             Image imagenEscalada = imagenOriginal.getImage()
-                    .getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                    .getScaledInstance(80, 80, Image.SCALE_SMOOTH);
 
             labelFoto.setIcon(new ImageIcon(imagenEscalada));
-            labelFoto.setPreferredSize(new Dimension(60, 60));
+            labelFoto.setPreferredSize(new Dimension(80, 80));
             labelFoto.setText(""); // Quitar texto por si había "Sin imagen"
 
         } catch (Exception e) {
@@ -95,7 +102,7 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
         List<Integrante> integrantes = artistasBO.consultarTodosLosIntegrantes(idArtista);
         
         DefaultTableModel modelo = (DefaultTableModel) tablaArtistas.getModel();
-        modelo.setRowCount(0); // Limpiar tabla
+        modelo.setRowCount(0); 
 
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
         
@@ -115,7 +122,7 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
         List<Integrante> integrantes = artistasBO.consultarIntegrantesActivos(idArtista);
         
         DefaultTableModel modelo = (DefaultTableModel) tablaArtistas.getModel();
-        modelo.setRowCount(0); // Limpiar tabla
+        modelo.setRowCount(0); 
 
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
         
@@ -127,6 +134,44 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
                 i.getFechaSalida() != null ? formatoFecha.format(i.getFechaSalida()) : "N/A"
             };
             modelo.addRow(fila);
+        }
+    }
+    
+    public void agregarArtistaAFavoritos() {
+        try {
+            String idUsuario = usuarioActual.getId();
+            FavoritoDTO nuevoFavorito = new FavoritoDTO(
+                TipoContenido.ARTISTA, 
+                artistaSeleccionado.getId().toString(), 
+                new Date()
+            );
+
+            boolean artistaAgregado = usuariosBO.agregarFavorito(idUsuario, nuevoFavorito);
+
+            if (artistaAgregado) {
+                JOptionPane.showMessageDialog(null, "Artista agregado a tus favoritos", "Operación exitosa",
+                    JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null,
+                    "Este artista ya está en tus favoritos", "Información",
+                    JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        } catch (NegocioException e) {
+
+            JOptionPane.showMessageDialog(null, "Error al agregar artista: " + e.getMessage(), "Error de negocio",
+                JOptionPane.ERROR_MESSAGE);
+
+            System.err.println("Error de negocio al agregar favorito: " + e.getMessage());
+            e.printStackTrace();
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(null, "️Ocurrió un error inesperado", "Error",
+                JOptionPane.ERROR_MESSAGE);
+
+            System.err.println("Error inesperado al agregar favorito: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -159,6 +204,7 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
         labelArtista = new javax.swing.JLabel();
         labelPregunta = new javax.swing.JLabel();
         labelFoto = new javax.swing.JLabel();
+        btnAgregarFavoritos = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(850, 550));
@@ -318,6 +364,15 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
         labelFoto.setForeground(new java.awt.Color(255, 255, 255));
         labelFoto.setText("Foto de artista");
 
+        btnAgregarFavoritos.setBackground(new java.awt.Color(255, 204, 0));
+        btnAgregarFavoritos.setFont(new java.awt.Font("Gotham Black", 0, 14)); // NOI18N
+        btnAgregarFavoritos.setText("Agregar a Favoritos");
+        btnAgregarFavoritos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarFavoritosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
         panelFondo.setLayout(panelFondoLayout);
         panelFondoLayout.setHorizontalGroup(
@@ -325,33 +380,35 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addComponent(panelVerde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
-                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(40, 40, 40))
-                        .addGroup(panelFondoLayout.createSequentialGroup()
-                            .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(labelArtista, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(panelFondoLayout.createSequentialGroup()
-                                    .addComponent(btnVolver)
-                                    .addGap(26, 26, 26)
-                                    .addComponent(txtNombreArtista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(txtGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(panelFondoLayout.createSequentialGroup()
-                                    .addGap(111, 111, 111)
-                                    .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(panelFondoLayout.createSequentialGroup()
-                                    .addGap(92, 92, 92)
-                                    .addComponent(labelFoto)))
-                            .addContainerGap()))
+                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(6, 6, 6)
+                        .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(labelArtista, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panelFondoLayout.createSequentialGroup()
+                                .addComponent(btnVolver)
+                                .addGap(26, 26, 26)
+                                .addComponent(txtNombreArtista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbMostrarInactivos, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelPregunta)))))
+                            .addGroup(panelFondoLayout.createSequentialGroup()
+                                .addGap(111, 111, 111)
+                                .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelFondoLayout.createSequentialGroup()
+                                .addGap(92, 92, 92)
+                                .addComponent(labelFoto)))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
+                        .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(panelFondoLayout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cbMostrarInactivos, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(labelPregunta))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnAgregarFavoritos))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(40, 40, 40))))
         );
         panelFondoLayout.setVerticalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -372,9 +429,12 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(labelPregunta)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbMostrarInactivos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addComponent(labelPregunta)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbMostrarInactivos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnAgregarFavoritos, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -417,8 +477,13 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnUsuarioActionPerformed
 
+    private void btnAgregarFavoritosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarFavoritosActionPerformed
+        agregarArtistaAFavoritos();
+    }//GEN-LAST:event_btnAgregarFavoritosActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarFavoritos;
     private javax.swing.JButton btnAlbumes;
     private javax.swing.JButton btnArtistas;
     private javax.swing.JButton btnCanciones;

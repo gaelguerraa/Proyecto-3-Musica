@@ -54,6 +54,7 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
         txtAlbum = new javax.swing.JTextField();
         labelAlbum = new javax.swing.JLabel();
         labelFoto = new javax.swing.JLabel();
+        btnAgregarFavoritos = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(850, 550));
@@ -206,6 +207,10 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
         labelFoto.setForeground(new java.awt.Color(255, 255, 255));
         labelFoto.setText("Mostrar Foto de album aqui");
 
+        btnAgregarFavoritos.setBackground(new java.awt.Color(255, 204, 0));
+        btnAgregarFavoritos.setFont(new java.awt.Font("Gotham Black", 0, 14)); // NOI18N
+        btnAgregarFavoritos.setText("Agregar a Favoritos");
+
         javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
         panelFondo.setLayout(panelFondoLayout);
         panelFondoLayout.setHorizontalGroup(
@@ -217,9 +222,6 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(40, 40, 40))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
                                 .addComponent(btnVolver)
                                 .addGap(26, 26, 26)
                                 .addComponent(txtNombreArtista, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -227,7 +229,12 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
                                 .addComponent(txtAlbum, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(73, 73, 73)
                                 .addComponent(labelFoto)
-                                .addGap(280, 280, 280))))
+                                .addGap(280, 280, 280))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
+                                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnAgregarFavoritos)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(40, 40, 40))))
                     .addGroup(panelFondoLayout.createSequentialGroup()
                         .addGap(60, 60, 60)
                         .addComponent(labelAlbum, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -257,7 +264,9 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
                     .addGroup(panelFondoLayout.createSequentialGroup()
                         .addGap(29, 29, 29)
                         .addComponent(labelFoto)))
-                .addContainerGap(89, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnAgregarFavoritos, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -300,6 +309,7 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarFavoritos;
     private javax.swing.JButton btnAlbumes;
     private javax.swing.JButton btnArtistas;
     private javax.swing.JButton btnCanciones;

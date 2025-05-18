@@ -9,6 +9,7 @@ import java.util.List;
 import sistemamusica.dtos.AlbumFavoritoDTO;
 import sistemamusica.dtos.ArtistaFavoritoDTO;
 import sistemamusica.dtos.CancionFavoritaDTO;
+import sistemamusica.dtos.FavoritoDTO;
 import sistemamusica.dtos.GeneroFavoritoDTO;
 import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicadominio.Favorito;
@@ -64,7 +65,7 @@ public interface IUsuariosDAO {
      */
     public Usuario consultarInicioSesion(String username, String contrasenia);
     
-    public abstract boolean agregarFavorito(String idUsuario, Favorito favorito);
+    public abstract boolean agregarFavorito(String idUsuario, FavoritoDTO favoritoDTO);
     public abstract boolean eliminarFavorito(String idUsuario, String idContenido);
     public abstract List<AlbumFavoritoDTO> obtenerAlbumesFavoritos(String idUsario, String nombreAlbum);
     public abstract List<ArtistaFavoritoDTO> obtenerArtistasFavoritos(String idUsuario, String nombreArtista);

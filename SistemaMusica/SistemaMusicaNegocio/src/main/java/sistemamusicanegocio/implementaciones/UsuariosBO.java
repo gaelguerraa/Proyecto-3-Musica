@@ -9,6 +9,7 @@ import java.util.List;
 import sistemamusica.dtos.AlbumFavoritoDTO;
 import sistemamusica.dtos.ArtistaFavoritoDTO;
 import sistemamusica.dtos.CancionFavoritaDTO;
+import sistemamusica.dtos.FavoritoDTO;
 import sistemamusica.dtos.GeneroFavoritoDTO;
 import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicadominio.Favorito;
@@ -215,12 +216,18 @@ public class UsuariosBO implements IUsuariosBO {
     }
 
     @Override
-    public boolean agregarFavorito(String idUsuario, Favorito favorito) {
-        return usuariosDAO.agregarFavorito(idUsuario, favorito);
+    public boolean agregarFavorito(String idUsuario, FavoritoDTO favoritoDTO) throws NegocioException {
+        if(idUsuario == null || favoritoDTO == null ){
+            throw new NegocioException("Debe seleccionar un usario y un contenido a agregar a favoritos.");
+        }
+        return usuariosDAO.agregarFavorito(idUsuario, favoritoDTO);
     }
 
     @Override
-    public boolean eliminarFavorito(String idUsuario, String idContenido) {
+    public boolean eliminarFavorito(String idUsuario, String idContenido) throws NegocioException{
+        if(idUsuario == null || idContenido == null ){
+            throw new NegocioException("Debe seleccionar un usario y un contenido a eliminar favoritos.");
+        }
         return usuariosDAO.eliminarFavorito(idUsuario, idContenido);
     }
 

@@ -4,7 +4,20 @@
  */
 package sistemamusicapresentacion.usuario;
 
+import java.awt.Component;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import sistemamusica.dtos.AlbumFavoritoDTO;
+import sistemamusica.dtos.ArtistaFavoritoDTO;
+import sistemamusica.dtos.CancionFavoritaDTO;
+import sistemamusica.dtos.GeneroFavoritoDTO;
 import sistemamusica.dtos.UsuarioDTO;
+import sistemamusicadominio.Genero;
 import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
 import sistemamusicanegocio.interfaces.IUsuariosBO;
 import sistemamusicapresentacion.main.ControladorUniversal;
@@ -15,7 +28,7 @@ import sistemamusicapresentacion.main.ControladorUniversal;
  */
 public class frmFavoritosUsuario extends javax.swing.JFrame {
 
-    private final IUsuariosBO usuarioBO = FabricaObjetosNegocio.crearUsuariosBO();
+    private final IUsuariosBO usuariosBO = FabricaObjetosNegocio.crearUsuariosBO();
     ControladorUniversal control;
     UsuarioDTO usuario;
 
@@ -28,7 +41,121 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
         setTitle("Favoritos");
         this.control = control;
         this.usuario = usuario;
+        LlenarComboboxGenero();
+        mostrarTodo();
+        this.llenarTablaFavoritos();
     }
+    
+    public void LlenarComboboxGenero(){
+        cbGenero.removeAllItems(); 
+        for(Genero genero : Genero.values()){
+            cbGenero.addItem(genero.name());
+        }
+    }
+    
+
+    
+    public void mostrarTodo(){
+        String idUsuario = usuario.getId();
+        List<GeneroFavoritoDTO> resultados = usuariosBO.obtenerTodosFavoritos(idUsuario);
+        
+        DefaultTableModel modelo = (DefaultTableModel) tablaFavoritos.getModel();
+            modelo.setRowCount(0); // Limpiar tabla
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+            for(GeneroFavoritoDTO gf : resultados) {
+                modelo.addRow(new Object[]{
+                    gf.getTipo(),
+                    gf.getNombre(),
+                    gf.getGenero(),
+                    gf.getFechaAgregacion() != null ? sdf.format(gf.getFechaAgregacion()) : ""
+                });
+            }
+    }
+
+    public void buscarPorGenero() {
+    
+            String idUsuario = usuario.getId();
+            String genero = (String) this.cbGenero.getSelectedItem();
+
+            List<GeneroFavoritoDTO> resultados = usuariosBO.obtenerGenerosFavoritos(idUsuario, genero);
+
+            DefaultTableModel modelo = (DefaultTableModel) tablaFavoritos.getModel();
+            modelo.setRowCount(0); // Limpiar tabla
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+            for(GeneroFavoritoDTO gf : resultados) {
+                modelo.addRow(new Object[]{
+                    gf.getTipo(),
+                    gf.getNombre(),
+                    gf.getGenero(),
+                    gf.getFechaAgregacion() != null ? sdf.format(gf.getFechaAgregacion()) : ""
+                });
+            }
+
+    }
+    
+    private void llenarTablaFavoritos() {
+    String tipoSeleccionado = (String) comboboxFiltro.getSelectedItem(); // "CANCION", "ALBUM", "ARTISTA"
+    String nombreBuscado = txtBuscador.getText().trim();
+    String idUsuario = usuario.getId();
+    DefaultTableModel modeloTabla = (DefaultTableModel) tablaFavoritos.getModel();
+    modeloTabla.setRowCount(0); // Limpiar la tabla
+
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+    switch (tipoSeleccionado) {
+        case "CANCION":
+            String[] columnasCancion = {"Título", "Duración", "Artista", "Álbum", "Género", "Lanzamiento", "Agregado el"};
+            modeloTabla.setColumnIdentifiers(columnasCancion);
+            List<CancionFavoritaDTO> canciones = usuariosBO.obtenerCancionesFavoritas(idUsuario, nombreBuscado);
+            for (CancionFavoritaDTO c : canciones) {
+                modeloTabla.addRow(new Object[]{
+                    c.getTitulo(),
+                    c.getDuracion(),
+                    c.getNombreArtista(),
+                    c.getNombreAlbum(),
+                    c.getGenero(),
+                    c.getFechaLanzamiento(),
+                    c.getFechaAgregacion() != null ? sdf.format(c.getFechaAgregacion()) : ""
+                });
+            }
+            break;
+
+        case "ALBUM":
+            String[] columnasAlbum = {"Nombre", "Artista", "Género", "Lanzamiento", "Agregado el"};
+            modeloTabla.setColumnIdentifiers(columnasAlbum);
+            List<AlbumFavoritoDTO> albumes = usuariosBO.obtenerAlbumesFavoritos(idUsuario, nombreBuscado);
+            for (AlbumFavoritoDTO a : albumes) {
+                modeloTabla.addRow(new Object[]{
+                    a.getNombreAlbum(),
+                    a.getNombreArtista(),
+                    a.getGenero(),
+                    a.getFechaLanzamiento(),
+                    a.getFechaAgregacion() != null ? sdf.format(a.getFechaAgregacion()) : ""
+                });
+            }
+            break;
+
+        case "ARTISTA":
+            String[] columnasArtista = {"Nombre", "Género", "Tipo", "Agregado el"};
+            modeloTabla.setColumnIdentifiers(columnasArtista);
+            List<ArtistaFavoritoDTO> artistas = usuariosBO.obtenerArtistasFavoritos(idUsuario, nombreBuscado);
+            for (ArtistaFavoritoDTO a : artistas) {
+                modeloTabla.addRow(new Object[]{
+                    a.getNombreArtista(),
+                    a.getGeneroArtista(),
+                    a.getTipoArtista(),
+                    a.getFechaAgregacion() != null ? sdf.format(a.getFechaAgregacion()) : ""
+                });
+            }
+            break;
+    }
+}
+
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -58,6 +185,10 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
         tablaFavoritos = new javax.swing.JTable();
         btnBorrarFavorito = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
+        nombre = new javax.swing.JLabel();
+        filtro = new javax.swing.JLabel();
+        cbGenero = new javax.swing.JComboBox<>();
+        btnBuscar1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -160,11 +291,16 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
 
         comboboxFiltro.setBackground(new java.awt.Color(30, 215, 96));
         comboboxFiltro.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
-        comboboxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Artistas", "Canciones", "Albumes", "Genero", "Fecha de agregacion" }));
+        comboboxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ARTISTAS", "CANCIONES", "ALBUMES" }));
 
         btnBuscar.setBackground(new java.awt.Color(30, 215, 96));
         btnBuscar.setFont(new java.awt.Font("Gotham Black", 0, 18)); // NOI18N
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         tablaFavoritos.setFont(new java.awt.Font("Gotham Black", 1, 12)); // NOI18N
         tablaFavoritos.setModel(new javax.swing.table.DefaultTableModel(
@@ -210,35 +346,71 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
             }
         });
 
+        nombre.setFont(new java.awt.Font("Gotham Bold", 1, 14)); // NOI18N
+        nombre.setForeground(new java.awt.Color(30, 215, 96));
+        nombre.setText("nombre:");
+
+        filtro.setFont(new java.awt.Font("Gotham Bold", 1, 14)); // NOI18N
+        filtro.setForeground(new java.awt.Color(30, 215, 96));
+        filtro.setText("contenido:");
+
+        cbGenero.setBackground(new java.awt.Color(30, 215, 96));
+        cbGenero.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
+        cbGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ARTISTAS", "CANCIONES", "ALBUMES" }));
+
+        btnBuscar1.setBackground(new java.awt.Color(0, 0, 0));
+        btnBuscar1.setFont(new java.awt.Font("Gotham Black", 0, 10)); // NOI18N
+        btnBuscar1.setForeground(new java.awt.Color(30, 215, 96));
+        btnBuscar1.setText("Buscar por Genero");
+        btnBuscar1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+        btnBuscar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscar1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
         panelFondo.setLayout(panelFondoLayout);
         panelFondoLayout.setHorizontalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addComponent(panelVerde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(58, 58, 58)
                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addComponent(btnVolver)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnBorrarFavorito, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(220, 220, 220))
+                        .addGap(58, 58, 58)
+                        .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelFondoLayout.createSequentialGroup()
+                                .addComponent(btnVolver)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnBorrarFavorito, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(220, 220, 220))
+                            .addGroup(panelFondoLayout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addComponent(comboboxFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(49, 49, 49)
+                        .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(cbGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBuscar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelFondoLayout.createSequentialGroup()
-                                .addComponent(labelFavoritos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(107, 107, 107)
+                                .addComponent(filtro)
+                                .addGap(82, 82, 82)
+                                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelFondoLayout.createSequentialGroup()
+                                        .addComponent(nombre)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(labelFavoritos, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(panelFondoLayout.createSequentialGroup()
-                                .addComponent(txtBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(comboboxFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 6, Short.MAX_VALUE)))
+                                .addComponent(txtBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
         panelFondoLayout.setVerticalGroup(
@@ -246,22 +418,32 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
             .addComponent(panelVerde, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelFavoritos, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16)
-                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(comboboxFiltro)
-                    .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(16, 16, 16))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
+                        .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
+                                .addComponent(labelFavoritos, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(filtro)
+                                    .addComponent(nombre)))
+                            .addComponent(btnBuscar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbGenero, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                    .addComponent(comboboxFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBorrarFavorito)
                     .addComponent(btnVolver))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -302,16 +484,27 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnAlbumesActionPerformed
 
+    private void btnBuscar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscar1ActionPerformed
+        buscarPorGenero();
+    }//GEN-LAST:event_btnBuscar1ActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        llenarTablaFavoritos();
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAlbumes;
     private javax.swing.JButton btnArtistas;
     private javax.swing.JButton btnBorrarFavorito;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnBuscar1;
     private javax.swing.JButton btnCanciones;
     private javax.swing.JButton btnUsuario;
     private javax.swing.JButton btnVolver;
+    private javax.swing.JComboBox<String> cbGenero;
     private javax.swing.JComboBox<String> comboboxFiltro;
+    private javax.swing.JLabel filtro;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelAlbumes;
     private javax.swing.JLabel labelArtistas;
@@ -319,6 +512,7 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
     private javax.swing.JLabel labelFavoritos;
     private javax.swing.JLabel labelMusicio1;
     private javax.swing.JLabel labelUsuario;
+    private javax.swing.JLabel nombre;
     private javax.swing.JPanel panelFondo;
     private javax.swing.JPanel panelVerde;
     private javax.swing.JTable tablaFavoritos;

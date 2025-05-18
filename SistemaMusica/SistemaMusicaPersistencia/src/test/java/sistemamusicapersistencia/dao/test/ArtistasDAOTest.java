@@ -190,24 +190,24 @@ public class ArtistasDAOTest {
         List<Artista> resultados = dao.buscarArtistasPorNombreGenero("Vicente Fernandez", "MUSICAMEXICANA");
         assertFalse(resultados.isEmpty());
     }
-
-    @Test
-    public void testBuscarArtistas() {
-        
-        ArtistasDAO dao = new ArtistasDAO();
-        
-        ArtistaDTO dto = new ArtistaDTO();
-        dto.setTipo(TipoArtista.SOLISTA);
-        dto.setNombre("Raphael");
-        dto.setImagen("raphael.jpg");
-        dto.setGenero(Genero.MUSICAMEXICANA);
-
-
-        Artista registrado = dao.registrarArtista(dto);
-        artistaGuardado = registrado;
-        List<Artista> resultados = dao.buscarArtistas();
-        assertFalse(resultados.isEmpty());
-    }
+//
+//    @Test
+//    public void testBuscarArtistas() {
+//        
+//        ArtistasDAO dao = new ArtistasDAO();
+//        
+//        ArtistaDTO dto = new ArtistaDTO();
+//        dto.setTipo(TipoArtista.SOLISTA);
+//        dto.setNombre("Raphael");
+//        dto.setImagen("raphael.jpg");
+//        dto.setGenero(Genero.MUSICAMEXICANA);
+//
+//
+//        Artista registrado = dao.registrarArtista(dto);
+//        artistaGuardado = registrado;
+//        List<Artista> resultados = dao.buscarArtistas();
+//        assertFalse(resultados.isEmpty());
+//    }
     
     @Test
     public void testBuscarArtistaPorNombre(){

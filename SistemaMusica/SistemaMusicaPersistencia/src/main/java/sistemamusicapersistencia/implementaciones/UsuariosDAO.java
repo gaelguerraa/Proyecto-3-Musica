@@ -28,6 +28,7 @@ import org.bson.types.ObjectId;
 import sistemamusica.dtos.AlbumFavoritoDTO;
 import sistemamusica.dtos.ArtistaFavoritoDTO;
 import sistemamusica.dtos.CancionFavoritaDTO;
+import sistemamusica.dtos.FavoritoDTO;
 import sistemamusica.dtos.GeneroFavoritoDTO;
 import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicadominio.Favorito;
@@ -217,29 +218,32 @@ public class UsuariosDAO implements IUsuariosDAO {
     }
 
     @Override
-    public boolean agregarFavorito(String idUsuario, Favorito favorito){
+    public boolean agregarFavorito(String idUsuario, FavoritoDTO favoritoDTO) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Document> usuarios = db.getCollection(COLECCION);
-        
+
         Document nuevoFavorito = new Document()
-                .append("idContenido", favorito.getIdContenido())
-                .append("tipo", favorito.getTipo().name())
-                .append("fechaAgregacion", favorito.getFechaAgregacion());
-        
+                .append("idContenido", new ObjectId(favoritoDTO.getIdElemento()))
+                .append("tipo", favoritoDTO.getTipo().name())
+                .append("fechaAgregacion", favoritoDTO.getFechaAgregado());
+
         Document filtroDuplicado = new Document("_id", new ObjectId(idUsuario))
-                .append("favoritos.idContenido", favorito.getIdContenido())
-                .append("favoritos.tipo", favorito.getTipo().name());
-        
-                Document usuarioExistente = usuarios.find(filtroDuplicado).first();
-                if (usuarioExistente != null) {
-                    return false; // Ya está en favoritos
-                }
+                .append("favoritos.idContenido", new ObjectId(favoritoDTO.getIdElemento()))
+                .append("favoritos.tipo", favoritoDTO.getTipo().name());
+
+        Document usuarioExistente = usuarios.find(filtroDuplicado).first();
+        if (usuarioExistente != null) {
+            return false; // Ya está en favoritos
+        }
+
         UpdateResult resultado = usuarios.updateOne(
             Filters.eq("_id", new ObjectId(idUsuario)),
             Updates.push("favoritos", nuevoFavorito)
         );
-            return resultado.getModifiedCount() > 0;
+
+        return resultado.getModifiedCount() > 0;
     }
+
     
     @Override
     public boolean eliminarFavorito(String idUsuario, String idContenido) {
@@ -395,7 +399,7 @@ public class UsuariosDAO implements IUsuariosDAO {
                 Projections.computed("tipo", new BsonString("artista")),
                 Projections.computed("nombre", "$artistaInfo.nombre"),
                 Projections.computed("genero", "$artistaInfo.genero"),
-                Projections.computed("fechaAgregacion", "$favoritos.fecha")
+                Projections.computed("fechaAgregacion", "$favoritos.fechaAgregacion")
             ))
         );
 
@@ -411,7 +415,7 @@ public class UsuariosDAO implements IUsuariosDAO {
                 Projections.computed("tipo", new BsonString("album")),
                 Projections.computed("nombre", "$albumInfo.nombre"),
                 Projections.computed("genero", "$albumInfo.genero"),
-                Projections.computed("fechaAgregacion", "$favoritos.fecha")
+                Projections.computed("fechaAgregacion", "$favoritos.fechaAgregacion")
             ))
         );
 
