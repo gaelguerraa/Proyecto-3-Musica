@@ -15,8 +15,7 @@ import org.bson.types.ObjectId;
  */
 public class Integrante {
 
-    @BsonId
-    private ObjectId id;
+    ObjectId id; //no va esto
     private String nombre;
     private RolIntegrante rol;
     private Date fechaIngreso;

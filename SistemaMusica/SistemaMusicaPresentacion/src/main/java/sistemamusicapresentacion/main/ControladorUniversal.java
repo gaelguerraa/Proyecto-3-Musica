@@ -17,6 +17,7 @@ import sistemamusicapresentacion.artistas.frmArtistasDetalles;
 import sistemamusicapresentacion.artistas.frmArtistasPrincipal;
 import sistemamusicapresentacion.canciones.frmCanciones;
 import sistemamusicapresentacion.usuario.frmCambiarDatos;
+import sistemamusicapresentacion.usuario.frmFavoritosBusqueda;
 import sistemamusicapresentacion.usuario.frmFavoritosUsuario;
 import sistemamusicapresentacion.usuario.frmRestringidosUsuario;
 import sistemamusicapresentacion.usuario.frmUsuarioPrincipal;
@@ -72,6 +73,11 @@ public class ControladorUniversal {
     public void mostrarModuloFavoritosUsuario(UsuarioDTO usuario) {
         frmFavoritosUsuario frmFavoritosUsuario = new frmFavoritosUsuario(this, usuario);
         frmFavoritosUsuario.setVisible(true);
+    }
+    
+    public void mostrarModuloFavoritosBusqueda(UsuarioDTO usuario) {
+        frmFavoritosBusqueda frmFavoritosbusqueda = new frmFavoritosBusqueda(this, usuario);
+        frmFavoritosbusqueda.setVisible(true);
     }
 
     /**

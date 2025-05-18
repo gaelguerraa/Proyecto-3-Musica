@@ -6,12 +6,16 @@ package sistemamusicanegocio.fabrica;
 
 import sistemamusicanegocio.implementaciones.ArtistasBO;
 import sistemamusicanegocio.implementaciones.UsuariosBO;
+import sistemamusicanegocio.implementaciones.UtilsBO;
 import sistemamusicanegocio.interfaces.IArtistasBO;
 import sistemamusicanegocio.interfaces.IUsuariosBO;
+import sistemamusicanegocio.interfaces.IUtilsBO;
 import sistemamusicapersistencia.implementaciones.ArtistasDAO;
 import sistemamusicapersistencia.implementaciones.UsuariosDAO;
+import sistemamusicapersistencia.implementaciones.UtilsDAO;
 import sistemamusicapersistencia.interfaces.IArtistasDAO;
 import sistemamusicapersistencia.interfaces.IUsuariosDAO;
+import sistemamusicapersistencia.interfaces.IUtilsDAO;
 
 /**
  *
@@ -40,4 +44,9 @@ public class FabricaObjetosNegocio {
         return new UsuariosBO(usuariosDAO);
     }
 
+    public static IUtilsBO crearUtilsBO(){
+        IUtilsDAO utilsDAO = new UtilsDAO();
+        return new UtilsBO(utilsDAO);
+    }
+    
 }

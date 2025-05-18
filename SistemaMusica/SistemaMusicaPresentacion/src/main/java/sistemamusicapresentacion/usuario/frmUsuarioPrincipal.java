@@ -4,9 +4,12 @@
  */
 package sistemamusicapresentacion.usuario;
 
+import java.awt.Cursor;
+import javax.swing.JOptionPane;
 import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
 import sistemamusicanegocio.interfaces.IUsuariosBO;
+import sistemamusicanegocio.interfaces.IUtilsBO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
@@ -15,6 +18,7 @@ import sistemamusicapresentacion.main.ControladorUniversal;
  */
 public class frmUsuarioPrincipal extends javax.swing.JFrame {
 
+    private final IUtilsBO utilsBO = FabricaObjetosNegocio.crearUtilsBO();
     private final IUsuariosBO usuarioBO = FabricaObjetosNegocio.crearUsuariosBO();
     ControladorUniversal control;
     private UsuarioDTO usuario;
@@ -309,7 +313,49 @@ public class frmUsuarioPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancionesActionPerformed
 
     private void btnRegistrarMasivamenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarMasivamenteActionPerformed
-        // TODO add your handling code here:
+              int confirmacion = JOptionPane.showConfirmDialog(
+        this,
+        "¿Está seguro que desea realizar la inserción masiva de datos?",
+        "Confirmar operación",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.QUESTION_MESSAGE);
+    
+    if (confirmacion != JOptionPane.YES_OPTION) {
+        return; // El usuario canceló la operación
+    }
+    
+    try {
+        // Mostrar indicador de progreso (opcional)
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        btnRegistrarMasivamente.setEnabled(false);
+        
+        // Ejecutar la inserción masiva
+        utilsBO.insertarDatos();
+        
+        // Mostrar mensaje de éxito
+        JOptionPane.showMessageDialog(
+            this,
+            "Datos insertados correctamente",
+            "Operación exitosa",
+            JOptionPane.INFORMATION_MESSAGE);
+
+        
+    } catch (Exception e) {
+        // Manejo de errores genéricos
+        JOptionPane.showMessageDialog(
+            this,
+            "Error al insertar datos: " + e.getMessage(),
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
+        
+        // Log del error
+        System.err.println("Error en inserción masiva: " + e.getMessage());
+        e.printStackTrace();
+    } finally {
+        // Restaurar estado normal de la UI
+        setCursor(Cursor.getDefaultCursor());
+        btnRegistrarMasivamente.setEnabled(true);
+    }
     }//GEN-LAST:event_btnRegistrarMasivamenteActionPerformed
 
     private void btnFavoritosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFavoritosActionPerformed
