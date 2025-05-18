@@ -261,4 +261,9 @@ public class UsuariosBO implements IUsuariosBO {
         return usuariosDAO.obtenerTodosFavoritos(idUsuario);
     }
 
+    @Override
+    public List<Favorito> consultarFavoritos(String idUsuario) {
+        return usuariosDAO.consultarFavoritos(idUsuario);
+    }
+
 }

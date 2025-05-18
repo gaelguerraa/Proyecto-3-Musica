@@ -9,10 +9,13 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import sistemamusica.dtos.GeneroFavoritoDTO;
 import sistemamusica.dtos.UsuarioDTO;
+import sistemamusicadominio.Favorito;
 import sistemamusicadominio.Genero;
+import sistemamusicanegocio.exception.NegocioException;
 import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
 import sistemamusicanegocio.interfaces.IUsuariosBO;
 import sistemamusicapresentacion.main.ControladorUniversal;
@@ -36,8 +39,8 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Busqueda Favoritos");
+        mostrarTodo();
         LlenarComboboxGenero();
-        this.mostrarTodo();
         buscarPorGenero();
 
     }
@@ -62,6 +65,7 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
 
             for(GeneroFavoritoDTO gf : resultados) {
                 modelo.addRow(new Object[]{
+                    gf.getIdContenido(),
                     gf.getTipo(),
                     gf.getNombre(),
                     gf.getGenero(),
@@ -84,6 +88,7 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
 
             for(GeneroFavoritoDTO gf : resultados) {
                 modelo.addRow(new Object[]{
+                    gf.getIdContenido(),
                     gf.getTipo(),
                     gf.getNombre(),
                     gf.getGenero(),
@@ -116,6 +121,7 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
 
             for(GeneroFavoritoDTO gf : resultados) {
                 modelo.addRow(new Object[]{
+                    gf.getIdContenido(),
                     gf.getTipo(),
                     gf.getNombre(),
                     gf.getGenero(),
@@ -123,6 +129,37 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
                 });
             }    
     } 
+    
+    private String obtenerFavoritoSeleccionado(){
+        int filaSeleccionada = tablaFavoritos.getSelectedRow();
+        if (filaSeleccionada == -1) {
+                JOptionPane.showMessageDialog(this, "Seleccione un favorito de la tabla", "Error", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+        
+        String id = (String) tablaFavoritos.getValueAt(filaSeleccionada, 0); 
+        return id;
+
+   
+
+    }
+    
+    public void eliminarFavorito(){
+        String idContenido = obtenerFavoritoSeleccionado();
+        if (idContenido != null) {
+            try {
+                usuariosBO.eliminarFavorito(usuario.getId(), idContenido);
+                JOptionPane.showMessageDialog(this, "Favorito eliminado correctamente");
+                mostrarTodo(); // o llenarTablaFavoritos()
+            } catch (NegocioException ex) {
+                JOptionPane.showMessageDialog(this, "Error al eliminar favorito: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -263,14 +300,14 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Tipo", "Nombre", "Genero", "Fecha de Agregacion"
+                "Id Contenido", "Tipo", "Nombre", "Genero", "Fecha de Agregacion"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -344,29 +381,23 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelFondoLayout.createSequentialGroup()
                         .addGap(58, 58, 58)
-                        .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(panelFondoLayout.createSequentialGroup()
                                 .addComponent(btnVolver)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnBorrarFavorito, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(220, 220, 220))
-                            .addGroup(panelFondoLayout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                                .addGap(368, 368, 368)
+                                .addComponent(btnBorrarFavorito, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(panelFondoLayout.createSequentialGroup()
                         .addGap(49, 49, 49)
                         .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cbGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(filtro))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(59, 59, 59)
                         .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelFondoLayout.createSequentialGroup()
-                                .addComponent(labelFavoritos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(panelFondoLayout.createSequentialGroup()
+                                .addComponent(btnBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(59, 59, 59)
                                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(panelFondoLayout.createSequentialGroup()
                                         .addComponent(fecha1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -376,7 +407,12 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
                                         .addComponent(filtro1)
                                         .addGap(34, 34, 34)
                                         .addComponent(btnBuscarFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(panelFondoLayout.createSequentialGroup()
+                                .addGap(84, 84, 84)
+                                .addComponent(labelFavoritos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(103, 103, 103)
+                                .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap())))
         );
         panelFondoLayout.setVerticalGroup(
@@ -385,10 +421,10 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labelFavoritos, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(filtro)
-                        .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(labelFavoritos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelFondoLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -443,7 +479,7 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancionesActionPerformed
 
     private void btnBorrarFavoritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarFavoritoActionPerformed
-        // TODO add your handling code here:
+        eliminarFavorito();
     }//GEN-LAST:event_btnBorrarFavoritoActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed

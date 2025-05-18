@@ -277,7 +277,7 @@ public class UsuariosDAO implements IUsuariosDAO {
             Projections.computed("nombreArtista", "$artistaInfo.nombre"),
             Projections.computed("tipoArtista", "$artistaInfo.tipo"),
             Projections.computed("generoArtista", "$artistaInfo.genero"),
-            Projections.computed("fechaAgregacion", "$favoritos.fecha")
+            Projections.computed("fechaAgregacion", "$favoritos.fechaAgregacion")
         ))
     );
 
@@ -314,7 +314,7 @@ public class UsuariosDAO implements IUsuariosDAO {
             Projections.computed("nombreArtista", "$artistaInfo.nombre"),
             Projections.computed("genero", "$albumInfo.genero"),
             Projections.computed("fechaLanzamiento", "$albumInfo.fechaLanzamiento"),
-            Projections.computed("fechaAgregacion", "$favoritos.fecha")
+            Projections.computed("fechaAgregacion", "$favoritos.fechaAgregacion")
 
         ))
     );
@@ -358,7 +358,7 @@ public class UsuariosDAO implements IUsuariosDAO {
             Projections.computed("nombreAlbum", "$albumInfo.nombre"),
             Projections.computed("genero", "$albumInfo.genero"),
             Projections.computed("fechaLanzamiento", "$albumInfo.fechaLanzamiento"),
-            Projections.computed("fechaAgregacion", "$favoritos.fecha")
+            Projections.computed("fechaAgregacion", "$favoritos.fechaAgregacion")
         ))
         );
 
@@ -396,6 +396,7 @@ public class UsuariosDAO implements IUsuariosDAO {
             Aggregates.unwind("$artistaInfo"),
             Aggregates.match(Filters.eq("artistaInfo.genero", genero)),
             Aggregates.project(Projections.fields(
+                Projections.computed("idContenido", "$favoritos.idContenido"),
                 Projections.computed("tipo", new BsonString("artista")),
                 Projections.computed("nombre", "$artistaInfo.nombre"),
                 Projections.computed("genero", "$artistaInfo.genero"),
@@ -412,6 +413,7 @@ public class UsuariosDAO implements IUsuariosDAO {
             Aggregates.unwind("$albumInfo"),
             Aggregates.match(Filters.eq("albumInfo.genero", genero)),
             Aggregates.project(Projections.fields(
+                Projections.computed("idContenido", "$favoritos.idContenido"),    
                 Projections.computed("tipo", new BsonString("album")),
                 Projections.computed("nombre", "$albumInfo.nombre"),
                 Projections.computed("genero", "$albumInfo.genero"),
@@ -422,6 +424,7 @@ public class UsuariosDAO implements IUsuariosDAO {
         // Ejecutar ambos pipelines
         for (Document doc : usuarios.aggregate(pipelineArtistas)) {
             GeneroFavoritoDTO dto = new GeneroFavoritoDTO();
+            dto.setIdContenido(doc.get("idContenido").toString());
             dto.setTipo(doc.getString("tipo"));
             dto.setNombre(doc.getString("nombre"));
             dto.setGenero(doc.getString("genero"));
@@ -431,6 +434,7 @@ public class UsuariosDAO implements IUsuariosDAO {
 
         for (Document doc : usuarios.aggregate(pipelineAlbumes)) {
             GeneroFavoritoDTO dto = new GeneroFavoritoDTO();
+            dto.setIdContenido(doc.get("idContenido").toString());
             dto.setTipo(doc.getString("tipo"));
             dto.setNombre(doc.getString("nombre"));
             dto.setGenero(doc.getString("genero"));
@@ -460,6 +464,7 @@ public class UsuariosDAO implements IUsuariosDAO {
             Aggregates.lookup("artistas", "favoritos.idContenido", "_id", "artistaInfo"),
             Aggregates.unwind("$artistaInfo"),
             Aggregates.project(Projections.fields(
+                Projections.computed("idContenido", "$favoritos.idContenido"),    
                 Projections.computed("tipo", new BsonString("artista")),
                 Projections.computed("nombre", "$artistaInfo.nombre"),
                 Projections.computed("genero", "$artistaInfo.genero"),
@@ -479,6 +484,7 @@ public class UsuariosDAO implements IUsuariosDAO {
             Aggregates.lookup("albumes", "favoritos.idContenido", "_id", "albumInfo"),
             Aggregates.unwind("$albumInfo"),
             Aggregates.project(Projections.fields(
+                Projections.computed("idContenido", "$favoritos.idContenido"),
                 Projections.computed("tipo", new BsonString("album")),
                 Projections.computed("nombre", "$albumInfo.nombre"),
                 Projections.computed("genero", "$albumInfo.genero"),
@@ -500,6 +506,7 @@ public class UsuariosDAO implements IUsuariosDAO {
             Aggregates.lookup("albumes", "cancionInfo.idAlbum", "_id", "albumInfo"),
             Aggregates.unwind("$albumInfo"),
             Aggregates.project(Projections.fields(
+                Projections.computed("idContenido", "$favoritos.idContenido"),    
                 Projections.computed("tipo", new BsonString("cancion")),
                 Projections.computed("nombre", "$cancionInfo.titulo"),
                 Projections.computed("genero", "$albumInfo.genero"),
@@ -529,6 +536,7 @@ public class UsuariosDAO implements IUsuariosDAO {
             Aggregates.lookup("artistas", "favoritos.idContenido", "_id", "artistaInfo"),
             Aggregates.unwind("$artistaInfo"),
             Aggregates.project(Projections.fields(
+                Projections.computed("idContenido", "$favoritos.idContenido"),        
                 Projections.computed("tipo", new BsonString("artista")),
                 Projections.computed("nombre", "$artistaInfo.nombre"),
                 Projections.computed("genero", "$artistaInfo.genero"),
@@ -544,6 +552,7 @@ public class UsuariosDAO implements IUsuariosDAO {
             Aggregates.lookup("albumes", "favoritos.idContenido", "_id", "albumInfo"),
             Aggregates.unwind("$albumInfo"),
             Aggregates.project(Projections.fields(
+                Projections.computed("idContenido", "$favoritos.idContenido"),        
                 Projections.computed("tipo", new BsonString("album")),
                 Projections.computed("nombre", "$albumInfo.nombre"),
                 Projections.computed("genero", "$albumInfo.genero"),
@@ -561,6 +570,7 @@ public class UsuariosDAO implements IUsuariosDAO {
             Aggregates.lookup("albumes", "cancionInfo.idAlbum", "_id", "albumInfo"),
             Aggregates.unwind("$albumInfo"),
             Aggregates.project(Projections.fields(
+                Projections.computed("idContenido", "$favoritos.idContenido"),        
                 Projections.computed("tipo", new BsonString("cancion")),
                 Projections.computed("nombre", "$cancionInfo.titulo"),
                 Projections.computed("genero", "$albumInfo.genero"),
@@ -585,6 +595,7 @@ public class UsuariosDAO implements IUsuariosDAO {
 
         for (Document doc : usuarios.aggregate(pipeline)) {
             GeneroFavoritoDTO dto = new GeneroFavoritoDTO();
+            dto.setIdContenido(doc.get("idContenido").toString());
             dto.setTipo(doc.getString("tipo"));
             dto.setNombre(doc.getString("nombre"));
             dto.setGenero(doc.getString("genero"));
@@ -593,6 +604,17 @@ public class UsuariosDAO implements IUsuariosDAO {
         }
     }
 
+    @Override
+    public List<Favorito> consultarFavoritos(String idUsuario) {
+        MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Usuario> coleccion = db.getCollection(COLECCION, Usuario.class);
+        Usuario usuario = coleccion.find(Filters.eq("_id", new ObjectId(idUsuario))).first();
+
+        if (usuario != null) {
+            return usuario.getFavoritos();
+        }
+        return new ArrayList<>();
+    }
 
 
 

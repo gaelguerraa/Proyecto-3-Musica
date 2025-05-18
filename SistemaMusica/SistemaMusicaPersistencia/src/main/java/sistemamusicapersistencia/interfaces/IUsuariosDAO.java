@@ -73,5 +73,6 @@ public interface IUsuariosDAO {
     public abstract List<GeneroFavoritoDTO> obtenerGenerosFavoritos(String idUsuario, String genero);
     public abstract List<GeneroFavoritoDTO> consultarFavoritosPorRangoFechas(String idUsuario, Date fechaInicio, Date fechaFin);
     public abstract List<GeneroFavoritoDTO> obtenerTodosFavoritos(String idUsuario);
+    public abstract List<Favorito> consultarFavoritos(String idUsuario);
 
 }
