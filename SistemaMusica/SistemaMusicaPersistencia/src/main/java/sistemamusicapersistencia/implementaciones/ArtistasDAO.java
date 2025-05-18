@@ -190,7 +190,9 @@ public class ArtistasDAO implements IArtistasDAO {
 
         // Realizar el push dentro del documento del artista
         ObjectId id = new ObjectId(idArtista);
-        coleccion.updateOne(Filters.eq("_id", id), Updates.push("integrantes", integranteDoc));
+        coleccion.updateOne(
+                Filters.eq("_id", id), 
+                Updates.push("integrantes", integranteDoc));
 
         // Puedes devolver una instancia de Integrante si necesitas
         Integrante integrante = new Integrante();

@@ -7,12 +7,17 @@ package sistemamusicapersistencia.dao.test;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import java.util.Date;
+import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Disabled;
 import sistemamusica.dtos.UsuarioDTO;
+import sistemamusicadominio.Favorito;
+import sistemamusicadominio.TipoContenido;
 import sistemamusicadominio.Usuario;
 import sistemamusicapersistencia.implementaciones.ManejadorConexiones;
 import sistemamusicapersistencia.implementaciones.UsuariosDAO;
@@ -29,6 +34,7 @@ public class UsuariosDAOTest {
     private Usuario usuarioGuardado;
     private final UsuariosDAO usuariosDAO = new UsuariosDAO();
     private final String COLECCION = "usuarios";
+    private final String COLECCION_ARTISTAS = "artistas";
     private final String CAMPO_ID = "_id";
 
     @BeforeAll
@@ -169,5 +175,52 @@ public class UsuariosDAOTest {
         assertEquals(CONTRASENIA_ENCRIPTADA, usuarioObtenido.getContrasenia());
         assertEquals(DIRECTORIO_IMAGEN_PLACEHOLDER, usuarioObtenido.getImagenPerfil());
     }
+    
+    @Test
+    public void testAgregarFavorito(){
+        
+    MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+
+        // Crear usuario de prueba
+        Document usuario = new Document("_id", new ObjectId())
+                .append("username", "usuarioPrueba")
+                .append("favoritos", new java.util.ArrayList<Document>());
+        baseDatos.getCollection(COLECCION).insertOne(usuario);
+        String idUsuario = usuario.getObjectId("_id").toHexString();
+
+        // Crear artista de prueba
+        Document artista = new Document("_id", new ObjectId())
+                .append("nombre", "ArtistaTest")
+                .append("tipo", "Solista")
+                .append("genero", "Rock");
+        baseDatos.getCollection(COLECCION_ARTISTAS).insertOne(artista);
+        String idArtista = artista.getObjectId("_id").toHexString();
+
+        // Preparar favorito
+        Favorito favorito = new Favorito();
+        favorito.setIdContenido(new ObjectId(idArtista));
+        favorito.setTipo(TipoContenido.ARTISTA);
+        favorito.setFechaAgregacion(new Date());
+
+        // Agregar favorito - debe ser exitoso
+        boolean agregado = usuariosDAO.agregarFavorito(idUsuario, favorito);
+        assertTrue(agregado, "El favorito debe ser agregado correctamente");
+
+        // Intentar agregar el mismo favorito de nuevo - debe fallar (duplicado)
+        boolean agregadoDuplicado = usuariosDAO.agregarFavorito(idUsuario, favorito);
+        assertFalse(agregadoDuplicado, "No debe agregar favorito duplicado");
+
+        // Eliminar favorito - debe ser exitoso
+        boolean eliminado = usuariosDAO.eliminarFavorito(idUsuario, idArtista);
+        assertTrue(eliminado, "El favorito debe eliminarse correctamente");
+
+        // Intentar eliminar de nuevo - debe fallar (ya no existe)
+        boolean eliminadoDeNuevo = usuariosDAO.eliminarFavorito(idUsuario, idArtista);
+        assertFalse(eliminadoDeNuevo, "No debe eliminar favorito inexistente");
+
+        // Limpiar registros creados para no afectar otras pruebas
+        baseDatos.getCollection(COLECCION).deleteOne(Filters.eq("_id", new ObjectId(idUsuario)));
+        baseDatos.getCollection(COLECCION_ARTISTAS).deleteOne(Filters.eq("_id", new ObjectId(idArtista)));
+        }
 
 }

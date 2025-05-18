@@ -4,7 +4,14 @@
  */
 package sistemamusicanegocio.implementaciones;
 
+import java.util.Date;
+import java.util.List;
+import sistemamusica.dtos.AlbumFavoritoDTO;
+import sistemamusica.dtos.ArtistaFavoritoDTO;
+import sistemamusica.dtos.CancionFavoritaDTO;
+import sistemamusica.dtos.GeneroFavoritoDTO;
 import sistemamusica.dtos.UsuarioDTO;
+import sistemamusicadominio.Favorito;
 import sistemamusicadominio.Usuario;
 import sistemamusicanegocio.exception.NegocioException;
 import sistemamusicanegocio.interfaces.IUsuariosBO;
@@ -205,6 +212,46 @@ public class UsuariosBO implements IUsuariosBO {
         if (!nombreUsuario.matches("^[A-Za-z0-9]+$")) {
             throw new NegocioException("El email solo puede contener letras y numeros antes del '@'");
         }
+    }
+
+    @Override
+    public boolean agregarFavorito(String idUsuario, Favorito favorito) {
+        return usuariosDAO.agregarFavorito(idUsuario, favorito);
+    }
+
+    @Override
+    public boolean eliminarFavorito(String idUsuario, String idContenido) {
+        return usuariosDAO.eliminarFavorito(idUsuario, idContenido);
+    }
+
+    @Override
+    public List<AlbumFavoritoDTO> obtenerAlbumesFavoritos(String idUsario, String nombreAlbum) {
+        return usuariosDAO.obtenerAlbumesFavoritos(idUsario, nombreAlbum);
+    }
+
+    @Override
+    public List<ArtistaFavoritoDTO> obtenerArtistasFavoritos(String idUsuario, String nombreArtista) {
+        return usuariosDAO.obtenerArtistasFavoritos(idUsuario, nombreArtista);
+    }
+
+    @Override
+    public List<CancionFavoritaDTO> obtenerCancionesFavoritas(String idUsuario, String nombreCancion) {
+        return usuariosDAO.obtenerCancionesFavoritas(idUsuario, nombreCancion);
+    }
+
+    @Override
+    public List<GeneroFavoritoDTO> obtenerGenerosFavoritos(String idUsuario, String genero) {
+        return usuariosDAO.obtenerGenerosFavoritos(idUsuario, genero);
+    }
+
+    @Override
+    public List<GeneroFavoritoDTO> consultarFavoritosPorRangoFechas(String idUsuario, Date fechaInicio, Date fechaFin) {
+        return usuariosDAO.consultarFavoritosPorRangoFechas(idUsuario, fechaInicio, fechaFin);
+    }
+
+    @Override
+    public List<GeneroFavoritoDTO> obtenerTodosFavoritos(String idUsuario) {
+        return usuariosDAO.obtenerTodosFavoritos(idUsuario);
     }
 
 }
