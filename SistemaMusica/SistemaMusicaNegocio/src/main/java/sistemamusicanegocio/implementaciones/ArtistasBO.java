@@ -59,23 +59,23 @@ public class ArtistasBO implements IArtistasBO {
     }
 
     @Override
-    public List<Artista> buscarArtistasPorNombre(String nombre) {
-        return artistasDAO.buscarArtistasPorNombre(nombre);
+    public List<Artista> buscarArtistasPorNombre(String idUsuario,String nombre) {
+        return artistasDAO.buscarArtistasPorNombre(idUsuario, nombre);
     }
 
     @Override
-    public List<Artista> buscarArtistasPorGenero(String genero) {
-        return artistasDAO.buscarArtistasPorGenero(genero);
+    public List<Artista> buscarArtistasPorGenero(String idUsuario,String genero) {
+        return artistasDAO.buscarArtistasPorGenero(idUsuario, genero);
     }
 
     @Override
-    public List<Artista> buscarArtistasPorNombreGenero(String nombre, String genero) {
-        return artistasDAO.buscarArtistasPorNombreGenero(nombre, genero);
+    public List<Artista> buscarArtistasPorNombreGenero(String idUsuario,String nombre, String genero) {
+        return artistasDAO.buscarArtistasPorNombreGenero(idUsuario, nombre, genero);
     }
 
     @Override
-    public List<Artista> buscarArtistas() {
-        return artistasDAO.buscarArtistas();
+    public List<Artista> buscarArtistas(String idUsuario) {
+        return artistasDAO.buscarArtistas(idUsuario);
     }
 
     @Override

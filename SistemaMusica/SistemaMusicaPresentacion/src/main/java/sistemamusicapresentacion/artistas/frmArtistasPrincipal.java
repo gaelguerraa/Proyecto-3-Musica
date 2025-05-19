@@ -68,7 +68,7 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
         String generoSeleccionado = (String) CBGenero.getSelectedItem();
 
         if (nombreBuscado.isEmpty() && generoSeleccionado.equals("CUALQUIERA")) {
-            artistasConsultados = artistasBO.buscarArtistas();
+            artistasConsultados = artistasBO.buscarArtistas(usuarioActual.getId());
             DefaultTableModel modeloTabla = (DefaultTableModel) tablaArtistas.getModel();
             modeloTabla.setRowCount(0);
             for (Artista a : artistasConsultados) {
@@ -80,7 +80,7 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
             modeloTabla.addRow(fila);
         }
         } else if (!nombreBuscado.isEmpty() && generoSeleccionado.equals("CUALQUIERA")) {
-            artistasConsultados = artistasBO.buscarArtistasPorNombre(nombreBuscado);
+            artistasConsultados = artistasBO.buscarArtistasPorNombre(usuarioActual.getId(),nombreBuscado);
             DefaultTableModel modeloTabla = (DefaultTableModel) tablaArtistas.getModel();
             modeloTabla.setRowCount(0);
             for (Artista a : artistasConsultados) {
@@ -92,7 +92,7 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
                 modeloTabla.addRow(fila);
             }
         } else if (nombreBuscado.isEmpty() && !generoSeleccionado.equals("CUALQUIERA")) {
-            artistasConsultados = artistasBO.buscarArtistasPorGenero(generoSeleccionado);
+            artistasConsultados = artistasBO.buscarArtistasPorGenero(usuarioActual.getId(), generoSeleccionado);
             DefaultTableModel modeloTabla = (DefaultTableModel) tablaArtistas.getModel();
             modeloTabla.setRowCount(0);
             for (Artista a : artistasConsultados) {
@@ -104,7 +104,7 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
                 modeloTabla.addRow(fila);
             }
         } else {
-            artistasConsultados = artistasBO.buscarArtistasPorNombreGenero(nombreBuscado, generoSeleccionado);
+            artistasConsultados = artistasBO.buscarArtistasPorNombreGenero(usuarioActual.getId(), nombreBuscado, generoSeleccionado);
             DefaultTableModel modeloTabla = (DefaultTableModel) tablaArtistas.getModel();
             modeloTabla.setRowCount(0);
             for (Artista a : artistasConsultados) {

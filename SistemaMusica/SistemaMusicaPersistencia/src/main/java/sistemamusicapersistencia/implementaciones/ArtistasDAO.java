@@ -22,6 +22,7 @@ import sistemamusicadominio.Artista;
 import sistemamusicadominio.Integrante;
 import sistemamusicadominio.RolIntegrante;
 import sistemamusicadominio.TipoArtista;
+import sistemamusicadominio.Usuario;
 import sistemamusicapersistencia.interfaces.IArtistasDAO;
 
 /**
@@ -73,12 +74,15 @@ public class ArtistasDAO implements IArtistasDAO {
      * @return lista de artisas
      */
     @Override
-    public List<Artista> buscarArtistasPorNombre(String nombre) {
+    public List<Artista> buscarArtistasPorNombre(String idUsuario, String nombre) {
         MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Artista> coleccion = baseDatos.getCollection(COLECCION, Artista.class);
+        List<String> restricciones = obtenerGenerosRestringidos(idUsuario);
         
-        Document filtros = new Document();
-        filtros.append(CAMPO_NOMBRE, new Document("$regex", nombre).append("$options", "i"));
+         Document filtros = new Document(CAMPO_NOMBRE, new Document("$regex", nombre).append("$options", "i"));
+        if (!restricciones.isEmpty()) {
+            filtros.append(CAMPO_GENERO, new Document("$nin", restricciones));
+        }
         
         FindIterable<Artista> resultados = coleccion.find(filtros);
         List<Artista> listaArtistas = new LinkedList<>();
@@ -94,10 +98,15 @@ public class ArtistasDAO implements IArtistasDAO {
      * @return lista de artistas
      */
     @Override
-    public List<Artista> buscarArtistasPorGenero(String genero) {
+    public List<Artista> buscarArtistasPorGenero(String idUsuario, String genero) {
+        List<String> restricciones = obtenerGenerosRestringidos(idUsuario);
+        if (restricciones.contains(genero)) {
+            return new ArrayList<>(); // No mostrar si está restringido
+        }
+        
         MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Artista> coleccion = baseDatos.getCollection(COLECCION, Artista.class);
-        
+
         Document filtros = new Document();
         filtros.append(CAMPO_GENERO, genero);
         
@@ -117,18 +126,23 @@ public class ArtistasDAO implements IArtistasDAO {
      * @return 
      */
     @Override
-    public List<Artista> buscarArtistasPorNombreGenero(String nombre, String genero) {
-        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
-        MongoCollection<Artista> coleccion = baseDatos.getCollection(COLECCION, Artista.class);
-        
-        Document filtros = new Document();
-        filtros.append(CAMPO_NOMBRE, new Document("$regex", nombre).append("$options", "i"));
-        filtros.append(CAMPO_GENERO, genero);
-        
-        FindIterable<Artista> resultados = coleccion.find(filtros);
-        List<Artista> listaArtistas = new ArrayList<>();
-        resultados.into(listaArtistas);
-        return listaArtistas;
+    public List<Artista> buscarArtistasPorNombreGenero(String idUsuario, String nombre, String genero) {
+        List<String> restricciones = obtenerGenerosRestringidos(idUsuario);
+        if (restricciones.contains(genero)) {
+            return new ArrayList<>();
+        }
+
+        MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Artista> coleccion = db.getCollection(COLECCION, Artista.class);
+
+        Document filtro = new Document()
+            .append(CAMPO_NOMBRE, new Document("$regex", nombre).append("$options", "i"))
+            .append(CAMPO_GENERO, genero);
+
+        FindIterable<Artista> resultados = coleccion.find(filtro);
+        List<Artista> lista = new ArrayList<>();
+        resultados.into(lista);
+        return lista;
     }
 
     /**
@@ -137,11 +151,18 @@ public class ArtistasDAO implements IArtistasDAO {
      * @return lista de artistas
      */
     @Override
-    public List<Artista> buscarArtistas() {
+    public List<Artista> buscarArtistas(String idUsuario) {
         MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Artista> coleccion = baseDatos.getCollection(COLECCION, Artista.class);
         
-        FindIterable<Artista> resultados = coleccion.find();
+        List<String> restricciones = obtenerGenerosRestringidos(idUsuario);
+    
+        Document filtro = new Document();
+        if (!restricciones.isEmpty()) {
+            filtro.append(CAMPO_GENERO, new Document("$nin", restricciones));
+        }
+        
+        FindIterable<Artista> resultados = coleccion.find(filtro);
         List<Artista> listaArtistas = new ArrayList<>();
         resultados.into(listaArtistas);
         return listaArtistas;
@@ -298,6 +319,16 @@ public class ArtistasDAO implements IArtistasDAO {
         return integrante;
     }
     
-    
+    private List<String> obtenerGenerosRestringidos(String idUsuario) {
+        MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Usuario> coleccion = db.getCollection("usuarios", Usuario.class);
+
+        Usuario usuario = coleccion.find(new Document("_id", new ObjectId(idUsuario))).first();
+        return (usuario != null && usuario.getRestricciones() != null)
+                ? usuario.getRestricciones()
+                : new ArrayList<>();
+    }
+
+
     
 }

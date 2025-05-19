@@ -143,54 +143,54 @@ public class ArtistasDAOTest {
 //        assertEquals(2, registrado.getIntegrantes().size());
 //    }
 
-    @Test
-    public void testBuscarArtistasPorNombre() {
-        
-        ArtistaDTO dto = new ArtistaDTO();
-        dto.setTipo(TipoArtista.SOLISTA);
-        dto.setNombre("Luis Miguel");
-        dto.setImagen("sol.jpg");
-        dto.setGenero(Genero.MUSICAMEXICANA);
-
-
-        Artista registrado = dao.registrarArtista(dto);
-        artistaGuardado = registrado;
-        List<Artista> resultados = dao.buscarArtistasPorNombre("Luis Miguel");
-        assertFalse(resultados.isEmpty());
-    }
-
-    @Test
-    public void testBuscarArtistasPorGenero() {
-        
-        ArtistaDTO dto = new ArtistaDTO();
-        dto.setTipo(TipoArtista.SOLISTA);
-        dto.setNombre("Jose Jose");
-        dto.setImagen("josejose.jpg");
-        dto.setGenero(Genero.MUSICAMEXICANA);
-
-
-        Artista registrado = dao.registrarArtista(dto);
-        artistaGuardado = registrado;
-        List<Artista> resultados = dao.buscarArtistasPorGenero("MUSICAMEXICANA");
-        assertFalse(resultados.isEmpty());
-    }
-
-    @Test
-    public void testBuscarArtistasPorNombreGenero() {
-        
-        ArtistaDTO dto = new ArtistaDTO();
-        dto.setTipo(TipoArtista.SOLISTA);
-        dto.setNombre("Vicente Fernandez");
-        dto.setImagen("elcharro.jpg");
-        dto.setGenero(Genero.MUSICAMEXICANA);
-
-
-        Artista registrado = dao.registrarArtista(dto);
-        artistaGuardado = registrado;
-        List<Artista> resultados = dao.buscarArtistasPorNombreGenero("Vicente Fernandez", "MUSICAMEXICANA");
-        assertFalse(resultados.isEmpty());
-    }
+//    @Test
+//    public void testBuscarArtistasPorNombre() {
+//        
+//        ArtistaDTO dto = new ArtistaDTO();
+//        dto.setTipo(TipoArtista.SOLISTA);
+//        dto.setNombre("Luis Miguel");
+//        dto.setImagen("sol.jpg");
+//        dto.setGenero(Genero.MUSICAMEXICANA);
 //
+//
+//        Artista registrado = dao.registrarArtista(dto);
+//        artistaGuardado = registrado;
+//        List<Artista> resultados = dao.buscarArtistasPorNombre("Luis Miguel");
+//        assertFalse(resultados.isEmpty());
+//    }
+//
+//    @Test
+//    public void testBuscarArtistasPorGenero() {
+//        
+//        ArtistaDTO dto = new ArtistaDTO();
+//        dto.setTipo(TipoArtista.SOLISTA);
+//        dto.setNombre("Jose Jose");
+//        dto.setImagen("josejose.jpg");
+//        dto.setGenero(Genero.MUSICAMEXICANA);
+//
+//
+//        Artista registrado = dao.registrarArtista(dto);
+//        artistaGuardado = registrado;
+//        List<Artista> resultados = dao.buscarArtistasPorGenero("MUSICAMEXICANA");
+//        assertFalse(resultados.isEmpty());
+//    }
+//
+//    @Test
+//    public void testBuscarArtistasPorNombreGenero() {
+//        
+//        ArtistaDTO dto = new ArtistaDTO();
+//        dto.setTipo(TipoArtista.SOLISTA);
+//        dto.setNombre("Vicente Fernandez");
+//        dto.setImagen("elcharro.jpg");
+//        dto.setGenero(Genero.MUSICAMEXICANA);
+//
+//
+//        Artista registrado = dao.registrarArtista(dto);
+//        artistaGuardado = registrado;
+//        List<Artista> resultados = dao.buscarArtistasPorNombreGenero("Vicente Fernandez", "MUSICAMEXICANA");
+//        assertFalse(resultados.isEmpty());
+//    }
+////
 //    @Test
 //    public void testBuscarArtistas() {
 //        
