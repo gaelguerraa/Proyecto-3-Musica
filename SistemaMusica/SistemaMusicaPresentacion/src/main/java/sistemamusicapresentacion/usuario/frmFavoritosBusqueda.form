@@ -210,11 +210,11 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="btnArtistas">
               <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="60" green="d7" red="1e" type="rgb"/>
-                </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/imagenes/BlackStar.png"/>
+                </Property>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="60" green="d7" red="1e" type="rgb"/>
                 </Property>
               </Properties>
               <Events>
@@ -223,27 +223,27 @@
             </Component>
             <Component class="javax.swing.JLabel" name="labelArtistas">
               <Properties>
+                <Property name="text" type="java.lang.String" value="Artistas"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Gotham Black" size="12" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Artistas"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="labelAlbumes">
               <Properties>
+                <Property name="text" type="java.lang.String" value="Albumes"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Gotham Black" size="12" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Albumes"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btnAlbumes">
               <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="60" green="d7" red="1e" type="rgb"/>
-                </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/imagenes/musica.png"/>
+                </Property>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="60" green="d7" red="1e" type="rgb"/>
                 </Property>
               </Properties>
               <Events>
@@ -252,11 +252,11 @@
             </Component>
             <Component class="javax.swing.JButton" name="btnCanciones">
               <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="60" green="d7" red="1e" type="rgb"/>
-                </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/imagenes/disco.png"/>
+                </Property>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="60" green="d7" red="1e" type="rgb"/>
                 </Property>
               </Properties>
               <Events>
@@ -265,27 +265,27 @@
             </Component>
             <Component class="javax.swing.JLabel" name="labelCanciones">
               <Properties>
+                <Property name="text" type="java.lang.String" value="Canciones"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Gotham Black" size="12" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Canciones"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="labelUsuario">
               <Properties>
+                <Property name="text" type="java.lang.String" value="Usuario"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Gotham Black" size="12" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Usuario"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btnUsuario">
               <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="60" green="d7" red="1e" type="rgb"/>
-                </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/imagenes/usuario.png"/>
+                </Property>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="60" green="d7" red="1e" type="rgb"/>
                 </Property>
               </Properties>
             </Component>
@@ -293,24 +293,24 @@
         </Container>
         <Component class="javax.swing.JLabel" name="labelMusicio1">
           <Properties>
+            <Property name="text" type="java.lang.String" value="Music.io"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Gotham Black" size="36" style="1"/>
             </Property>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="60" green="d7" red="1e" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Music.io"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="labelFavoritos">
           <Properties>
+            <Property name="text" type="java.lang.String" value="Favoritos"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Gotham Black" size="36" style="1"/>
             </Property>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="60" green="d7" red="1e" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Favoritos"/>
           </Properties>
         </Component>
         <Container class="javax.swing.JScrollPane" name="jScrollPane1">
@@ -319,11 +319,9 @@
           <SubComponents>
             <Component class="javax.swing.JTable" name="tablaFavoritos">
               <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Gotham Black" size="12" style="1"/>
-                </Property>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="5" rowCount="0">
+                  <Table columnCount="6" rowCount="0">
+                    <Column editable="false" title="Id Favorito" type="java.lang.String"/>
                     <Column editable="false" title="Id Contenido" type="java.lang.String"/>
                     <Column editable="false" title="Tipo" type="java.lang.String"/>
                     <Column editable="false" title="Nombre" type="java.lang.String"/>
@@ -331,19 +329,22 @@
                     <Column editable="false" title="Fecha de Agregacion" type="java.lang.String"/>
                   </Table>
                 </Property>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Gotham Black" size="12" style="1"/>
+                </Property>
               </Properties>
             </Component>
           </SubComponents>
         </Container>
         <Component class="javax.swing.JButton" name="btnBorrarFavorito">
           <Properties>
+            <Property name="text" type="java.lang.String" value="Borrar Favorito"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="60" green="d7" red="1e" type="rgb"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Gotham Black" size="18" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Borrar Favorito"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBorrarFavoritoActionPerformed"/>
@@ -351,13 +352,13 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnVolver">
           <Properties>
+            <Property name="text" type="java.lang.String" value="Volver"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="60" green="d7" red="1e" type="rgb"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Gotham Black" size="18" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Volver"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVolverActionPerformed"/>
@@ -365,18 +366,18 @@
         </Component>
         <Component class="javax.swing.JComboBox" name="cbGenero">
           <Properties>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="60" green="d7" red="1e" type="rgb"/>
-            </Property>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Gotham Black" size="14" style="1"/>
-            </Property>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="3">
                 <StringItem index="0" value="ARTISTAS"/>
                 <StringItem index="1" value="CANCIONES"/>
                 <StringItem index="2" value="ALBUMES"/>
               </StringArray>
+            </Property>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="60" green="d7" red="1e" type="rgb"/>
+            </Property>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Gotham Black" size="14" style="1"/>
             </Property>
           </Properties>
           <AuxValues>
@@ -385,22 +386,22 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnBuscar1">
           <Properties>
+            <Property name="text" type="java.lang.String" value="Buscar por Genero"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Gotham Black" size="10" style="0"/>
-            </Property>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="60" green="d7" red="1e" type="rgb"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Buscar por Genero"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder>
                   <Color PropertyName="color" blue="ff" green="ff" red="ff" type="rgb"/>
                 </LineBorder>
               </Border>
+            </Property>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Gotham Black" size="10" style="0"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="60" green="d7" red="1e" type="rgb"/>
             </Property>
           </Properties>
           <Events>
@@ -409,13 +410,13 @@
         </Component>
         <Component class="javax.swing.JLabel" name="filtro">
           <Properties>
+            <Property name="text" type="java.lang.String" value="genero:"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Gotham Bold" size="14" style="1"/>
             </Property>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="60" green="d7" red="1e" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="genero:"/>
           </Properties>
         </Component>
         <Component class="com.github.lgooddatepicker.components.DatePicker" name="fecha1">
@@ -424,33 +425,33 @@
         </Component>
         <Component class="javax.swing.JLabel" name="filtro1">
           <Properties>
+            <Property name="text" type="java.lang.String" value="fechas de agregacion: "/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Gotham Bold" size="14" style="1"/>
             </Property>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="60" green="d7" red="1e" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="fechas de agregacion: "/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btnBuscarFecha">
           <Properties>
+            <Property name="text" type="java.lang.String" value="Buscar por Fecha"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Gotham Black" size="10" style="0"/>
-            </Property>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="60" green="d7" red="1e" type="rgb"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Buscar por Fecha"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder>
                   <Color PropertyName="color" blue="ff" green="ff" red="ff" type="rgb"/>
                 </LineBorder>
               </Border>
+            </Property>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Gotham Black" size="10" style="0"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="60" green="d7" red="1e" type="rgb"/>
             </Property>
           </Properties>
           <Events>

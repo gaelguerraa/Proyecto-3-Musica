@@ -5,6 +5,7 @@
 package sistemamusicapresentacion.usuario;
 
 import sistemamusica.dtos.UsuarioDTO;
+import sistemamusicadominio.Genero;
 import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
 import sistemamusicanegocio.interfaces.IUsuariosBO;
 import sistemamusicapresentacion.main.ControladorUniversal;
@@ -28,8 +29,16 @@ public class frmRestringidosUsuario extends javax.swing.JFrame {
         setTitle("Restringidos");
         this.control = control;
         this.usuario = usuario;
+        LlenarComboboxGenero();
     }
 
+    public void LlenarComboboxGenero(){
+        cbGenero.removeAllItems(); 
+        for(Genero genero : Genero.values()){
+            cbGenero.addItem(genero.name());
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -53,7 +62,7 @@ public class frmRestringidosUsuario extends javax.swing.JFrame {
         tablaRestringidos = new javax.swing.JTable();
         labelMusicio1 = new javax.swing.JLabel();
         btnVolver = new javax.swing.JButton();
-        comboboxGeneros = new javax.swing.JComboBox<>();
+        cbGenero = new javax.swing.JComboBox<>();
         labelRestringidos = new javax.swing.JLabel();
         labelPregunta = new javax.swing.JLabel();
         btnAgregar = new javax.swing.JButton();
@@ -189,7 +198,7 @@ public class frmRestringidosUsuario extends javax.swing.JFrame {
             }
         });
 
-        comboboxGeneros.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
+        cbGenero.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
 
         labelRestringidos.setFont(new java.awt.Font("Gotham Black", 1, 36)); // NOI18N
         labelRestringidos.setForeground(new java.awt.Color(30, 215, 96));
@@ -228,7 +237,7 @@ public class frmRestringidosUsuario extends javax.swing.JFrame {
                                 .addGap(41, 41, 41)
                                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(labelPregunta)
-                                    .addComponent(comboboxGeneros, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cbGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(btnAgregar))
                                 .addGap(163, 163, 163))))
                     .addGroup(panelFondoLayout.createSequentialGroup()
@@ -249,7 +258,7 @@ public class frmRestringidosUsuario extends javax.swing.JFrame {
                     .addGroup(panelFondoLayout.createSequentialGroup()
                         .addComponent(labelPregunta)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(comboboxGeneros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnAgregar))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -303,7 +312,7 @@ public class frmRestringidosUsuario extends javax.swing.JFrame {
     private javax.swing.JButton btnCanciones;
     private javax.swing.JButton btnUsuario;
     private javax.swing.JButton btnVolver;
-    private javax.swing.JComboBox<String> comboboxGeneros;
+    private javax.swing.JComboBox<String> cbGenero;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelAlbumes;
     private javax.swing.JLabel labelArtistas;

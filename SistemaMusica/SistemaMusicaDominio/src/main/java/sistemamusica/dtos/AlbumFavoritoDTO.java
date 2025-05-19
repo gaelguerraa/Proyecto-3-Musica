@@ -11,6 +11,9 @@ import java.util.Date;
  * @author gael_
  */
 public class AlbumFavoritoDTO {
+    
+    private String idFavorito;
+    private String idAlbum;
     private String nombreAlbum;
     private String nombreArtista;
     private String genero;
@@ -20,13 +23,33 @@ public class AlbumFavoritoDTO {
     public AlbumFavoritoDTO() {
     }
 
-    public AlbumFavoritoDTO(String nombreAlbum, String nombreArtista, String genero, Date fechaLanzamiento, Date fechaAgregacion) {
+    public AlbumFavoritoDTO(String idFavorito, String idAlbum, String nombreAlbum, String nombreArtista, String genero, Date fechaLanzamiento, Date fechaAgregacion) {
+        this.idFavorito = idFavorito;
+        this.idAlbum = idAlbum;
         this.nombreAlbum = nombreAlbum;
         this.nombreArtista = nombreArtista;
         this.genero = genero;
         this.fechaLanzamiento = fechaLanzamiento;
         this.fechaAgregacion = fechaAgregacion;
     }
+
+    public String getIdFavorito() {
+        return idFavorito;
+    }
+
+    public void setIdFavorito(String idFavorito) {
+        this.idFavorito = idFavorito;
+    }
+
+    public String getIdAlbum() {
+        return idAlbum;
+    }
+
+    public void setIdAlbum(String idAlbum) {
+        this.idAlbum = idAlbum;
+    }
+
+    
 
     public String getNombreAlbum() {
         return nombreAlbum;

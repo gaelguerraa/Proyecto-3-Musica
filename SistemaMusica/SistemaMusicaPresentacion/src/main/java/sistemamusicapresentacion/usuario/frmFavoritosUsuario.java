@@ -37,12 +37,41 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
      */
     public frmFavoritosUsuario(ControladorUniversal control, UsuarioDTO usuario) {
         initComponents();
+        tablaFavoritos = new javax.swing.JTable();
+        tablaFavoritos.setFont(new java.awt.Font("Gotham Black", 1, 12)); // NOI18N
+        tablaFavoritos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            } // Inicializar sin nombres de columna
+        ) {
+            @Override
+            public Class getColumnClass(int columnIndex) {
+                // Asegúrate de que columnIndex esté dentro de los límites del modelo actual
+                if (columnIndex < getColumnCount()) {
+                    // Puedes definir la clase de columna basada en el índice si es necesario
+                    // Por ejemplo:
+                    // if (columnIndex == ...) { return Integer.class; }
+                    return String.class; // O la clase predeterminada que necesites
+                }
+                return Object.class; // Valor predeterminado si el índice está fuera de rango
+            }
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return false; // Por defecto, las celdas no son editables
+            }
+        });
+        jScrollPane1.setViewportView(tablaFavoritos);
         setLocationRelativeTo(null);
         setTitle("Favoritos");
         this.control = control;
         this.usuario = usuario;
         this.LlenarTablaFavoritos();
     }
+    
     
 
     private void LlenarTablaFavoritos() {
@@ -55,11 +84,13 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
         if (filtro.equals("ARTISTAS")) {
-            String[] columnasArtista = {"Nombre", "Género", "Tipo", "Agregado el"};
+            String[] columnasArtista = {"Id Favorito", "Id Artista", "Nombre", "Género", "Tipo", "Agregado el"};
             modeloTabla.setColumnIdentifiers(columnasArtista);
             List<ArtistaFavoritoDTO> artistas = usuariosBO.obtenerArtistasFavoritos(idUsuario, nombreBuscado);
             for (ArtistaFavoritoDTO a : artistas) {
                 modeloTabla.addRow(new Object[]{
+                    a.getIdFavorito(),
+                    a.getIdArtista(),
                     a.getNombreArtista(),
                     a.getGeneroArtista(),
                     a.getTipoArtista(),
@@ -67,11 +98,13 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
                 });
             }
         } else if (filtro.equals("ALBUMES")) {
-            String[] columnasAlbum = {"Nombre", "Artista", "Género", "Lanzamiento", "Agregado el"};
+            String[] columnasAlbum = {"Id Favorito", "Id Album","Nombre", "Artista", "Género", "Lanzamiento", "Agregado el"};
             modeloTabla.setColumnIdentifiers(columnasAlbum);
             List<AlbumFavoritoDTO> albumes = usuariosBO.obtenerAlbumesFavoritos(idUsuario, nombreBuscado);
             for (AlbumFavoritoDTO a : albumes) {
                 modeloTabla.addRow(new Object[]{
+                    a.getIdFavorito(),
+                    a.getIdAlbum(),
                     a.getNombreAlbum(),
                     a.getNombreArtista(),
                     a.getGenero(),
@@ -80,11 +113,12 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
                 });
             }
         } else if (filtro.equals("CANCIONES")) {
-           String[] columnasCancion = {"Título", "Duración", "Artista", "Álbum", "Género", "Lanzamiento", "Agregado el"};
+           String[] columnasCancion = {"Id Favorito", "Título", "Duración", "Artista", "Álbum", "Género", "Lanzamiento", "Agregado el"};
             modeloTabla.setColumnIdentifiers(columnasCancion);
             List<CancionFavoritaDTO> canciones = usuariosBO.obtenerCancionesFavoritas(idUsuario, nombreBuscado);
             for (CancionFavoritaDTO c : canciones) {
                 modeloTabla.addRow(new Object[]{
+                    c.getIdFavorito(),
                     c.getTitulo(),
                     c.getDuracion(),
                     c.getNombreArtista(),
@@ -95,6 +129,21 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
                 });
             }
 
+        }else{
+            String[] columnaGlobal = {"Id Favorito", "Id Contenido", "Nombre", "Género", "Tipo", "Agregado el"};
+            modeloTabla.setColumnIdentifiers(columnaGlobal);
+            List<GeneroFavoritoDTO> todo = usuariosBO.obtenerTodosFavoritos(idUsuario);
+            for(GeneroFavoritoDTO g : todo){
+                modeloTabla.addRow(new Object[]{
+                g.getIdFavorito(),
+                g.getIdContenido(),
+                g.getNombre(),
+                g.getGenero(),
+                g.getTipo(),
+                g.getFechaAgregacion()!= null ? sdf.format(g.getFechaAgregacion()) : ""
+                
+            });
+            }
         }
 
 
@@ -238,7 +287,7 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
 
         comboboxFiltro.setBackground(new java.awt.Color(30, 215, 96));
         comboboxFiltro.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
-        comboboxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ARTISTAS", "CANCIONES", "ALBUMES" }));
+        comboboxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CUALQUIERA", "ARTISTAS", "CANCIONES", "ALBUMES" }));
 
         btnBuscar.setBackground(new java.awt.Color(30, 215, 96));
         btnBuscar.setFont(new java.awt.Font("Gotham Black", 0, 18)); // NOI18N
@@ -255,24 +304,9 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Tipo", "Nombre", "Genero", "Fecha de Agregacion"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
             }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        ));
         jScrollPane1.setViewportView(tablaFavoritos);
 
         btnVolver.setBackground(new java.awt.Color(30, 215, 96));
@@ -357,10 +391,11 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
                             .addComponent(filtro)
                             .addComponent(nombre))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(comboboxFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(comboboxFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(24, 24, 24)

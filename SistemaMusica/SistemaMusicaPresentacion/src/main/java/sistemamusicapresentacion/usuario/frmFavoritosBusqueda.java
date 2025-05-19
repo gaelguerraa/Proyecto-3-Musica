@@ -65,6 +65,7 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
 
             for(GeneroFavoritoDTO gf : resultados) {
                 modelo.addRow(new Object[]{
+                    gf.getIdFavorito(),
                     gf.getIdContenido(),
                     gf.getTipo(),
                     gf.getNombre(),
@@ -88,6 +89,7 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
 
             for(GeneroFavoritoDTO gf : resultados) {
                 modelo.addRow(new Object[]{
+                    gf.getIdFavorito(),
                     gf.getIdContenido(),
                     gf.getTipo(),
                     gf.getNombre(),
@@ -121,6 +123,7 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
 
             for(GeneroFavoritoDTO gf : resultados) {
                 modelo.addRow(new Object[]{
+                    gf.getIdFavorito(),
                     gf.getIdContenido(),
                     gf.getTipo(),
                     gf.getNombre(),
@@ -137,7 +140,7 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
                 return null;
             }
         
-        String id = (String) tablaFavoritos.getValueAt(filaSeleccionada, 0); 
+        String id = (String) tablaFavoritos.getValueAt(filaSeleccionada, 1); 
         return id;
 
    
@@ -294,20 +297,19 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
         labelFavoritos.setForeground(new java.awt.Color(30, 215, 96));
         labelFavoritos.setText("Favoritos");
 
-        tablaFavoritos.setFont(new java.awt.Font("Gotham Black", 1, 12)); // NOI18N
         tablaFavoritos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Id Contenido", "Tipo", "Nombre", "Genero", "Fecha de Agregacion"
+                "Id Favorito", "Id Contenido", "Tipo", "Nombre", "Genero", "Fecha de Agregacion"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -318,6 +320,7 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tablaFavoritos.setFont(new java.awt.Font("Gotham Black", 1, 12)); // NOI18N
         jScrollPane1.setViewportView(tablaFavoritos);
 
         btnBorrarFavorito.setBackground(new java.awt.Color(30, 215, 96));

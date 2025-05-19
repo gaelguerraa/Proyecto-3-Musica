@@ -14,6 +14,9 @@ import org.bson.types.ObjectId;
  */
 public class Favorito {
 
+    private ObjectId idFavorito;
+    private String nombreContenido;
+    private String generoContenido;
     private TipoContenido tipo;
     private ObjectId idContenido;
     private Date fechaAgregacion;
@@ -24,20 +27,39 @@ public class Favorito {
     public Favorito() {
     }
 
-    /**
-     * Constructor que inicializa los atributos de la clase al valor de sus
-     * parametros
-     *
-     * @param tipo Tipo de contenido
-     * @param idContenido ID del contenido
-     * @param fechaAgregacion Fecha en la que se agrego a favoritos
-     */
-    public Favorito(TipoContenido tipo, ObjectId idContenido, Date fechaAgregacion) {
+    public Favorito(String nombreContenido, String generoContenido, TipoContenido tipo, ObjectId idContenido, Date fechaAgregacion) {
+        this.nombreContenido = nombreContenido;
+        this.generoContenido = generoContenido;
         this.tipo = tipo;
         this.idContenido = idContenido;
         this.fechaAgregacion = fechaAgregacion;
     }
 
+    public ObjectId getIdFavorito() {
+        return idFavorito;
+    }
+
+    public void setIdFavorito(ObjectId idFavorito) {
+        this.idFavorito = idFavorito;
+    }
+
+    public String getNombreContenido() {
+        return nombreContenido;
+    }
+
+    public void setNombreContenido(String nombreContenido) {
+        this.nombreContenido = nombreContenido;
+    }
+
+    public String getGeneroContenido() {
+        return generoContenido;
+    }
+
+    public void setGeneroContenido(String generoContenido) {
+        this.generoContenido = generoContenido;
+    }
+
+    
     public TipoContenido getTipo() {
         return tipo;
     }

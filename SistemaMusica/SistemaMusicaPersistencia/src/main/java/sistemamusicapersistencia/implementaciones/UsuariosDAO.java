@@ -32,6 +32,8 @@ import sistemamusica.dtos.FavoritoDTO;
 import sistemamusica.dtos.GeneroFavoritoDTO;
 import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicadominio.Favorito;
+import sistemamusicadominio.Genero;
+import sistemamusicadominio.TipoContenido;
 import sistemamusicadominio.Usuario;
 import sistemamusicapersistencia.interfaces.IUsuariosDAO;
 
@@ -223,12 +225,15 @@ public class UsuariosDAO implements IUsuariosDAO {
         MongoCollection<Document> usuarios = db.getCollection(COLECCION);
 
         Document nuevoFavorito = new Document()
-                .append("idContenido", new ObjectId(favoritoDTO.getIdElemento()))
+                .append("_id", new ObjectId())
+                .append("idContenido", new ObjectId(favoritoDTO.getIdContenido()))
                 .append("tipo", favoritoDTO.getTipo().name())
-                .append("fechaAgregacion", favoritoDTO.getFechaAgregado());
+                .append("nombre", favoritoDTO.getNombreContenido())
+                .append("genero", favoritoDTO.getGeneroContenido())
+                .append("fechaAgregacion", favoritoDTO.getFechaAgregacion());
 
         Document filtroDuplicado = new Document("_id", new ObjectId(idUsuario))
-                .append("favoritos.idContenido", new ObjectId(favoritoDTO.getIdElemento()))
+                .append("favoritos.idContenido", new ObjectId(favoritoDTO.getIdContenido()))
                 .append("favoritos.tipo", favoritoDTO.getTipo().name());
 
         Document usuarioExistente = usuarios.find(filtroDuplicado).first();
@@ -267,23 +272,29 @@ public class UsuariosDAO implements IUsuariosDAO {
         MongoCollection<Document> usuarios = db.getCollection(COLECCION);
 
         List<Bson> pipeline = Arrays.asList(
-        Aggregates.match(Filters.eq("_id", new ObjectId(idUsuario))), // Buscar al usuario
-        Aggregates.unwind("$favoritos"), // Separar cada favorito
-        Aggregates.match(Filters.eq("favoritos.tipo", "ARTISTA")), // Solo favoritos tipo artista
-        Aggregates.lookup("artistas", "favoritos.idContenido", "_id", "artistaInfo"), // Join con colección de artistas
-        Aggregates.unwind("$artistaInfo"), // Unir cada favorito con su artista
-        Aggregates.match(Filters.regex("artistaInfo.nombre", ".*" + Pattern.quote(nombreArtista) + ".*", "i")), // Filtrar por nombre con regex (ignora mayúsculas)
+        Aggregates.match(Filters.eq("_id", new ObjectId(idUsuario))),
+        Aggregates.unwind("$favoritos"),
+        Aggregates.match(Filters.and(
+            Filters.eq("favoritos.tipo", TipoContenido.ARTISTA.name()),
+            Filters.regex("favoritos.nombre", ".*" + nombreArtista + ".*", "i")
+        )),
+        Aggregates.lookup("artistas", "favoritos.idContenido", "_id", "artistaInfo"),
+        Aggregates.unwind("$artistaInfo"),
         Aggregates.project(Projections.fields(
+            Projections.computed("idFavorito", "$favoritos._id"),
+            Projections.computed("idArtista", "$favoritos.idContenido"),    
+            Projections.computed("tipoArtista","$artistaInfo.tipo"),
             Projections.computed("nombreArtista", "$artistaInfo.nombre"),
-            Projections.computed("tipoArtista", "$artistaInfo.tipo"),
             Projections.computed("generoArtista", "$artistaInfo.genero"),
             Projections.computed("fechaAgregacion", "$favoritos.fechaAgregacion")
+
         ))
     );
-
         List<ArtistaFavoritoDTO> resultado = new ArrayList<>();
         for (Document doc : usuarios.aggregate(pipeline)) {
             ArtistaFavoritoDTO dto = new ArtistaFavoritoDTO();
+            dto.setIdFavorito(doc.getObjectId("idFavorito").toString());
+            dto.setIdArtista(doc.getObjectId("idArtista").toString());
             dto.setNombreArtista(doc.getString("nombreArtista"));
             dto.setTipoArtista(doc.getString("tipoArtista"));
             dto.setGeneroArtista(doc.getString("generoArtista"));
@@ -301,15 +312,19 @@ public class UsuariosDAO implements IUsuariosDAO {
         MongoCollection<Document> usuarios = db.getCollection(COLECCION);
         
         List<Bson> pipeline = Arrays.asList(
-        Aggregates.match(Filters.eq("_id", new ObjectId(idUsuario))), // Buscar al usuario
-        Aggregates.unwind("$favoritos"), // Separar cada favorito
-        Aggregates.match(Filters.eq("favoritos.tipo", "ALBUM")), // Solo favoritos tipo álbum
-        Aggregates.lookup("albumes", "favoritos.idContenido", "_id", "albumInfo"), // Join con colección de álbumes
-        Aggregates.unwind("$albumInfo"), // Unir cada favorito con su álbum
-        Aggregates.lookup("artistas", "albumInfo.idArtista", "_id", "artistaInfo"), // Join adicional con artistas
-        Aggregates.unwind("$artistaInfo"), // Unir cada álbum con su artista
-        Aggregates.match(Filters.regex("albumInfo.nombre", ".*" + Pattern.quote(nombreAlbum) + ".*", "i")), // Filtrar por nombre de álbum
+        Aggregates.match(Filters.eq("_id", new ObjectId(idUsuario))),
+        Aggregates.unwind("$favoritos"),
+        Aggregates.match(Filters.and(
+            Filters.eq("favoritos.tipo", TipoContenido.ALBUM.name()),
+            Filters.regex("favoritos.nombre", ".*" + nombreAlbum + ".*", "i")
+        )),
+        Aggregates.lookup("albumes", "favoritos.idContenido", "_id", "albumInfo"),
+        Aggregates.unwind("$albumInfo"),
+        Aggregates.lookup("artistas", "albumInfo.idArtista", "_id", "artistaInfo"),
+        Aggregates.unwind("$artistaInfo"),
         Aggregates.project(Projections.fields(
+            Projections.computed("idFavorito", "$favoritos._id"),
+            Projections.computed("idAlbum", "$favoritos.idContenido"),
             Projections.computed("nombreAlbum", "$albumInfo.nombre"),
             Projections.computed("nombreArtista", "$artistaInfo.nombre"),
             Projections.computed("genero", "$albumInfo.genero"),
@@ -319,18 +334,21 @@ public class UsuariosDAO implements IUsuariosDAO {
         ))
     );
 
-    List<AlbumFavoritoDTO> resultado = new ArrayList<>();
-    for (Document doc : usuarios.aggregate(pipeline)) {
-        AlbumFavoritoDTO dto = new AlbumFavoritoDTO();
-        dto.setNombreAlbum(doc.getString("nombreAlbum"));
-        dto.setNombreArtista(doc.getString("nombreArtista"));
-        dto.setGenero(doc.getString("genero")); // Asume que Genero es un enum
-        dto.setFechaLanzamiento(doc.getDate("fechaLanzamiento"));
-        dto.setFechaAgregacion(doc.getDate("fechaAgregacion"));
-        resultado.add(dto);
-    }
+        List<AlbumFavoritoDTO> resultado = new ArrayList<>();
+        for (Document doc : usuarios.aggregate(pipeline)) {
+            AlbumFavoritoDTO dto = new AlbumFavoritoDTO();
+            dto.setIdFavorito(doc.getObjectId("idFavorito").toString());
+            dto.setIdAlbum(doc.getObjectId("idAlbum").toString());
+            dto.setNombreAlbum(doc.getString("nombreAlbum"));
+            dto.setNombreArtista(doc.getString("nombreArtista"));
+            dto.setGenero(doc.getString("genero"));
+            dto.setFechaLanzamiento(doc.getDate("fechaLanzamiento"));
+            dto.setFechaAgregacion(doc.getDate("fechaAgregacion"));
+             resultado.add(dto);
+        }
 
-    return resultado;
+        return resultado;
+
 
         
     }
@@ -341,105 +359,73 @@ public class UsuariosDAO implements IUsuariosDAO {
         MongoCollection<Document> usuarios = db.getCollection(COLECCION);
         
         List<Bson> pipeline = Arrays.asList(
-        Aggregates.match(Filters.eq("_id", new ObjectId(idUsuario))), // Buscar al usuario
-        Aggregates.unwind("$favoritos"), // Separar cada favorito
-        Aggregates.match(Filters.eq("favoritos.tipo", "CANCION")), // Solo favoritos tipo canción
-        Aggregates.lookup("canciones", "favoritos.idContenido", "_id", "cancionInfo"), // Join con canciones
-        Aggregates.unwind("$cancionInfo"), // Unir cada favorito con su canción
-        Aggregates.lookup("artistas", "cancionInfo.idArtista", "_id", "artistaInfo"), // Join con artistas
-        Aggregates.unwind("$artistaInfo"), // Unir cada canción con su artista
-        Aggregates.lookup("albumes", "cancionInfo.idAlbum", "_id", "albumInfo"), // Join con álbumes
-        Aggregates.unwind("$albumInfo"), // Unir cada canción con su álbum
-        Aggregates.match(Filters.regex("cancionInfo.titulo", ".*" + Pattern.quote(nombreCancion) + ".*", "i")), // Filtrar por título
+        Aggregates.match(Filters.eq("_id", new ObjectId(idUsuario))),
+        Aggregates.unwind("$favoritos"),
+        Aggregates.match(Filters.and(
+            Filters.eq("favoritos.tipo", TipoContenido.CANCION.name()),
+            Filters.regex("favoritos.nombre", ".*" + nombreCancion + ".*", "i")
+        )),
+        Aggregates.lookup("canciones", "favoritos.idContenido", "_id", "cancionInfo"),
+        Aggregates.unwind("$cancionInfo"),
+        Aggregates.lookup("albumes", "cancionInfo.idAlbum", "_id", "albumInfo"),
+        Aggregates.unwind("$albumInfo"),
+        Aggregates.lookup("artistas", "cancionInfo.idArtista", "_id", "artistaInfo"),
+        Aggregates.unwind("$artistaInfo"),
         Aggregates.project(Projections.fields(
+            Projections.computed("idFavorito", "$favoritos._id"),
+            Projections.computed("idCancion", "$favoritos.idContenido"),
             Projections.computed("titulo", "$cancionInfo.titulo"),
             Projections.computed("duracion", "$cancionInfo.duracion"),
             Projections.computed("nombreArtista", "$artistaInfo.nombre"),
             Projections.computed("nombreAlbum", "$albumInfo.nombre"),
             Projections.computed("genero", "$albumInfo.genero"),
-            Projections.computed("fechaLanzamiento", "$albumInfo.fechaLanzamiento"),
             Projections.computed("fechaAgregacion", "$favoritos.fechaAgregacion")
+
         ))
         );
 
         List<CancionFavoritaDTO> resultado = new ArrayList<>();
         for (Document doc : usuarios.aggregate(pipeline)) {
             CancionFavoritaDTO dto = new CancionFavoritaDTO();
+            dto.setIdFavorito(doc.getObjectId("idFavorito").toString());
+            dto.setIdCancion(doc.getObjectId("idCancion").toString());
             dto.setTitulo(doc.getString("titulo"));
             dto.setDuracion(doc.getDouble("duracion").floatValue());
             dto.setNombreArtista(doc.getString("nombreArtista"));
             dto.setNombreAlbum(doc.getString("nombreAlbum"));
             dto.setGenero(doc.getString("genero"));
-            dto.setFechaLanzamiento(doc.getDate("fechaLanzamiento"));
             dto.setFechaAgregacion(doc.getDate("fechaAgregacion"));
-
             resultado.add(dto);
         }
 
         return resultado;
-        
+
     }
     
     @Override
     public List<GeneroFavoritoDTO> obtenerGenerosFavoritos(String idUsuario, String genero) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
-        MongoCollection<Document> usuarios = db.getCollection(COLECCION); // o álbumes/artistas si aplican
+        MongoCollection<Document> usuarios = db.getCollection(COLECCION); 
 
+        Document usuario = usuarios.find(Filters.eq("_id", new ObjectId(idUsuario))).first();
         List<GeneroFavoritoDTO> resultado = new ArrayList<>();
 
-        // ----------- Pipeline para ARTISTAS -----------
-        List<Bson> pipelineArtistas = Arrays.asList(
-            Aggregates.match(Filters.eq("_id", new ObjectId(idUsuario))),
-            Aggregates.unwind("$favoritos"),
-            Aggregates.match(Filters.eq("favoritos.tipo", "ARTISTA")),
-            Aggregates.lookup("artistas", "favoritos.idContenido", "_id", "artistaInfo"),
-            Aggregates.unwind("$artistaInfo"),
-            Aggregates.match(Filters.eq("artistaInfo.genero", genero)),
-            Aggregates.project(Projections.fields(
-                Projections.computed("idContenido", "$favoritos.idContenido"),
-                Projections.computed("tipo", new BsonString("artista")),
-                Projections.computed("nombre", "$artistaInfo.nombre"),
-                Projections.computed("genero", "$artistaInfo.genero"),
-                Projections.computed("fechaAgregacion", "$favoritos.fechaAgregacion")
-            ))
-        );
+        if (usuario != null) {
+            List<Document> favoritos = usuario.getList("favoritos", Document.class, new ArrayList<>());
 
-        // ----------- Pipeline para ALBUMES -----------
-        List<Bson> pipelineAlbumes = Arrays.asList(
-            Aggregates.match(Filters.eq("_id", new ObjectId(idUsuario))),
-            Aggregates.unwind("$favoritos"),
-            Aggregates.match(Filters.eq("favoritos.tipo", "ALBUM")),
-            Aggregates.lookup("albumes", "favoritos.idContenido", "_id", "albumInfo"),
-            Aggregates.unwind("$albumInfo"),
-            Aggregates.match(Filters.eq("albumInfo.genero", genero)),
-            Aggregates.project(Projections.fields(
-                Projections.computed("idContenido", "$favoritos.idContenido"),    
-                Projections.computed("tipo", new BsonString("album")),
-                Projections.computed("nombre", "$albumInfo.nombre"),
-                Projections.computed("genero", "$albumInfo.genero"),
-                Projections.computed("fechaAgregacion", "$favoritos.fechaAgregacion")
-            ))
-        );
-
-        // Ejecutar ambos pipelines
-        for (Document doc : usuarios.aggregate(pipelineArtistas)) {
-            GeneroFavoritoDTO dto = new GeneroFavoritoDTO();
-            dto.setIdContenido(doc.get("idContenido").toString());
-            dto.setTipo(doc.getString("tipo"));
-            dto.setNombre(doc.getString("nombre"));
-            dto.setGenero(doc.getString("genero"));
-            dto.setFechaAgregacion(doc.getDate("fechaAgregacion"));
-            resultado.add(dto);
-        }
-
-        for (Document doc : usuarios.aggregate(pipelineAlbumes)) {
-            GeneroFavoritoDTO dto = new GeneroFavoritoDTO();
-            dto.setIdContenido(doc.get("idContenido").toString());
-            dto.setTipo(doc.getString("tipo"));
-            dto.setNombre(doc.getString("nombre"));
-            dto.setGenero(doc.getString("genero"));
-            dto.setFechaAgregacion(doc.getDate("fechaAgregacion"));
-            resultado.add(dto);
+            for (Document fav : favoritos) {
+                String generoFav = fav.getString("genero");
+                if (generoFav != null && generoFav.toLowerCase().contains(genero.toLowerCase())) {
+                    GeneroFavoritoDTO dto = new GeneroFavoritoDTO();
+                    dto.setIdFavorito(fav.getObjectId("_id").toHexString());
+                    dto.setIdContenido(fav.getObjectId("idContenido").toHexString());
+                    dto.setNombre(fav.getString("nombre"));
+                    dto.setGenero(generoFav);
+                    dto.setTipo(fav.getString("tipo"));
+                    dto.setFechaAgregacion(fav.getDate("fechaAgregacion"));
+                    resultado.add(dto);
+                }
+            }
         }
 
         return resultado;
@@ -450,159 +436,60 @@ public class UsuariosDAO implements IUsuariosDAO {
     public List<GeneroFavoritoDTO> consultarFavoritosPorRangoFechas(String idUsuario, Date fechaInicio, Date fechaFin) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Document> usuarios = db.getCollection(COLECCION);
+        
+         Document usuario = usuarios.find(Filters.eq("_id", new ObjectId(idUsuario))).first();
         List<GeneroFavoritoDTO> resultado = new ArrayList<>();
 
-        // Pipeline para ARTISTAS
-        List<Bson> pipelineArtistas = Arrays.asList(
-            Aggregates.match(Filters.eq("_id", new ObjectId(idUsuario))),
-            Aggregates.unwind("$favoritos"),
-            Aggregates.match(Filters.and(
-                Filters.eq("favoritos.tipo", "ARTISTA"),
-                Filters.gte("favoritos.fechaAgregacion", fechaInicio),
-                Filters.lte("favoritos.fechaAgregacion", fechaFin)
-            )),
-            Aggregates.lookup("artistas", "favoritos.idContenido", "_id", "artistaInfo"),
-            Aggregates.unwind("$artistaInfo"),
-            Aggregates.project(Projections.fields(
-                Projections.computed("idContenido", "$favoritos.idContenido"),    
-                Projections.computed("tipo", new BsonString("artista")),
-                Projections.computed("nombre", "$artistaInfo.nombre"),
-                Projections.computed("genero", "$artistaInfo.genero"),
-                Projections.computed("fechaAgregacion", "$favoritos.fechaAgregacion")
-            ))
-        );
+        if (usuario != null) {
+            List<Document> favoritos = usuario.getList("favoritos", Document.class, new ArrayList<>());
 
-        // Pipeline para ALBUMES
-        List<Bson> pipelineAlbumes = Arrays.asList(
-            Aggregates.match(Filters.eq("_id", new ObjectId(idUsuario))),
-            Aggregates.unwind("$favoritos"),
-            Aggregates.match(Filters.and(
-                Filters.eq("favoritos.tipo", "ALBUM"),
-                Filters.gte("favoritos.fechaAgregacion", fechaInicio),
-                Filters.lte("favoritos.fechaAgregacion", fechaFin)
-            )),
-            Aggregates.lookup("albumes", "favoritos.idContenido", "_id", "albumInfo"),
-            Aggregates.unwind("$albumInfo"),
-            Aggregates.project(Projections.fields(
-                Projections.computed("idContenido", "$favoritos.idContenido"),
-                Projections.computed("tipo", new BsonString("album")),
-                Projections.computed("nombre", "$albumInfo.nombre"),
-                Projections.computed("genero", "$albumInfo.genero"),
-                Projections.computed("fechaAgregacion", "$favoritos.fechaAgregacion")
-            ))
-        );
-
-        // Pipeline para CANCIONES (si es necesario)
-        List<Bson> pipelineCanciones = Arrays.asList(
-            Aggregates.match(Filters.eq("_id", new ObjectId(idUsuario))),
-            Aggregates.unwind("$favoritos"),
-            Aggregates.match(Filters.and(
-                Filters.eq("favoritos.tipo", "CANCION"),
-                Filters.gte("favoritos.fechaAgregacion", fechaInicio),
-                Filters.lte("favoritos.fechaAgregacion", fechaFin)
-            )),
-            Aggregates.lookup("canciones", "favoritos.idContenido", "_id", "cancionInfo"),
-            Aggregates.unwind("$cancionInfo"),
-            Aggregates.lookup("albumes", "cancionInfo.idAlbum", "_id", "albumInfo"),
-            Aggregates.unwind("$albumInfo"),
-            Aggregates.project(Projections.fields(
-                Projections.computed("idContenido", "$favoritos.idContenido"),    
-                Projections.computed("tipo", new BsonString("cancion")),
-                Projections.computed("nombre", "$cancionInfo.titulo"),
-                Projections.computed("genero", "$albumInfo.genero"),
-                Projections.computed("fechaAgregacion", "$favoritos.fechaAgregacion")
-            ))
-        );
-
-        // Ejecutar pipelines y procesar resultados
-        procesarPipeline(pipelineArtistas, resultado);
-        procesarPipeline(pipelineAlbumes, resultado);
-        procesarPipeline(pipelineCanciones, resultado);
+            for (Document fav : favoritos) {
+                Date fecha = fav.getDate("fechaAgregacion");
+                if (fecha != null && !fecha.before(fechaInicio) && !fecha.after(fechaFin)) {
+                    GeneroFavoritoDTO dto = new GeneroFavoritoDTO();
+                    dto.setIdFavorito(fav.getObjectId("_id").toHexString());
+                    dto.setIdContenido(fav.getObjectId("idContenido").toHexString());
+                    dto.setNombre(fav.getString("nombre"));
+                    dto.setGenero(fav.getString("genero"));
+                    dto.setTipo(fav.getString("tipo"));
+                    dto.setFechaAgregacion(fecha);
+                    resultado.add(dto);
+                }
+            }
+        }
 
         return resultado;
+       
     }
     
     @Override
     public List<GeneroFavoritoDTO> obtenerTodosFavoritos(String idUsuario) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Document> usuarios = db.getCollection(COLECCION);
+
+        
+        Document usuario = usuarios.find(Filters.eq("_id", new ObjectId(idUsuario))).first();
         List<GeneroFavoritoDTO> resultado = new ArrayList<>();
 
-        // Pipeline para ARTISTAS
-        List<Bson> pipelineArtistas = Arrays.asList(
-            Aggregates.match(Filters.eq("_id", new ObjectId(idUsuario))),
-            Aggregates.unwind("$favoritos"),
-            Aggregates.match(Filters.eq("favoritos.tipo", "ARTISTA")),
-            Aggregates.lookup("artistas", "favoritos.idContenido", "_id", "artistaInfo"),
-            Aggregates.unwind("$artistaInfo"),
-            Aggregates.project(Projections.fields(
-                Projections.computed("idContenido", "$favoritos.idContenido"),        
-                Projections.computed("tipo", new BsonString("artista")),
-                Projections.computed("nombre", "$artistaInfo.nombre"),
-                Projections.computed("genero", "$artistaInfo.genero"),
-                Projections.computed("fechaAgregacion", "$favoritos.fechaAgregacion")
-            ))
-        );
+        if (usuario != null) {
+            List<Document> favoritos = usuario.getList("favoritos", Document.class, new ArrayList<>());
 
-        // Pipeline para ALBUMES
-        List<Bson> pipelineAlbumes = Arrays.asList(
-            Aggregates.match(Filters.eq("_id", new ObjectId(idUsuario))),
-            Aggregates.unwind("$favoritos"),
-            Aggregates.match(Filters.eq("favoritos.tipo", "ALBUM")),
-            Aggregates.lookup("albumes", "favoritos.idContenido", "_id", "albumInfo"),
-            Aggregates.unwind("$albumInfo"),
-            Aggregates.project(Projections.fields(
-                Projections.computed("idContenido", "$favoritos.idContenido"),        
-                Projections.computed("tipo", new BsonString("album")),
-                Projections.computed("nombre", "$albumInfo.nombre"),
-                Projections.computed("genero", "$albumInfo.genero"),
-                Projections.computed("fechaAgregacion", "$favoritos.fechaAgregacion")
-            ))
-        );
-
-        // Pipeline para CANCIONES
-        List<Bson> pipelineCanciones = Arrays.asList(
-            Aggregates.match(Filters.eq("_id", new ObjectId(idUsuario))),
-            Aggregates.unwind("$favoritos"),
-            Aggregates.match(Filters.eq("favoritos.tipo", "CANCION")),
-            Aggregates.lookup("canciones", "favoritos.idContenido", "_id", "cancionInfo"),
-            Aggregates.unwind("$cancionInfo"),
-            Aggregates.lookup("albumes", "cancionInfo.idAlbum", "_id", "albumInfo"),
-            Aggregates.unwind("$albumInfo"),
-            Aggregates.project(Projections.fields(
-                Projections.computed("idContenido", "$favoritos.idContenido"),        
-                Projections.computed("tipo", new BsonString("cancion")),
-                Projections.computed("nombre", "$cancionInfo.titulo"),
-                Projections.computed("genero", "$albumInfo.genero"),
-                Projections.computed("fechaAgregacion", "$favoritos.fechaAgregacion")
-            ))
-        );
-
-        // Ejecutar todos los pipelines y combinar resultados
-        procesarPipeline(pipelineArtistas, resultado);
-        procesarPipeline(pipelineAlbumes, resultado);
-        procesarPipeline(pipelineCanciones, resultado);
-
-        // Ordenar por fecha de agregación (opcional)
-        resultado.sort(Comparator.comparing(GeneroFavoritoDTO::getFechaAgregacion).reversed());
+            for (Document fav : favoritos) {
+                GeneroFavoritoDTO dto = new GeneroFavoritoDTO();
+                dto.setIdFavorito(fav.getObjectId("_id").toHexString());
+                dto.setIdContenido(fav.getObjectId("idContenido").toHexString());
+                dto.setNombre(fav.getString("nombre"));
+                dto.setGenero(fav.getString("genero"));
+                dto.setTipo(fav.getString("tipo"));
+                dto.setFechaAgregacion(fav.getDate("fechaAgregacion"));
+                resultado.add(dto);
+            }
+        }
 
         return resultado;
+       
     }
 
-    private void procesarPipeline(List<Bson> pipeline, List<GeneroFavoritoDTO> resultado) {
-        MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
-        MongoCollection<Document> usuarios = db.getCollection(COLECCION);
-
-        for (Document doc : usuarios.aggregate(pipeline)) {
-            GeneroFavoritoDTO dto = new GeneroFavoritoDTO();
-            dto.setIdContenido(doc.get("idContenido").toString());
-            dto.setTipo(doc.getString("tipo"));
-            dto.setNombre(doc.getString("nombre"));
-            dto.setGenero(doc.getString("genero"));
-            dto.setFechaAgregacion(doc.getDate("fechaAgregacion"));
-            resultado.add(dto);
-        }
-    }
 
     @Override
     public List<Favorito> consultarFavoritos(String idUsuario) {
@@ -644,5 +531,59 @@ public class UsuariosDAO implements IUsuariosDAO {
         }
         return sb.toString();
     }
+
+    @Override
+    public void agregarGeneroRestringido(String idUsuario, String genero) {
+        MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Document> coleccion = db.getCollection(COLECCION);
+
+        Document filtro = new Document("_id", new ObjectId(idUsuario));
+        Document usuario = coleccion.find(filtro).first(); // Obtener el usuario
+
+        if (usuario == null) {
+            return; // No existe el usuario
+        }
+        
+                // Verificar favoritos del usuario con ese género
+        List<Document> favoritos = usuario.getList("favoritos", Document.class, new ArrayList<>());
+        List<Document> aEliminar = new ArrayList<>();
+        for (Document fav : favoritos) {
+            if (genero.equals(fav.getString("genero"))) {
+                aEliminar.add(fav);
+            }
+        }
+
+        // Si hay que eliminar favoritos, notifica (esto lo haces desde la capa de negocio)
+        if (!aEliminar.isEmpty()) {
+            coleccion.updateOne(filtro, new Document("$pull", new Document("favoritos", new Document("genero", genero))));
+        }
+
+        List<String> generos = usuario.getList("generosRestringidos", String.class);
+        if (generos == null) {
+            generos = new ArrayList<>(); // Si no tiene aún lista de géneros
+        }
+
+        if (generos.contains(genero)) {
+            return; // El género ya está restringido
+        }
+
+        // Aquí puedes buscar favoritos del género y eliminarlos si es necesario
+
+        // Finalmente agregas el género restringido
+        coleccion.updateOne(
+            filtro,
+            new Document("$addToSet", new Document("generosRestringidos", genero))
+        );
+    }
+
+    
+
+    @Override
+    public void eliminarGeneroRestringido(String idUsuario, String genero) {
+        MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Usuario> coleccion = db.getCollection(COLECCION, Usuario.class);
+    }
+    
+    
 
 }

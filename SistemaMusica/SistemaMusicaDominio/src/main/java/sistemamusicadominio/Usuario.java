@@ -20,7 +20,7 @@ public class Usuario {
     private String contrasenia;
     private String imagenPerfil;
     private List<Favorito> favoritos;
-    private List<Genero> restricciones;
+    private List<String> restricciones;
 
     /**
      * Constructor por omision
@@ -38,7 +38,7 @@ public class Usuario {
      * @param favoritos Favoritos con los que cuenta el usuario
      * @param restricciones Restricciones con las que cuenta el usuario
      */
-    public Usuario(String username, String email, String contrasenia, String imagenPerfil, List<Favorito> favoritos, List<Genero> restricciones) {
+    public Usuario(String username, String email, String contrasenia, String imagenPerfil, List<Favorito> favoritos, List<String> restricciones) {
         this.username = username;
         this.email = email;
         this.contrasenia = contrasenia;
@@ -95,11 +95,11 @@ public class Usuario {
         this.favoritos = favoritos;
     }
 
-    public List<Genero> getRestricciones() {
+    public List<String> getRestricciones() {
         return restricciones;
     }
 
-    public void setRestricciones(List<Genero> restricciones) {
+    public void setRestricciones(List<String> restricciones) {
         this.restricciones = restricciones;
     }
 

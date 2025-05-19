@@ -11,6 +11,9 @@ import java.util.Date;
  * @author gael_
  */
 public class ArtistaFavoritoDTO {
+    
+    private String idFavorito;
+    private String idArtista;
     private String nombreArtista;
     private String tipoArtista;
     private String generoArtista;
@@ -19,12 +22,34 @@ public class ArtistaFavoritoDTO {
     public ArtistaFavoritoDTO() {
     }
 
-    public ArtistaFavoritoDTO(String nombreArtista, String tipoArtista, String generoArtista, Date fechaAgregacion) {
+    public ArtistaFavoritoDTO(String idFavorito, String idArtista, String nombreArtista, String tipoArtista, String generoArtista, Date fechaAgregacion) {
+        this.idFavorito = idFavorito;
+        this.idArtista = idArtista;
         this.nombreArtista = nombreArtista;
         this.tipoArtista = tipoArtista;
         this.generoArtista = generoArtista;
         this.fechaAgregacion = fechaAgregacion;
     }
+
+    public String getIdArtista() {
+        return idArtista;
+    }
+
+    public void setIdArtista(String idArtista) {
+        this.idArtista = idArtista;
+    }
+
+    
+
+    public String getIdFavorito() {
+        return idFavorito;
+    }
+
+    public void setIdFavorito(String idFavorito) {
+        this.idFavorito = idFavorito;
+    }
+
+      
 
     public String getNombreArtista() {
         return nombreArtista;

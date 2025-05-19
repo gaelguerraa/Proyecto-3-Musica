@@ -51,6 +51,7 @@ public class frmAgregarBanda extends javax.swing.JFrame {
         this.artistasBO=artistasBO;
         this.usuarioActual=usuarioActual;
         LlenarComboboxGenero();
+        btnAgregarMiembro.setEnabled(false);
 
     }
     
@@ -79,7 +80,9 @@ public class frmAgregarBanda extends javax.swing.JFrame {
         if (resultado == JFileChooser.APPROVE_OPTION) {
             File archivoSeleccionado = selector.getSelectedFile();
             rutaImagen = archivoSeleccionado.getAbsolutePath();
-
+            btnAgregarMiembro.setEnabled(true);
+        }else{
+            btnAgregarMiembro.setEnabled(false);
         }
         return rutaImagen;
     }
@@ -87,29 +90,38 @@ public class frmAgregarBanda extends javax.swing.JFrame {
     public void agregarBanda(){
         String nombre = this.txtNombre.getText().trim();
         TipoArtista tipo =  TipoArtista.BANDA;
-        
+
         String generoSeleccionado = (String) this.cbGenero.getSelectedItem();
         Genero genero = Genero.valueOf(generoSeleccionado);
-        
+
         if (rutaImagenSeleccionada == null) {
             JOptionPane.showMessageDialog(this, "Debes seleccionar una imagen.");
             return;
         }
-        
+        if (nombre.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El nombre de la banda no puede estar vacío.");
+            return;
+        }
+
         ArtistaDTO nuevaBanda = new ArtistaDTO(tipo,nombre, rutaImagenSeleccionada, genero);
-        
+
         try {
-                this.banda = artistasBO.registrarArtista(nuevaBanda);
-                JOptionPane.showMessageDialog(this, "Artista de banda registrado con éxito.");
-            } catch (NegocioException ex) {
-                JOptionPane.showMessageDialog(this, "Error al registrar el artista: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
+            this.banda = artistasBO.registrarArtista(nuevaBanda);
+            JOptionPane.showMessageDialog(this, "Artista de banda registrado con éxito.");
+            // Si la banda se registra exitosamente, permitir pasar a agregar miembros
+            controlador.mostrarAgregarIntegrante(this.banda, usuarioActual);
+            this.dispose();
+            limpiarFormulario();
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(this, "Error al registrar el artista: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     
     
     public void limpiarFormulario(){
         this.txtNombre.setText("");
+        btnAgregarMiembro.setEnabled(false);
     }
 
     /**
@@ -397,7 +409,6 @@ public class frmAgregarBanda extends javax.swing.JFrame {
 
     private void btnAgregarMiembroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarMiembroActionPerformed
         agregarBanda();
-        controlador.mostrarAgregarIntegrante(this.banda, usuarioActual);
         this.dispose();
         limpiarFormulario();
     }//GEN-LAST:event_btnAgregarMiembroActionPerformed

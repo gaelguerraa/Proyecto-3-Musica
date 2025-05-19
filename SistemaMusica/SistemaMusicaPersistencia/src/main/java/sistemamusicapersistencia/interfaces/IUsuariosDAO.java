@@ -13,6 +13,7 @@ import sistemamusica.dtos.FavoritoDTO;
 import sistemamusica.dtos.GeneroFavoritoDTO;
 import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicadominio.Favorito;
+import sistemamusicadominio.Genero;
 import sistemamusicadominio.Usuario;
 
 /**
@@ -74,5 +75,8 @@ public interface IUsuariosDAO {
     public abstract List<GeneroFavoritoDTO> consultarFavoritosPorRangoFechas(String idUsuario, Date fechaInicio, Date fechaFin);
     public abstract List<GeneroFavoritoDTO> obtenerTodosFavoritos(String idUsuario);
     public abstract List<Favorito> consultarFavoritos(String idUsuario);
+    
+    public abstract void agregarGeneroRestringido(String idUsuario, String genero);
+    public abstract void eliminarGeneroRestringido(String idUsuario, String genero);
 
 }

@@ -141,6 +141,8 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
         try {
             String idUsuario = usuarioActual.getId();
             FavoritoDTO nuevoFavorito = new FavoritoDTO(
+                artistaSeleccionado.getNombre(),
+                artistaSeleccionado.getGenero().toString(),
                 TipoContenido.ARTISTA, 
                 artistaSeleccionado.getId().toString(), 
                 new Date()

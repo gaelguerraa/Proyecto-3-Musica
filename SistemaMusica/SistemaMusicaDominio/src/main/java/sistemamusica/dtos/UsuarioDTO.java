@@ -19,12 +19,12 @@ public class UsuarioDTO {
     private String contrasenia;
     private String imagenPerfil;
     private List<Favorito> favoritos;
-    private List<Genero> restricciones;
+    private List<String> restricciones;
 
     public UsuarioDTO() {
     }
 
-    public UsuarioDTO(String username, String email, String contrasenia, String imagenPerfil, List<Favorito> favoritos, List<Genero> restricciones) {
+    public UsuarioDTO(String username, String email, String contrasenia, String imagenPerfil, List<Favorito> favoritos, List<String> restricciones) {
         this.username = username;
         this.email = email;
         this.contrasenia = contrasenia;
@@ -90,11 +90,11 @@ public class UsuarioDTO {
         this.favoritos = favoritos;
     }
 
-    public List<Genero> getRestricciones() {
+    public List<String> getRestricciones() {
         return restricciones;
     }
 
-    public void setRestricciones(List<Genero> restricciones) {
+    public void setRestricciones(List<String> restricciones) {
         this.restricciones = restricciones;
     }
     
