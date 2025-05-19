@@ -142,9 +142,6 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
         
         String id = (String) tablaFavoritos.getValueAt(filaSeleccionada, 1); 
         return id;
-
-   
-
     }
     
     public void eliminarFavorito(){

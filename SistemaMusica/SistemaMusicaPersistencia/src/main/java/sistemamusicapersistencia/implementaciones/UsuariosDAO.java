@@ -558,7 +558,7 @@ public class UsuariosDAO implements IUsuariosDAO {
             coleccion.updateOne(filtro, new Document("$pull", new Document("favoritos", new Document("genero", genero))));
         }
 
-        List<String> generos = usuario.getList("generosRestringidos", String.class);
+        List<String> generos = usuario.getList("restricciones", String.class);
         if (generos == null) {
             generos = new ArrayList<>(); // Si no tiene aún lista de géneros
         }
@@ -572,7 +572,7 @@ public class UsuariosDAO implements IUsuariosDAO {
         // Finalmente agregas el género restringido
         coleccion.updateOne(
             filtro,
-            new Document("$addToSet", new Document("generosRestringidos", genero))
+            new Document("$addToSet", new Document("restricciones", genero))
         );
     }
 
@@ -582,8 +582,27 @@ public class UsuariosDAO implements IUsuariosDAO {
     public void eliminarGeneroRestringido(String idUsuario, String genero) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Usuario> coleccion = db.getCollection(COLECCION, Usuario.class);
+        
+        Document filtro = new Document("_id", new ObjectId(idUsuario));
+        Document update = new Document("$pull", new Document("restricciones", genero));
+
+        coleccion.updateOne(filtro, update);
     }
     
+    public List<String> mostrarGenerosRestringidos(String idUsuario){
+        MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Usuario> coleccion = db.getCollection(COLECCION, Usuario.class);
+        
+        Document filtro = new Document("_id", new ObjectId(idUsuario));
+        Usuario usuario = coleccion.find(filtro).first();
+
+        if (usuario != null && usuario.getRestricciones()!= null) {
+            return usuario.getRestricciones();
+        } else {
+            return new ArrayList<>();
+        }
+        
+    }
     
 
 }

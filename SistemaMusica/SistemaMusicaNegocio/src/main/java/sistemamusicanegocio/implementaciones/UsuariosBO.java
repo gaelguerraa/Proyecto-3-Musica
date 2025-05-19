@@ -266,4 +266,19 @@ public class UsuariosBO implements IUsuariosBO {
         return usuariosDAO.consultarFavoritos(idUsuario);
     }
 
+    @Override
+    public void agregarGeneroRestringido(String idUsuario, String genero) {
+        usuariosDAO.agregarGeneroRestringido(idUsuario, genero);
+    }
+
+    @Override
+    public void eliminarGeneroRestringido(String idUsuario, String genero) {
+        usuariosDAO.eliminarGeneroRestringido(idUsuario, genero);
+    }
+
+    @Override
+    public List<String> mostrarGenerosRestringidos(String idUsuario) {
+        return usuariosDAO.mostrarGenerosRestringidos(idUsuario);
+    }
+
 }

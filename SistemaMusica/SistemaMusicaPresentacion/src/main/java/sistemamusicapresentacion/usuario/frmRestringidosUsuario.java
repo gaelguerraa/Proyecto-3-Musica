@@ -4,6 +4,9 @@
  */
 package sistemamusicapresentacion.usuario;
 
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicadominio.Genero;
 import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
@@ -16,7 +19,7 @@ import sistemamusicapresentacion.main.ControladorUniversal;
  */
 public class frmRestringidosUsuario extends javax.swing.JFrame {
 
-    private final IUsuariosBO usuarioBO = FabricaObjetosNegocio.crearUsuariosBO();
+    private final IUsuariosBO usuariosBO = FabricaObjetosNegocio.crearUsuariosBO();
     ControladorUniversal control;
     UsuarioDTO usuario;
 
@@ -30,12 +33,82 @@ public class frmRestringidosUsuario extends javax.swing.JFrame {
         this.control = control;
         this.usuario = usuario;
         LlenarComboboxGenero();
+        LlenarTablaGenerosRestringidos();
     }
 
     public void LlenarComboboxGenero(){
         cbGenero.removeAllItems(); 
         for(Genero genero : Genero.values()){
             cbGenero.addItem(genero.name());
+        }
+    }
+    
+    public void agregarRestriccion(){
+        String generoSeleccionado = (String) this.cbGenero.getSelectedItem();
+    
+        // Mostrar advertencia
+        int opcion = JOptionPane.showConfirmDialog(
+            this,
+            "Si agregas este género como restringido, se eliminarán todos tus favoritos de ese género. ¿Deseas continuar?",
+            "Advertencia",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE
+        );
+
+        // Si el usuario acepta
+        if (opcion == JOptionPane.YES_OPTION) {
+            try {
+                usuariosBO.agregarGeneroRestringido(usuario.getId(), generoSeleccionado);
+                JOptionPane.showMessageDialog(this, "Restricción agregada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Ocurrió un error al agregar la restricción: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
+            }
+        } else {
+            // El usuario canceló
+            JOptionPane.showMessageDialog(this, "Operación cancelada.", "Información", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+    }
+    
+    public void LlenarTablaGenerosRestringidos(){
+        List<String> resultados = usuariosBO.mostrarGenerosRestringidos(usuario.getId());
+        DefaultTableModel modelo = (DefaultTableModel) tablaRestringidos.getModel();
+        modelo.setRowCount(0); // Limpiar tabla
+        
+        for (String g : resultados) {
+            modelo.addRow(new Object[]{ g });
+        }
+    }
+    
+    private String obtenerGeneroSeleccionado(){
+        int filaSeleccionada = tablaRestringidos.getSelectedRow();
+        if (filaSeleccionada == -1) {
+                JOptionPane.showMessageDialog(this, "Seleccione un favorito de la tabla", "Error", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+        
+        String genero = (String) tablaRestringidos.getValueAt(filaSeleccionada, 0); 
+        return genero;
+    }
+    
+    private void eliminarGeneroRestringido(){
+        String genero = obtenerGeneroSeleccionado();
+
+        if (genero == null) {
+            JOptionPane.showMessageDialog(this, "Selecciona un género para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Estás seguro de que quieres eliminar la restricción para el género \"" + genero + "\"?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            usuariosBO.eliminarGeneroRestringido(usuario.getId(), genero);
+            JOptionPane.showMessageDialog(this, "Restricción eliminada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            LlenarTablaGenerosRestringidos(); // refrescar tabla
         }
     }
     
@@ -66,6 +139,7 @@ public class frmRestringidosUsuario extends javax.swing.JFrame {
         labelRestringidos = new javax.swing.JLabel();
         labelPregunta = new javax.swing.JLabel();
         btnAgregar = new javax.swing.JButton();
+        btnEliminarRestriccion = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(850, 550));
@@ -217,6 +291,15 @@ public class frmRestringidosUsuario extends javax.swing.JFrame {
             }
         });
 
+        btnEliminarRestriccion.setBackground(new java.awt.Color(30, 215, 96));
+        btnEliminarRestriccion.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
+        btnEliminarRestriccion.setText("Eliminar de Restringidos");
+        btnEliminarRestriccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarRestriccionActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
         panelFondo.setLayout(panelFondoLayout);
         panelFondoLayout.setHorizontalGroup(
@@ -225,24 +308,26 @@ public class frmRestringidosUsuario extends javax.swing.JFrame {
                 .addComponent(panelVerde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(74, 74, 74)
+                        .addComponent(btnVolver))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
                         .addGap(18, 74, Short.MAX_VALUE)
                         .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
-                                .addComponent(labelRestringidos)
-                                .addGap(111, 111, 111)
-                                .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(41, 41, 41)
-                                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(labelPregunta)
-                                    .addComponent(cbGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnAgregar))
-                                .addGap(163, 163, 163))))
-                    .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(74, 74, 74)
-                        .addComponent(btnVolver))))
+                            .addComponent(btnEliminarRestriccion)
+                            .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
+                                    .addComponent(labelRestringidos)
+                                    .addGap(111, 111, 111)
+                                    .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addContainerGap())
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(41, 41, 41)
+                                    .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(labelPregunta)
+                                        .addComponent(cbGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnAgregar))
+                                    .addGap(163, 163, 163)))))))
         );
         panelFondoLayout.setVerticalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -262,7 +347,9 @@ public class frmRestringidosUsuario extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(btnAgregar))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(89, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnEliminarRestriccion)
+                .addContainerGap(49, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -295,8 +382,8 @@ public class frmRestringidosUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        control.mostrarModuloPrincipalUsuarios(usuario);
-        this.dispose();
+        agregarRestriccion();
+        LlenarTablaGenerosRestringidos();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnAlbumesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlbumesActionPerformed
@@ -304,12 +391,17 @@ public class frmRestringidosUsuario extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnAlbumesActionPerformed
 
+    private void btnEliminarRestriccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarRestriccionActionPerformed
+        eliminarGeneroRestringido();
+    }//GEN-LAST:event_btnEliminarRestriccionActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnAlbumes;
     private javax.swing.JButton btnArtistas;
     private javax.swing.JButton btnCanciones;
+    private javax.swing.JButton btnEliminarRestriccion;
     private javax.swing.JButton btnUsuario;
     private javax.swing.JButton btnVolver;
     private javax.swing.JComboBox<String> cbGenero;
