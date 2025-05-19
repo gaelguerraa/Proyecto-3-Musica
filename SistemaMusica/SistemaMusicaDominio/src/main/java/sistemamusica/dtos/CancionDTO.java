@@ -12,16 +12,14 @@ public class CancionDTO {
     private String id;
     private String titulo;
     private float duracion;
-    private String idAlbum;
     private String idArtista;
 
     public CancionDTO() {
     }
 
-    public CancionDTO(String titulo, float duracion, String idAlbum, String idArtista) {
+    public CancionDTO(String titulo, float duracion, String idArtista) {
         this.titulo = titulo;
         this.duracion = duracion;
-        this.idAlbum = idAlbum;
         this.idArtista = idArtista;
     }
 
@@ -47,14 +45,6 @@ public class CancionDTO {
 
     public void setDuracion(float duracion) {
         this.duracion = duracion;
-    }
-
-    public String getIdAlbum() {
-        return idAlbum;
-    }
-
-    public void setIdAlbum(String idAlbum) {
-        this.idAlbum = idAlbum;
     }
 
     public String getIdArtista() {

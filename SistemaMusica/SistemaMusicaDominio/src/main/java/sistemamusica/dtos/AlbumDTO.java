@@ -7,6 +7,7 @@ package sistemamusica.dtos;
 
 import java.util.Date;
 import java.util.List;
+import sistemamusicadominio.Cancion;
 import sistemamusicadominio.Genero;
 
 /**
@@ -20,18 +21,18 @@ public class AlbumDTO {
     private Genero genero;
     private String imagenPortada;
     private String idArtista;
-    private List<String> idCanciones;
+    private List<CancionDTO> canciones;
 
     public AlbumDTO() {
     }
 
-    public AlbumDTO(String nombre, Date fechaLanzamiento, Genero genero, String imagenPortada, String idArtista, List<String> idCanciones) {
+    public AlbumDTO(String nombre, Date fechaLanzamiento, Genero genero, String imagenPortada, String idArtista, List<CancionDTO> canciones) {
         this.nombre = nombre;
         this.fechaLanzamiento = fechaLanzamiento;
         this.genero = genero;
         this.imagenPortada = imagenPortada;
         this.idArtista = idArtista;
-        this.idCanciones = idCanciones;
+        this.canciones = canciones;
     }
 
     public String getId() {
@@ -82,12 +83,12 @@ public class AlbumDTO {
         this.idArtista = idArtista;
     }
 
-    public List<String> getidCanciones() {
-        return idCanciones;
+    public List<CancionDTO> getCanciones() {
+        return canciones;
     }
 
-    public void setCanciones(List<String> idCanciones) {
-        this.idCanciones = idCanciones;
+    public void setCanciones(List<CancionDTO> canciones) {
+        this.canciones = canciones;
     }
     
     
