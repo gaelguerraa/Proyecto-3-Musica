@@ -4,9 +4,12 @@
  */
 package sistemamusicapresentacion.main;
 
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicanegocio.exception.NegocioException;
 import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
@@ -20,6 +23,7 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
 
     private final IUsuariosBO usuarioBO = FabricaObjetosNegocio.crearUsuariosBO();
     private final ControladorUniversal control;
+    private String rutaImagenSeleccionada;
 
     /**
      * Creates new form frmRegistrarUsuario
@@ -33,6 +37,30 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
         setTitle("Registrarse");
     }
 
+    public String subirImagen(){
+        JFileChooser selector = new JFileChooser();
+        selector.setDialogTitle("Selecciona una imagen");
+
+        // Filtro de archivos de imagen
+        FileNameExtensionFilter filtroImagenes = new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif");
+        selector.setFileFilter(filtroImagenes);
+
+        int resultado = selector.showOpenDialog(null);
+
+        String rutaImagen = null;
+        
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            File archivoSeleccionado = selector.getSelectedFile();
+            rutaImagen = archivoSeleccionado.getAbsolutePath();
+
+        }
+        return rutaImagen;
+    }
+    
+    public void limpiarFormulario(){
+        txtUsername.setText("");
+        txtEmail.setText("");
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -212,7 +240,7 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
         char[] contraseniaChars = txtContrasenia.getPassword();
         String contrasenia = new String(contraseniaChars);
         String email = txtEmail.getText();
-        String imagenPerfil = null; // Esta parte esta null porque no esta el JFileChooser
+        String imagenPerfil = rutaImagenSeleccionada; 
 
         UsuarioDTO nuevoUsuario = new UsuarioDTO(username, email, contrasenia, imagenPerfil);
 
@@ -220,6 +248,7 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
             usuarioBO.agregarUsuario(nuevoUsuario);
             JOptionPane.showMessageDialog(this, "El usuario se ha registrado correctamente.", "Info.", JOptionPane.INFORMATION_MESSAGE);
             control.mostrarModuloIniciarSesion();
+            limpiarFormulario();
             this.dispose();
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error.", JOptionPane.ERROR_MESSAGE);

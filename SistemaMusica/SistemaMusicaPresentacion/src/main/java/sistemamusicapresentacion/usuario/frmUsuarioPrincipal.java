@@ -5,6 +5,9 @@
 package sistemamusicapresentacion.usuario;
 
 import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
@@ -36,6 +39,29 @@ public class frmUsuarioPrincipal extends javax.swing.JFrame {
         this.usuario = usuario;
         lblUsername.setText(usuario.getUsername());
         txtEmail.setText(usuario.getEmail());
+        try {
+            String rutaImagen = usuario.getImagenPerfil();
+
+            if (rutaImagen == null || rutaImagen.isEmpty()) {
+                labelFoto.setIcon(null); // Limpiar si no hay imagen
+                labelFoto.setText("Sin imagen");
+                return;
+            }
+
+            ImageIcon imagenOriginal = new ImageIcon(rutaImagen);
+
+            Image imagenEscalada = imagenOriginal.getImage()
+                    .getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+
+            labelFoto.setIcon(new ImageIcon(imagenEscalada));
+            labelFoto.setPreferredSize(new Dimension(80, 80));
+            labelFoto.setText(""); // Quitar texto por si había "Sin imagen"
+
+        } catch (Exception e) {
+            labelFoto.setIcon(null);
+            labelFoto.setText("Error al cargar imagen");
+            System.err.println("Error al mostrar imagen del artista: " + e.getMessage());
+        }
         
     }
 
