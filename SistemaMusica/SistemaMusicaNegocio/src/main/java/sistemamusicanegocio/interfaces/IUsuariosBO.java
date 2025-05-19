@@ -25,7 +25,7 @@ public interface IUsuariosBO {
 
     public UsuarioDTO agregarUsuario(UsuarioDTO nuevoUsuario) throws NegocioException;
     public Usuario consultarPorId(String idUsuario);
-    public Usuario modificarUsuario(String idUsuario, UsuarioDTO datosActualizados);
+    public Usuario modificarUsuario(String idUsuario, UsuarioDTO datosActualizados) throws NegocioException;
     public UsuarioDTO iniciarSesion(String username, String contrasenia) throws NegocioException;
     
     public abstract boolean agregarFavorito(String idUsuario, FavoritoDTO favorito) throws NegocioException;

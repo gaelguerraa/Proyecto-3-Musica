@@ -16,11 +16,19 @@ public class UtilsBO implements IUtilsBO{
     
     IUtilsDAO utilsDAO;
 
+    /**
+     * Constructor que recibe una implementación de IUtilsDAO.
+     * 
+     * @param utilsDAO Objeto que implementa la interfaz IUtilsDAO para el acceso a datos.
+     */
     public UtilsBO(IUtilsDAO utilsDAO) {
         this.utilsDAO = utilsDAO;
     }
     
-    
+    /**
+     * Inserta artistas con albumemes y canciones masivamente en la base de datos.
+     * Este método no retorna ningún valor y no lanza excepciones.
+     */
     @Override
     public void insertarDatos(){
         utilsDAO.insertarDatos();

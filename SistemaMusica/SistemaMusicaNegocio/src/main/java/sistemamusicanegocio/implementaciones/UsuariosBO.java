@@ -26,6 +26,11 @@ public class UsuariosBO implements IUsuariosBO {
 
     private IUsuariosDAO usuariosDAO;
 
+    /**
+     * Constructor que recibe una implementación de IUsuariosDAO.
+     * 
+     * @param usuariosDAO Objeto que implementa la interfaz IUsuariosDAO para el acceso a datos.
+     */
     public UsuariosBO(IUsuariosDAO usuariosDAO) {
         this.usuariosDAO = usuariosDAO;
     }
@@ -112,14 +117,66 @@ public class UsuariosBO implements IUsuariosBO {
         }
     }
 
+    /**
+    * Consulta un usuario por su ID después de validar que el ID sea válido.
+    * 
+    * @param idUsuario ID del usuario a consultar.
+    * @return El usuario encontrado.
+    */
     @Override
     public Usuario consultarPorId(String idUsuario) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return usuariosDAO.consultarPorId(idUsuario);
     }
 
+    /**
+    * Modifica los datos de un usuario existente después de validar todos los campos.
+    * 
+    * @param idUsuario ID del usuario a modificar.
+    * @param datosActualizados DTO con los nuevos datos del usuario.
+    * @return El usuario modificado.
+    * @throws NegocioException Si los datos no son válidos o si ocurre un error durante la actualización.
+    */
     @Override
-    public Usuario modificarUsuario(String idUsuario, UsuarioDTO datosActualizados) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Usuario modificarUsuario(String idUsuario, UsuarioDTO datosActualizados) throws NegocioException {
+        if (datosActualizados == null) {
+        throw new NegocioException("Los datos actualizados no pueden ser nulos.");
+    }
+
+    // Validar que exista el usuario antes de modificarlo
+    Usuario usuarioExistente = consultarPorId(idUsuario);
+    if (usuarioExistente == null) {
+        throw new NegocioException("El usuario a modificar no existe.");
+    }
+
+    // Validar campos individuales si están presentes
+    if (datosActualizados.getUsername() != null) {
+        validarUsername(datosActualizados.getUsername());
+        
+        // Verificar que el nuevo username no esté en uso por otro usuario
+        Usuario usuarioConMismoUsername = usuariosDAO.consultarPorUsername(datosActualizados.getUsername());
+        if (usuarioConMismoUsername != null && !usuarioConMismoUsername.getId().toString().equals(idUsuario)) {
+            throw new NegocioException("El nombre de usuario ya está en uso por otro usuario.");
+        }
+    }
+
+    if (datosActualizados.getEmail() != null) {
+        validarEmail(datosActualizados.getEmail());
+    }
+
+    if (datosActualizados.getContrasenia() != null) {
+        validarContrasenia(datosActualizados.getContrasenia());
+    }
+
+    // Verificar que al menos un campo sea modificado
+    if (datosActualizados.getUsername() == null &&
+        datosActualizados.getEmail() == null &&
+        datosActualizados.getContrasenia() == null &&
+        datosActualizados.getImagenPerfil() == null) {
+        throw new NegocioException("Debe proporcionar al menos un campo para actualizar.");
+    }
+
+    return usuariosDAO.modificarUsuario(idUsuario, datosActualizados);
+
     }
 
     /**
@@ -215,6 +272,14 @@ public class UsuariosBO implements IUsuariosBO {
         }
     }
 
+    /**
+     * Agrega un contenido a los favoritos de un usuario.
+     * 
+     * @param idUsuario ID del usuario que agrega el favorito.
+     * @param favoritoDTO DTO con la información del contenido favorito.
+     * @return true si se agregó correctamente, false en caso contrario.
+     * @throws NegocioException Si el usuario o el contenido son nulos.
+     */
     @Override
     public boolean agregarFavorito(String idUsuario, FavoritoDTO favoritoDTO) throws NegocioException {
         if(idUsuario == null || favoritoDTO == null ){
@@ -223,6 +288,14 @@ public class UsuariosBO implements IUsuariosBO {
         return usuariosDAO.agregarFavorito(idUsuario, favoritoDTO);
     }
 
+     /**
+     * Elimina un contenido de los favoritos de un usuario.
+     * 
+     * @param idUsuario ID del usuario que elimina el favorito.
+     * @param idContenido ID del contenido a eliminar de favoritos.
+     * @return true si se eliminó correctamente, false en caso contrario.
+     * @throws NegocioException Si el usuario o el contenido son nulos.
+     */
     @Override
     public boolean eliminarFavorito(String idUsuario, String idContenido) throws NegocioException{
         if(idUsuario == null || idContenido == null ){
@@ -231,51 +304,117 @@ public class UsuariosBO implements IUsuariosBO {
         return usuariosDAO.eliminarFavorito(idUsuario, idContenido);
     }
 
+    /**
+     * Obtiene los álbumes favoritos de un usuario, filtrados por nombre.
+     * 
+     * @param idUsuario ID del usuario.
+     * @param nombreAlbum Nombre o parte del nombre del álbum a buscar.
+     * @return Lista de álbumes favoritos que coinciden con el criterio.
+     */
     @Override
-    public List<AlbumFavoritoDTO> obtenerAlbumesFavoritos(String idUsario, String nombreAlbum) {
-        return usuariosDAO.obtenerAlbumesFavoritos(idUsario, nombreAlbum);
+    public List<AlbumFavoritoDTO> obtenerAlbumesFavoritos(String idUsuario, String nombreAlbum) {
+        return usuariosDAO.obtenerAlbumesFavoritos(idUsuario, nombreAlbum);
     }
 
+    /**
+     * Obtiene los artistas favoritos de un usuario, filtrados por nombre.
+     * 
+     * @param idUsuario ID del usuario.
+     * @param nombreArtista Nombre o parte del nombre del artista a buscar.
+     * @return Lista de artistas favoritos que coinciden con el criterio.
+     */
     @Override
     public List<ArtistaFavoritoDTO> obtenerArtistasFavoritos(String idUsuario, String nombreArtista) {
         return usuariosDAO.obtenerArtistasFavoritos(idUsuario, nombreArtista);
     }
 
+    /**
+     * Obtiene las canciones favoritas de un usuario, filtradas por nombre.
+     * 
+     * @param idUsuario ID del usuario.
+     * @param nombreCancion Nombre o parte del nombre de la canción a buscar.
+     * @return Lista de canciones favoritas que coinciden con el criterio.
+     */
     @Override
     public List<CancionFavoritaDTO> obtenerCancionesFavoritas(String idUsuario, String nombreCancion) {
         return usuariosDAO.obtenerCancionesFavoritas(idUsuario, nombreCancion);
     }
 
+    /**
+     * Obtiene los géneros favoritos de un usuario, filtrados por género.
+     * 
+     * @param idUsuario ID del usuario.
+     * @param genero Género musical a buscar.
+     * @return Lista de géneros favoritos que coinciden con el criterio.
+     */
     @Override
     public List<GeneroFavoritoDTO> obtenerGenerosFavoritos(String idUsuario, String genero) {
         return usuariosDAO.obtenerGenerosFavoritos(idUsuario, genero);
     }
 
+    /**
+     * Consulta los favoritos de un usuario dentro de un rango de fechas.
+     * 
+     * @param idUsuario ID del usuario.
+     * @param fechaInicio Fecha de inicio del rango.
+     * @param fechaFin Fecha de fin del rango.
+     * @return Lista de favoritos agregados en el rango de fechas especificado.
+     */
     @Override
     public List<GeneroFavoritoDTO> consultarFavoritosPorRangoFechas(String idUsuario, Date fechaInicio, Date fechaFin) {
         return usuariosDAO.consultarFavoritosPorRangoFechas(idUsuario, fechaInicio, fechaFin);
     }
 
+    /**
+     * Obtiene todos los favoritos de un usuario.
+     * 
+     * @param idUsuario ID del usuario.
+     * @return Lista completa de todos los favoritos del usuario.
+     */
     @Override
     public List<GeneroFavoritoDTO> obtenerTodosFavoritos(String idUsuario) {
         return usuariosDAO.obtenerTodosFavoritos(idUsuario);
     }
 
+    /**
+     * Consulta los favoritos de un usuario.
+     * 
+     * @param idUsuario ID del usuario.
+     * @return Lista de favoritos del usuario.
+     */
     @Override
     public List<Favorito> consultarFavoritos(String idUsuario) {
         return usuariosDAO.consultarFavoritos(idUsuario);
     }
 
+    /**
+     * Agrega un género a la lista de restringidos de un usuario.
+     * 
+     * @param idUsuario ID del usuario.
+     * @param genero Género a restringir.
+     */
     @Override
     public void agregarGeneroRestringido(String idUsuario, String genero) {
         usuariosDAO.agregarGeneroRestringido(idUsuario, genero);
     }
 
+    /**
+     * Elimina un género de la lista de restringidos de un usuario.
+     * 
+     * @param idUsuario ID del usuario.
+     * @param genero Género a dejar de restringir.
+     */
     @Override
     public void eliminarGeneroRestringido(String idUsuario, String genero) {
         usuariosDAO.eliminarGeneroRestringido(idUsuario, genero);
     }
 
+    /**
+     * Muestra los géneros restringidos de un usuario.
+     * 
+     * @param idUsuario ID del usuario.
+     * @return Lista de géneros restringidos para el usuario.
+     */
     @Override
     public List<String> mostrarGenerosRestringidos(String idUsuario) {
         return usuariosDAO.mostrarGenerosRestringidos(idUsuario);

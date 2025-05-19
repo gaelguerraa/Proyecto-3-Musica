@@ -44,6 +44,11 @@ public class FabricaObjetosNegocio {
         return new UsuariosBO(usuariosDAO);
     }
 
+    /**
+     * Metodo constructor de Utils
+     *
+     * @return Constructor de Utils
+     */
     public static IUtilsBO crearUtilsBO(){
         IUtilsDAO utilsDAO = new UtilsDAO();
         return new UtilsBO(utilsDAO);
