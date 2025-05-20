@@ -5,8 +5,9 @@
 package sistemamusicapresentacion.main;
 
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -37,25 +38,58 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
         setTitle("Registrarse");
     }
 
-    public String subirImagen(){
-        JFileChooser selector = new JFileChooser();
-        selector.setDialogTitle("Selecciona una imagen");
+//    public String subirImagen(){
+//        JFileChooser selector = new JFileChooser();
+//        selector.setDialogTitle("Selecciona una imagen");
+//
+//        // Filtro de archivos de imagen
+//        FileNameExtensionFilter filtroImagenes = new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif");
+//        selector.setFileFilter(filtroImagenes);
+//
+//        int resultado = selector.showOpenDialog(null);
+//
+//        String rutaImagen = null;
+//        
+//        if (resultado == JFileChooser.APPROVE_OPTION) {
+//            File archivoSeleccionado = selector.getSelectedFile();
+//            rutaImagen = archivoSeleccionado.getAbsolutePath();
+//
+//        }
+//        return rutaImagen;
+//    }
+    
+    public String subirImagen() {
+    JFileChooser selector = new JFileChooser();
+    selector.setDialogTitle("Selecciona una imagen");
 
-        // Filtro de archivos de imagen
-        FileNameExtensionFilter filtroImagenes = new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif");
-        selector.setFileFilter(filtroImagenes);
+    FileNameExtensionFilter filtroImagenes = new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif");
+    selector.setFileFilter(filtroImagenes);
 
-        int resultado = selector.showOpenDialog(null);
+    int resultado = selector.showOpenDialog(null);
+    String rutaRelativa = null;
 
-        String rutaImagen = null;
-        
-        if (resultado == JFileChooser.APPROVE_OPTION) {
-            File archivoSeleccionado = selector.getSelectedFile();
-            rutaImagen = archivoSeleccionado.getAbsolutePath();
+    if (resultado == JFileChooser.APPROVE_OPTION) {
+        File archivoSeleccionado = selector.getSelectedFile();
+        String nombreImagen = archivoSeleccionado.getName();
+        File carpetaDestino = new File("userImages");
 
+        // Crear carpeta si no existe
+        if (!carpetaDestino.exists()) {
+            carpetaDestino.mkdirs();
         }
-        return rutaImagen;
+
+        File destino = new File(carpetaDestino, nombreImagen);
+
+        try {
+            Files.copy(archivoSeleccionado.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            rutaRelativa = "userImages/" + nombreImagen;
+        } catch (IOException e) {
+            System.out.println("Error al copiar la imagen: " + e.getMessage());
+        }
     }
+
+    return rutaRelativa;
+}
     
     public void limpiarFormulario(){
         txtUsername.setText("");
@@ -78,7 +112,7 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
         labelContrasenia = new javax.swing.JLabel();
         labelUsername = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btnSubirImagen = new javax.swing.JButton();
         labelFotoSubir = new javax.swing.JLabel();
         btnRegistrarse = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
@@ -110,10 +144,10 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
         labelUsername.setForeground(new java.awt.Color(30, 215, 96));
         labelUsername.setText("username:");
 
-        jButton1.setText("boton para subir foto");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnSubirImagen.setText("boton para subir foto");
+        btnSubirImagen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnSubirImagenActionPerformed(evt);
             }
         });
 
@@ -158,7 +192,7 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
                     .addGroup(panelFondoLayout.createSequentialGroup()
                         .addComponent(labelContrasenia)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 290, Short.MAX_VALUE)
-                        .addComponent(jButton1)
+                        .addComponent(btnSubirImagen)
                         .addGap(224, 224, 224))
                     .addGroup(panelFondoLayout.createSequentialGroup()
                         .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -196,7 +230,7 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(labelContrasenia)
-                            .addComponent(jButton1))
+                            .addComponent(btnSubirImagen))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -225,9 +259,9 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO Agregar funcionamiento con JFileChooser
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnSubirImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubirImagenActionPerformed
+        rutaImagenSeleccionada = subirImagen();
+    }//GEN-LAST:event_btnSubirImagenActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         control.mostrarModuloIniciarSesion();
@@ -259,8 +293,8 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrarse;
+    private javax.swing.JButton btnSubirImagen;
     private javax.swing.JButton btnVolver;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel labelContrasenia;
     private javax.swing.JLabel labelEmail;
     private javax.swing.JLabel labelFotoSubir;
