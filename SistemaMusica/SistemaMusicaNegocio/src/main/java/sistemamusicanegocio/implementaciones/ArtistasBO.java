@@ -4,6 +4,7 @@
  */
 package sistemamusicanegocio.implementaciones;
 
+import java.util.ArrayList;
 import java.util.List;
 import sistemamusica.dtos.ArtistaDTO;
 import sistemamusica.dtos.IntegranteDTO;
@@ -85,9 +86,24 @@ public class ArtistasBO implements IArtistasBO {
      * @return Lista de artistas que coinciden con el criterio de búsqueda.
      */
     @Override
-    public List<Artista> buscarArtistasPorNombre(String idUsuario,String nombre) {
-        return artistasDAO.buscarArtistasPorNombre(idUsuario, nombre);
+     public List<ArtistaDTO> buscarArtistasPorNombre(String idUsuario, String nombre) {
+        List<Artista> artistas = artistasDAO.buscarArtistasPorNombre(idUsuario, nombre);
+
+        List<ArtistaDTO> artistasDTO = new ArrayList<>();
+
+        if (artistas != null) {
+            for (Artista a : artistas) {
+                ArtistaDTO dto = new ArtistaDTO();
+                dto.setNombre(a.getNombre());
+                dto.setGenero(a.getGenero());
+                dto.setTipo(a.getTipo());
+                artistasDTO.add(dto); 
+            }
+        }
+
+        return artistasDTO; 
     }
+
 
     /**
      * Busca artistas por género musical.
@@ -97,8 +113,22 @@ public class ArtistasBO implements IArtistasBO {
      * @return Lista de artistas que coinciden con el género especificado.
      */
     @Override
-    public List<Artista> buscarArtistasPorGenero(String idUsuario,String genero) {
-        return artistasDAO.buscarArtistasPorGenero(idUsuario, genero);
+    public List<ArtistaDTO> buscarArtistasPorGenero(String idUsuario,String genero) {
+        List<Artista> artistas = artistasDAO.buscarArtistasPorGenero(idUsuario, genero);
+
+        List<ArtistaDTO> artistasDTO = new ArrayList<>();
+
+        if (artistas != null) {
+            for (Artista a : artistas) {
+                ArtistaDTO dto = new ArtistaDTO();
+                dto.setNombre(a.getNombre());
+                dto.setGenero(a.getGenero());
+                dto.setTipo(a.getTipo());
+                artistasDTO.add(dto); 
+            }
+        }
+
+        return artistasDTO; 
     }
 
     /**
@@ -110,8 +140,22 @@ public class ArtistasBO implements IArtistasBO {
      * @return Lista de artistas que coinciden con ambos criterios de búsqueda.
      */
     @Override
-    public List<Artista> buscarArtistasPorNombreGenero(String idUsuario,String nombre, String genero) {
-        return artistasDAO.buscarArtistasPorNombreGenero(idUsuario, nombre, genero);
+    public List<ArtistaDTO> buscarArtistasPorNombreGenero(String idUsuario,String nombre, String genero) {
+        List<Artista> artistas = artistasDAO.buscarArtistasPorNombreGenero(idUsuario, nombre, genero);
+
+        List<ArtistaDTO> artistasDTO = new ArrayList<>();
+
+        if (artistas != null) {
+            for (Artista a : artistas) {
+                ArtistaDTO dto = new ArtistaDTO();
+                dto.setNombre(a.getNombre());
+                dto.setGenero(a.getGenero());
+                dto.setTipo(a.getTipo());
+                artistasDTO.add(dto); 
+            }
+        }
+
+        return artistasDTO; 
     }
 
     /**
@@ -121,8 +165,22 @@ public class ArtistasBO implements IArtistasBO {
      * @return Lista de todos los artistas disponibles.
      */
     @Override
-    public List<Artista> buscarArtistas(String idUsuario) {
-        return artistasDAO.buscarArtistas(idUsuario);
+    public List<ArtistaDTO> buscarArtistas(String idUsuario) {
+        List<Artista> artistas = artistasDAO.buscarArtistas(idUsuario);
+
+        List<ArtistaDTO> artistasDTO = new ArrayList<>();
+
+        if (artistas != null) {
+            for (Artista a : artistas) {
+                ArtistaDTO dto = new ArtistaDTO();
+                dto.setNombre(a.getNombre());
+                dto.setGenero(a.getGenero());
+                dto.setTipo(a.getTipo());
+                artistasDTO.add(dto); 
+            }
+        }
+
+        return artistasDTO; 
     }
 
     /**
@@ -132,8 +190,19 @@ public class ArtistasBO implements IArtistasBO {
      * @return El artista encontrado o null si no existe.
      */
     @Override
-    public Artista buscarArtistaPorNombre(String nombre) {
-        return artistasDAO.buscarArtistaPorNombre(nombre);
+    public ArtistaDTO buscarArtistaPorNombre(String nombre) {
+        Artista artista = artistasDAO.buscarArtistaPorNombre(nombre);
+        ArtistaDTO artistaDTO = new ArtistaDTO();
+        
+        if (artista != null){
+            artistaDTO.setId(artista.getId().toString());
+            artistaDTO.setTipo(artista.getTipo());
+            artistaDTO.setNombre(artista.getNombre());
+            artistaDTO.setImagen(artista.getImagen());
+            artistaDTO.setGenero(artista.getGenero());
+            artistaDTO.setIntegrantes(artista.getIntegrantes());
+        } 
+        return artistaDTO;
     }
     
     /**
@@ -143,8 +212,24 @@ public class ArtistasBO implements IArtistasBO {
      * @return Lista de todos los integrantes del artista.
      */
     @Override
-    public List<Integrante> consultarTodosLosIntegrantes(String idArtista) {
-        return artistasDAO.consultarTodosLosIntegrantes(idArtista);
+    public List<IntegranteDTO> consultarTodosLosIntegrantes(String idArtista) {
+        List<Integrante> integrantes = artistasDAO.consultarTodosLosIntegrantes(idArtista);
+
+        List<IntegranteDTO> integrantesDTO = new ArrayList<>();
+
+        if (integrantes != null) {
+            for (Integrante i : integrantes) {
+                IntegranteDTO dto = new IntegranteDTO();
+                dto.setNombre(i.getNombre());
+                dto.setRol(i.getRol());
+                dto.setFechaIngreso(i.getFechaIngreso());
+                dto.setFechaSalida(i.getFechaSalida());
+
+                integrantesDTO.add(dto);
+            }
+        }
+
+        return integrantesDTO;
     }
 
     /**
@@ -154,8 +239,24 @@ public class ArtistasBO implements IArtistasBO {
      * @return Lista de los integrantes activos del artista.
      */
     @Override
-    public List<Integrante> consultarIntegrantesActivos(String idArtista) {
-        return artistasDAO.consultarIntegrantesActivos(idArtista);
-    }
-    
+    public List<IntegranteDTO> consultarIntegrantesActivos(String idArtista) {
+        List<Integrante> integrantes = artistasDAO.consultarIntegrantesActivos(idArtista);
+
+        List<IntegranteDTO> integrantesDTO = new ArrayList<>();
+
+        if (integrantes != null) {
+            for (Integrante i : integrantes) {
+                IntegranteDTO dto = new IntegranteDTO();
+                dto.setNombre(i.getNombre());
+                dto.setRol(i.getRol());
+                dto.setFechaIngreso(i.getFechaIngreso());
+                dto.setFechaSalida(i.getFechaSalida());
+
+                integrantesDTO.add(dto);
+            }
+        }
+
+        return integrantesDTO;
+        }
+
 }

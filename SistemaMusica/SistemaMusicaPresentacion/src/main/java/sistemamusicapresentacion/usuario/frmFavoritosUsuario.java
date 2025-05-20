@@ -4,20 +4,14 @@
  */
 package sistemamusicapresentacion.usuario;
 
-import java.awt.Component;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import sistemamusica.dtos.AlbumFavoritoDTO;
 import sistemamusica.dtos.ArtistaFavoritoDTO;
 import sistemamusica.dtos.CancionFavoritaDTO;
 import sistemamusica.dtos.GeneroFavoritoDTO;
 import sistemamusica.dtos.UsuarioDTO;
-import sistemamusicadominio.Genero;
 import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
 import sistemamusicanegocio.interfaces.IUsuariosBO;
 import sistemamusicapresentacion.main.ControladorUniversal;

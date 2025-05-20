@@ -4,6 +4,7 @@
  */
 package sistemamusicapresentacion.main;
 
+import sistemamusica.dtos.ArtistaDTO;
 import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicadominio.Artista;
 import sistemamusicapresentacion.albumes.frmAgregarAlbum;
@@ -120,7 +121,7 @@ public class ControladorUniversal {
         agregarIntegrante.setVisible(true);
     }
     
-    public void mostrarArtistasDetalles(Artista artistaSeleccionado, UsuarioDTO usuario){
+    public void mostrarArtistasDetalles(ArtistaDTO artistaSeleccionado, UsuarioDTO usuario){
         frmArtistasDetalles artistasDetalles = new frmArtistasDetalles(this, artistaSeleccionado, usuario);
         artistasDetalles.setVisible(true);
     }

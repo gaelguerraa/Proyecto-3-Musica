@@ -14,10 +14,10 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import sistemamusica.dtos.ArtistaDTO;
 import sistemamusica.dtos.FavoritoDTO;
+import sistemamusica.dtos.IntegranteDTO;
 import sistemamusica.dtos.UsuarioDTO;
-import sistemamusicadominio.Artista;
-import sistemamusicadominio.Integrante;
 import sistemamusicadominio.TipoContenido;
 import sistemamusicanegocio.exception.NegocioException;
 import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
@@ -35,12 +35,12 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
     private IUsuariosBO usuariosBO = FabricaObjetosNegocio.crearUsuariosBO();
     private IArtistasBO artistasBO = FabricaObjetosNegocio.crearArtistasBO();
     ControladorUniversal universal;
-    Artista artistaSeleccionado;
+    ArtistaDTO artistaSeleccionado;
     
     /**
      * Creates new form frmArtistasDetalles
      */
-    public frmArtistasDetalles(ControladorUniversal universal, Artista artistaSeleccionado, UsuarioDTO usuarioActual) {
+    public frmArtistasDetalles(ControladorUniversal universal, ArtistaDTO artistaSeleccionado, UsuarioDTO usuarioActual) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Artistas Detalles");
@@ -68,7 +68,7 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
 
     }
     
-    public void mostrarInfoArtista(Artista artista){
+    public void mostrarInfoArtista(ArtistaDTO artista){
         this.txtNombreArtista.setText(artista.getNombre());
         this.txtGenero.setText(artista.getGenero().toString());
         
@@ -99,14 +99,14 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
     
     private void LlenarTablaIntegrantesTodos(){
         String idArtista = artistaSeleccionado.getId().toString();
-        List<Integrante> integrantes = artistasBO.consultarTodosLosIntegrantes(idArtista);
+        List<IntegranteDTO> integrantes = artistasBO.consultarTodosLosIntegrantes(idArtista);
         
         DefaultTableModel modelo = (DefaultTableModel) tablaArtistas.getModel();
         modelo.setRowCount(0); 
 
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
         
-        for(Integrante i : integrantes){
+        for(IntegranteDTO i : integrantes){
             Object[] fila = {
                 i.getNombre(),
                 i.getRol(),
@@ -119,14 +119,14 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
     
     private void LlenarTablaIntegrantesActivos(){
         String idArtista = artistaSeleccionado.getId().toString();
-        List<Integrante> integrantes = artistasBO.consultarIntegrantesActivos(idArtista);
+        List<IntegranteDTO> integrantes = artistasBO.consultarIntegrantesActivos(idArtista);
         
         DefaultTableModel modelo = (DefaultTableModel) tablaArtistas.getModel();
         modelo.setRowCount(0); 
 
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
         
-        for(Integrante i : integrantes){
+        for(IntegranteDTO i : integrantes){
             Object[] fila = {
                 i.getNombre(),
                 i.getRol(),

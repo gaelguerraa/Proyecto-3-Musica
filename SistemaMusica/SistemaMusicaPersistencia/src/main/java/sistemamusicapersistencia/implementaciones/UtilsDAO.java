@@ -27,12 +27,16 @@ import sistemamusicapersistencia.interfaces.IUtilsDAO;
  */
 public class UtilsDAO implements IUtilsDAO {
     
+    private final String COLECCION_ARTISTAS = "artistas";
+    private final String COLECCION_ALBUMES = "albumes";
+    private final String COLECCION_CANCIONES = "cancioness";
+    
     @Override
     public void insertarDatos() {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
-        MongoCollection<Artista> colArtistas = db.getCollection("artistas", Artista.class);
-        MongoCollection<Album> colAlbumes = db.getCollection("albumes", Album.class);
-        MongoCollection<Cancion> colCanciones = db.getCollection("canciones", Cancion.class);
+        MongoCollection<Artista> colArtistas = db.getCollection(COLECCION_ARTISTAS, Artista.class);
+        MongoCollection<Album> colAlbumes = db.getCollection(COLECCION_ALBUMES, Album.class);
+        MongoCollection<Cancion> colCanciones = db.getCollection(COLECCION_CANCIONES, Cancion.class);
 
         Faker faker = new Faker();
         Random random = new Random();
@@ -41,8 +45,8 @@ public class UtilsDAO implements IUtilsDAO {
         List<Album> albumes = new ArrayList<>();
         List<Cancion> canciones = new ArrayList<>();
 
-        for (int i = 1; i <= 30; i++) {
-            boolean esSolista = i <= 15;
+        for (int i = 1; i <= 60; i++) {
+            boolean esSolista = i <= 30;
 
             Artista artista = new Artista();
             artista.setId(new ObjectId());

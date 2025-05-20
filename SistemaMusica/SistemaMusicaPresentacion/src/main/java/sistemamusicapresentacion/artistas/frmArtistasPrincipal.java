@@ -6,8 +6,8 @@ package sistemamusicapresentacion.artistas;
 
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
+import sistemamusica.dtos.ArtistaDTO;
 import sistemamusica.dtos.UsuarioDTO;
-import sistemamusicadominio.Artista;
 import sistemamusicadominio.Genero;
 import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
 import sistemamusicanegocio.interfaces.IArtistasBO;
@@ -24,7 +24,7 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
     ControladorUniversal universal;
     
     String nombreArtista;
-    Artista artistaSeleccionado;
+    ArtistaDTO artistaSeleccionado;
     
     /**
      * Creates new form frmArtistasPrincipal
@@ -62,7 +62,7 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
     }
     
     private void LlenarTablaArtistas() {
-        List<Artista> artistasConsultados;
+        List<ArtistaDTO> artistasConsultados;
 
         String nombreBuscado = txtBuscador.getText().trim();
         String generoSeleccionado = (String) CBGenero.getSelectedItem();
@@ -71,7 +71,7 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
             artistasConsultados = artistasBO.buscarArtistas(usuarioActual.getId());
             DefaultTableModel modeloTabla = (DefaultTableModel) tablaArtistas.getModel();
             modeloTabla.setRowCount(0);
-            for (Artista a : artistasConsultados) {
+            for (ArtistaDTO a : artistasConsultados) {
             Object[] fila = {
                 a.getNombre(),
                 a.getGenero(),
@@ -83,7 +83,7 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
             artistasConsultados = artistasBO.buscarArtistasPorNombre(usuarioActual.getId(),nombreBuscado);
             DefaultTableModel modeloTabla = (DefaultTableModel) tablaArtistas.getModel();
             modeloTabla.setRowCount(0);
-            for (Artista a : artistasConsultados) {
+            for (ArtistaDTO a : artistasConsultados) {
                 Object[] fila = {
                     a.getNombre(),
                     a.getGenero(),
@@ -95,7 +95,7 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
             artistasConsultados = artistasBO.buscarArtistasPorGenero(usuarioActual.getId(), generoSeleccionado);
             DefaultTableModel modeloTabla = (DefaultTableModel) tablaArtistas.getModel();
             modeloTabla.setRowCount(0);
-            for (Artista a : artistasConsultados) {
+            for (ArtistaDTO a : artistasConsultados) {
                 Object[] fila = {
                     a.getNombre(),
                     a.getGenero(),
@@ -107,7 +107,7 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
             artistasConsultados = artistasBO.buscarArtistasPorNombreGenero(usuarioActual.getId(), nombreBuscado, generoSeleccionado);
             DefaultTableModel modeloTabla = (DefaultTableModel) tablaArtistas.getModel();
             modeloTabla.setRowCount(0);
-            for (Artista a : artistasConsultados) {
+            for (ArtistaDTO a : artistasConsultados) {
                 Object[] fila = {
                     a.getNombre(),
                     a.getGenero(),

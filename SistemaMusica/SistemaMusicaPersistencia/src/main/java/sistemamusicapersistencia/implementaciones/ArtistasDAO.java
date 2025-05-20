@@ -12,16 +12,13 @@ import com.mongodb.client.model.Updates;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Pattern;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import sistemamusica.dtos.ArtistaDTO;
 import sistemamusica.dtos.IntegranteDTO;
 import sistemamusicadominio.Artista;
 import sistemamusicadominio.Integrante;
 import sistemamusicadominio.RolIntegrante;
-import sistemamusicadominio.TipoArtista;
 import sistemamusicadominio.Usuario;
 import sistemamusicapersistencia.interfaces.IArtistasDAO;
 

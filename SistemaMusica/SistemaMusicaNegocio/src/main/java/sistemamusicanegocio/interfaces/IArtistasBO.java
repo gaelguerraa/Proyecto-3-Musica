@@ -18,13 +18,13 @@ import sistemamusicanegocio.exception.NegocioException;
 public interface IArtistasBO {
 
     public abstract Artista registrarArtista(ArtistaDTO nuevoArtista) throws NegocioException;
-    public abstract List<Artista> buscarArtistasPorNombre(String idUsuario, String nombre);
-    public abstract List<Artista> buscarArtistasPorGenero(String idUsuario, String genero);
-    public abstract List<Artista> buscarArtistasPorNombreGenero(String idUsuario, String nombre, String genero);
-    public abstract List<Artista> buscarArtistas(String idUsuario);
-    public abstract Artista buscarArtistaPorNombre(String nombre);
+    public abstract List<ArtistaDTO> buscarArtistasPorNombre(String idUsuario, String nombre);
+    public abstract List<ArtistaDTO> buscarArtistasPorGenero(String idUsuario, String genero);
+    public abstract List<ArtistaDTO> buscarArtistasPorNombreGenero(String idUsuario, String nombre, String genero);
+    public abstract List<ArtistaDTO> buscarArtistas(String idUsuario);
+    public abstract ArtistaDTO buscarArtistaPorNombre(String nombre);
     
     public abstract Integrante agregarIntegrante(String idArtista, IntegranteDTO nuevoIntegrante) throws NegocioException;
-    public abstract List<Integrante> consultarTodosLosIntegrantes(String idArtista);
-    public abstract List<Integrante> consultarIntegrantesActivos(String idArtista);
+    public abstract List<IntegranteDTO> consultarTodosLosIntegrantes(String idArtista);
+    public abstract List<IntegranteDTO> consultarIntegrantesActivos(String idArtista);
 }
