@@ -4,15 +4,19 @@
  */
 package sistemamusicanegocio.fabrica;
 
+import sistemamusicanegocio.implementaciones.AlbumesBO;
 import sistemamusicanegocio.implementaciones.ArtistasBO;
 import sistemamusicanegocio.implementaciones.UsuariosBO;
 import sistemamusicanegocio.implementaciones.UtilsBO;
+import sistemamusicanegocio.interfaces.IAlbumesBO;
 import sistemamusicanegocio.interfaces.IArtistasBO;
 import sistemamusicanegocio.interfaces.IUsuariosBO;
 import sistemamusicanegocio.interfaces.IUtilsBO;
+import sistemamusicapersistencia.implementaciones.AlbumesDAO;
 import sistemamusicapersistencia.implementaciones.ArtistasDAO;
 import sistemamusicapersistencia.implementaciones.UsuariosDAO;
 import sistemamusicapersistencia.implementaciones.UtilsDAO;
+import sistemamusicapersistencia.interfaces.IAlbumesDAO;
 import sistemamusicapersistencia.interfaces.IArtistasDAO;
 import sistemamusicapersistencia.interfaces.IUsuariosDAO;
 import sistemamusicapersistencia.interfaces.IUtilsDAO;
@@ -33,7 +37,6 @@ public class FabricaObjetosNegocio {
         return new ArtistasBO(artistasDAO);
     }
 
-
     /**
      * Metodo constructor de Usuarios
      *
@@ -45,13 +48,23 @@ public class FabricaObjetosNegocio {
     }
 
     /**
+     * Metodo constructor de Albumes
+     *
+     * @return Contructor de Albumes
+     */
+    public static IAlbumesBO crearAlbumesBO() {
+        IAlbumesDAO albumesDAO = new AlbumesDAO();
+        return new AlbumesBO(albumesDAO);
+    }
+
+    /**
      * Metodo constructor de Utils
      *
      * @return Constructor de Utils
      */
-    public static IUtilsBO crearUtilsBO(){
+    public static IUtilsBO crearUtilsBO() {
         IUtilsDAO utilsDAO = new UtilsDAO();
         return new UtilsBO(utilsDAO);
     }
-    
+
 }
