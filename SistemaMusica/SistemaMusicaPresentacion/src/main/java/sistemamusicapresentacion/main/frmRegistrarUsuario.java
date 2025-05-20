@@ -57,44 +57,44 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
 //        }
 //        return rutaImagen;
 //    }
-    
     public String subirImagen() {
-    JFileChooser selector = new JFileChooser();
-    selector.setDialogTitle("Selecciona una imagen");
+        JFileChooser selector = new JFileChooser();
+        selector.setDialogTitle("Selecciona una imagen");
 
-    FileNameExtensionFilter filtroImagenes = new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif");
-    selector.setFileFilter(filtroImagenes);
+        FileNameExtensionFilter filtroImagenes = new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif");
+        selector.setFileFilter(filtroImagenes);
 
-    int resultado = selector.showOpenDialog(null);
-    String rutaRelativa = null;
+        int resultado = selector.showOpenDialog(null);
+        String rutaRelativa = null;
 
-    if (resultado == JFileChooser.APPROVE_OPTION) {
-        File archivoSeleccionado = selector.getSelectedFile();
-        String nombreImagen = archivoSeleccionado.getName();
-        File carpetaDestino = new File("userImages");
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            File archivoSeleccionado = selector.getSelectedFile();
+            String nombreImagen = archivoSeleccionado.getName();
+            File carpetaDestino = new File("userImages");
 
-        // Crear carpeta si no existe
-        if (!carpetaDestino.exists()) {
-            carpetaDestino.mkdirs();
+            // Crear carpeta si no existe
+            if (!carpetaDestino.exists()) {
+                carpetaDestino.mkdirs();
+            }
+
+            File destino = new File(carpetaDestino, nombreImagen);
+
+            try {
+                Files.copy(archivoSeleccionado.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                rutaRelativa = "userImages/" + nombreImagen;
+            } catch (IOException e) {
+                System.out.println("Error al copiar la imagen: " + e.getMessage());
+            }
         }
 
-        File destino = new File(carpetaDestino, nombreImagen);
-
-        try {
-            Files.copy(archivoSeleccionado.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            rutaRelativa = "userImages/" + nombreImagen;
-        } catch (IOException e) {
-            System.out.println("Error al copiar la imagen: " + e.getMessage());
-        }
+        return rutaRelativa;
     }
 
-    return rutaRelativa;
-}
-    
-    public void limpiarFormulario(){
+    public void limpiarFormulario() {
         txtUsername.setText("");
         txtEmail.setText("");
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -274,7 +274,7 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
         char[] contraseniaChars = txtContrasenia.getPassword();
         String contrasenia = new String(contraseniaChars);
         String email = txtEmail.getText();
-        String imagenPerfil = rutaImagenSeleccionada; 
+        String imagenPerfil = rutaImagenSeleccionada;
 
         UsuarioDTO nuevoUsuario = new UsuarioDTO(username, email, contrasenia, imagenPerfil);
 

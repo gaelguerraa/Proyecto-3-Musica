@@ -28,8 +28,9 @@ public class UsuariosBO implements IUsuariosBO {
 
     /**
      * Constructor que recibe una implementación de IUsuariosDAO.
-     * 
-     * @param usuariosDAO Objeto que implementa la interfaz IUsuariosDAO para el acceso a datos.
+     *
+     * @param usuariosDAO Objeto que implementa la interfaz IUsuariosDAO para el
+     * acceso a datos.
      */
     public UsuariosBO(IUsuariosDAO usuariosDAO) {
         this.usuariosDAO = usuariosDAO;
@@ -94,7 +95,7 @@ public class UsuariosBO implements IUsuariosBO {
         Usuario usuarioExistente = usuariosDAO.consultarPorUsername(username);
 
         if (usuarioExistente == null) {
-            
+
             Usuario usuario = usuariosDAO.agregarUsuario(nuevoUsuario);
 
             if (usuario != null) {
@@ -110,7 +111,7 @@ public class UsuariosBO implements IUsuariosBO {
             } else {
                 throw new NegocioException("No se pudo agregar al usuario a la base de datos.");
             }
-            
+
         } else {
             throw new NegocioException("El usuario con el username "
                     + username + " ya existe");
@@ -118,64 +119,89 @@ public class UsuariosBO implements IUsuariosBO {
     }
 
     /**
-    * Consulta un usuario por su ID después de validar que el ID sea válido.
-    * 
-    * @param idUsuario ID del usuario a consultar.
-    * @return El usuario encontrado.
-    */
+     * Consulta un usuario por su ID después de validar que el ID sea válido.
+     *
+     * @param idUsuario ID del usuario a consultar.
+     * @return El usuario encontrado.
+     */
     @Override
     public Usuario consultarPorId(String idUsuario) {
         return usuariosDAO.consultarPorId(idUsuario);
     }
 
     /**
-    * Modifica los datos de un usuario existente después de validar todos los campos.
-    * 
-    * @param idUsuario ID del usuario a modificar.
-    * @param datosActualizados DTO con los nuevos datos del usuario.
-    * @return El usuario modificado.
-    * @throws NegocioException Si los datos no son válidos o si ocurre un error durante la actualización.
-    */
+     * Consulta un usuario por su ID despues de validar el ID, para
+     * posteriormente regresarlo como DTO
+     *
+     * @param idUsuario ID del usuario a consultar
+     * @return El usuario encontrado en forma de DTO
+     */
+    @Override
+    public UsuarioDTO consultarPorIdDTO(String idUsuario) {
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+
+        Usuario usuarioObtenido = usuariosDAO.consultarPorId(idUsuario);
+
+        usuarioDTO.setUsername(usuarioObtenido.getUsername());
+        usuarioDTO.setEmail(usuarioObtenido.getEmail());
+        usuarioDTO.setContrasenia(usuarioObtenido.getContrasenia());
+        usuarioDTO.setImagenPerfil(usuarioObtenido.getImagenPerfil());
+        usuarioDTO.setFavoritos(usuarioObtenido.getFavoritos());
+        usuarioDTO.setRestricciones(usuarioObtenido.getRestricciones());
+
+        return usuarioDTO;
+    }
+
+    /**
+     * Modifica los datos de un usuario existente después de validar todos los
+     * campos.
+     *
+     * @param idUsuario ID del usuario a modificar.
+     * @param datosActualizados DTO con los nuevos datos del usuario.
+     * @return El usuario modificado.
+     * @throws NegocioException Si los datos no son válidos o si ocurre un error
+     * durante la actualización.
+     */
     @Override
     public Usuario modificarUsuario(String idUsuario, UsuarioDTO datosActualizados) throws NegocioException {
         if (datosActualizados == null) {
-        throw new NegocioException("Los datos actualizados no pueden ser nulos.");
-    }
-
-    // Validar que exista el usuario antes de modificarlo
-    Usuario usuarioExistente = consultarPorId(idUsuario);
-    if (usuarioExistente == null) {
-        throw new NegocioException("El usuario a modificar no existe.");
-    }
-
-    // Validar campos individuales si están presentes
-    if (datosActualizados.getUsername() != null) {
-        validarUsername(datosActualizados.getUsername());
-        
-        // Verificar que el nuevo username no esté en uso por otro usuario
-        Usuario usuarioConMismoUsername = usuariosDAO.consultarPorUsername(datosActualizados.getUsername());
-        if (usuarioConMismoUsername != null && !usuarioConMismoUsername.getId().toString().equals(idUsuario)) {
-            throw new NegocioException("El nombre de usuario ya está en uso por otro usuario.");
+            throw new NegocioException("Los datos actualizados no pueden ser nulos.");
         }
-    }
 
-    if (datosActualizados.getEmail() != null) {
-        validarEmail(datosActualizados.getEmail());
-    }
+        // Validar que exista el usuario antes de modificarlo
+        Usuario usuarioExistente = consultarPorId(idUsuario);
+        if (usuarioExistente == null) {
+            throw new NegocioException("El usuario a modificar no existe.");
+        }
 
-    if (datosActualizados.getContrasenia() != null) {
-        validarContrasenia(datosActualizados.getContrasenia());
-    }
+        // Validar campos individuales si están presentes
+        if (datosActualizados.getUsername() != null) {
+            validarUsername(datosActualizados.getUsername());
 
-    // Verificar que al menos un campo sea modificado
-    if (datosActualizados.getUsername() == null &&
-        datosActualizados.getEmail() == null &&
-        datosActualizados.getContrasenia() == null &&
-        datosActualizados.getImagenPerfil() == null) {
-        throw new NegocioException("Debe proporcionar al menos un campo para actualizar.");
-    }
+            // Verificar que el nuevo username no esté en uso por otro usuario
+            Usuario usuarioConMismoUsername = usuariosDAO.consultarPorUsername(datosActualizados.getUsername());
+            if (usuarioConMismoUsername != null && !usuarioConMismoUsername.getId().toString().equals(idUsuario)) {
+                throw new NegocioException("El nombre de usuario ya está en uso por otro usuario.");
+            }
+        }
 
-    return usuariosDAO.modificarUsuario(idUsuario, datosActualizados);
+        if (datosActualizados.getEmail() != null) {
+            validarEmail(datosActualizados.getEmail());
+        }
+
+        if (datosActualizados.getContrasenia() != null) {
+            validarContrasenia(datosActualizados.getContrasenia());
+        }
+
+        // Verificar que al menos un campo sea modificado
+        if (datosActualizados.getUsername() == null
+                && datosActualizados.getEmail() == null
+                && datosActualizados.getContrasenia() == null
+                && datosActualizados.getImagenPerfil() == null) {
+            throw new NegocioException("Debe proporcionar al menos un campo para actualizar.");
+        }
+
+        return usuariosDAO.modificarUsuario(idUsuario, datosActualizados);
 
     }
 
@@ -274,7 +300,7 @@ public class UsuariosBO implements IUsuariosBO {
 
     /**
      * Agrega un contenido a los favoritos de un usuario.
-     * 
+     *
      * @param idUsuario ID del usuario que agrega el favorito.
      * @param favoritoDTO DTO con la información del contenido favorito.
      * @return true si se agregó correctamente, false en caso contrario.
@@ -282,23 +308,23 @@ public class UsuariosBO implements IUsuariosBO {
      */
     @Override
     public boolean agregarFavorito(String idUsuario, FavoritoDTO favoritoDTO) throws NegocioException {
-        if(idUsuario == null || favoritoDTO == null ){
+        if (idUsuario == null || favoritoDTO == null) {
             throw new NegocioException("Debe seleccionar un usario y un contenido a agregar a favoritos.");
         }
         return usuariosDAO.agregarFavorito(idUsuario, favoritoDTO);
     }
 
-     /**
+    /**
      * Elimina un contenido de los favoritos de un usuario.
-     * 
+     *
      * @param idUsuario ID del usuario que elimina el favorito.
      * @param idContenido ID del contenido a eliminar de favoritos.
      * @return true si se eliminó correctamente, false en caso contrario.
      * @throws NegocioException Si el usuario o el contenido son nulos.
      */
     @Override
-    public boolean eliminarFavorito(String idUsuario, String idContenido) throws NegocioException{
-        if(idUsuario == null || idContenido == null ){
+    public boolean eliminarFavorito(String idUsuario, String idContenido) throws NegocioException {
+        if (idUsuario == null || idContenido == null) {
             throw new NegocioException("Debe seleccionar un usario y un contenido a eliminar favoritos.");
         }
         return usuariosDAO.eliminarFavorito(idUsuario, idContenido);
@@ -306,7 +332,7 @@ public class UsuariosBO implements IUsuariosBO {
 
     /**
      * Obtiene los álbumes favoritos de un usuario, filtrados por nombre.
-     * 
+     *
      * @param idUsuario ID del usuario.
      * @param nombreAlbum Nombre o parte del nombre del álbum a buscar.
      * @return Lista de álbumes favoritos que coinciden con el criterio.
@@ -318,7 +344,7 @@ public class UsuariosBO implements IUsuariosBO {
 
     /**
      * Obtiene los artistas favoritos de un usuario, filtrados por nombre.
-     * 
+     *
      * @param idUsuario ID del usuario.
      * @param nombreArtista Nombre o parte del nombre del artista a buscar.
      * @return Lista de artistas favoritos que coinciden con el criterio.
@@ -330,7 +356,7 @@ public class UsuariosBO implements IUsuariosBO {
 
     /**
      * Obtiene las canciones favoritas de un usuario, filtradas por nombre.
-     * 
+     *
      * @param idUsuario ID del usuario.
      * @param nombreCancion Nombre o parte del nombre de la canción a buscar.
      * @return Lista de canciones favoritas que coinciden con el criterio.
@@ -342,7 +368,7 @@ public class UsuariosBO implements IUsuariosBO {
 
     /**
      * Obtiene los géneros favoritos de un usuario, filtrados por género.
-     * 
+     *
      * @param idUsuario ID del usuario.
      * @param genero Género musical a buscar.
      * @return Lista de géneros favoritos que coinciden con el criterio.
@@ -354,7 +380,7 @@ public class UsuariosBO implements IUsuariosBO {
 
     /**
      * Consulta los favoritos de un usuario dentro de un rango de fechas.
-     * 
+     *
      * @param idUsuario ID del usuario.
      * @param fechaInicio Fecha de inicio del rango.
      * @param fechaFin Fecha de fin del rango.
@@ -367,7 +393,7 @@ public class UsuariosBO implements IUsuariosBO {
 
     /**
      * Obtiene todos los favoritos de un usuario.
-     * 
+     *
      * @param idUsuario ID del usuario.
      * @return Lista completa de todos los favoritos del usuario.
      */
@@ -378,7 +404,7 @@ public class UsuariosBO implements IUsuariosBO {
 
     /**
      * Consulta los favoritos de un usuario.
-     * 
+     *
      * @param idUsuario ID del usuario.
      * @return Lista de favoritos del usuario.
      */
@@ -389,7 +415,7 @@ public class UsuariosBO implements IUsuariosBO {
 
     /**
      * Agrega un género a la lista de restringidos de un usuario.
-     * 
+     *
      * @param idUsuario ID del usuario.
      * @param genero Género a restringir.
      */
@@ -400,7 +426,7 @@ public class UsuariosBO implements IUsuariosBO {
 
     /**
      * Elimina un género de la lista de restringidos de un usuario.
-     * 
+     *
      * @param idUsuario ID del usuario.
      * @param genero Género a dejar de restringir.
      */
@@ -411,7 +437,7 @@ public class UsuariosBO implements IUsuariosBO {
 
     /**
      * Muestra los géneros restringidos de un usuario.
-     * 
+     *
      * @param idUsuario ID del usuario.
      * @return Lista de géneros restringidos para el usuario.
      */

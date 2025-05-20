@@ -22,23 +22,45 @@ import sistemamusicanegocio.exception.NegocioException;
  */
 public interface IUsuariosBO {
 
-
     public UsuarioDTO agregarUsuario(UsuarioDTO nuevoUsuario) throws NegocioException;
+
     public Usuario consultarPorId(String idUsuario);
+
     public Usuario modificarUsuario(String idUsuario, UsuarioDTO datosActualizados) throws NegocioException;
+
     public UsuarioDTO iniciarSesion(String username, String contrasenia) throws NegocioException;
-    
+
     public abstract boolean agregarFavorito(String idUsuario, FavoritoDTO favorito) throws NegocioException;
+
     public abstract boolean eliminarFavorito(String idUsuario, String idContenido) throws NegocioException;
+
     public abstract List<AlbumFavoritoDTO> obtenerAlbumesFavoritos(String idUsario, String nombreAlbum);
+
     public abstract List<ArtistaFavoritoDTO> obtenerArtistasFavoritos(String idUsuario, String nombreArtista);
+
     public abstract List<CancionFavoritaDTO> obtenerCancionesFavoritas(String idUsuario, String nombreCancion);
+
     public abstract List<GeneroFavoritoDTO> obtenerGenerosFavoritos(String idUsuario, String genero);
+
     public abstract List<GeneroFavoritoDTO> consultarFavoritosPorRangoFechas(String idUsuario, Date fechaInicio, Date fechaFin);
+
     public abstract List<GeneroFavoritoDTO> obtenerTodosFavoritos(String idUsuario);
+
     public abstract List<Favorito> consultarFavoritos(String idUsuario);
+
     public abstract void agregarGeneroRestringido(String idUsuario, String genero);
+
     public abstract void eliminarGeneroRestringido(String idUsuario, String genero);
+
     public abstract List<String> mostrarGenerosRestringidos(String idUsuario);
+
+    /**
+     * Consulta un usuario por su ID despues de validar el ID, para
+     * posteriormente regresarlo como DTO
+     *
+     * @param idUsuario ID del usuario a consultar
+     * @return El usuario encontrado en forma de DTO
+     */
+    public UsuarioDTO consultarPorIdDTO(String idUsuario);
 
 }

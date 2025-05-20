@@ -4,7 +4,16 @@
  */
 package sistemamusicapresentacion.usuario;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import sistemamusica.dtos.UsuarioDTO;
+import sistemamusicadominio.Usuario;
+import sistemamusicanegocio.exception.NegocioException;
 import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
 import sistemamusicanegocio.interfaces.IUsuariosBO;
 import sistemamusicapresentacion.main.ControladorUniversal;
@@ -18,6 +27,7 @@ public class frmCambiarDatos extends javax.swing.JFrame {
     private final IUsuariosBO usuarioBO = FabricaObjetosNegocio.crearUsuariosBO();
     ControladorUniversal control;
     UsuarioDTO usuario;
+    private String rutaImagenSeleccionada;
 
     /**
      * Creates new form frmCambiarDatos
@@ -27,7 +37,40 @@ public class frmCambiarDatos extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setTitle("Actualizar Datos");
         this.control = control;
-        this.usuario=usuario;
+        this.usuario = usuario;
+    }
+
+    public String subirImagen() {
+        JFileChooser selector = new JFileChooser();
+        selector.setDialogTitle("Selecciona una imagen");
+
+        FileNameExtensionFilter filtroImagenes = new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif");
+        selector.setFileFilter(filtroImagenes);
+
+        int resultado = selector.showOpenDialog(null);
+        String rutaRelativa = null;
+
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            File archivoSeleccionado = selector.getSelectedFile();
+            String nombreImagen = archivoSeleccionado.getName();
+            File carpetaDestino = new File("userImages");
+
+            // Crear carpeta si no existe
+            if (!carpetaDestino.exists()) {
+                carpetaDestino.mkdirs();
+            }
+
+            File destino = new File(carpetaDestino, nombreImagen);
+
+            try {
+                Files.copy(archivoSeleccionado.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                rutaRelativa = "userImages/" + nombreImagen;
+            } catch (IOException e) {
+                System.out.println("Error al copiar la imagen: " + e.getMessage());
+            }
+        }
+
+        return rutaRelativa;
     }
 
     /**
@@ -46,7 +89,7 @@ public class frmCambiarDatos extends javax.swing.JFrame {
         txtEmail = new javax.swing.JTextField();
         labelUsername = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btnSubirImagen = new javax.swing.JButton();
         labelFotoSubir = new javax.swing.JLabel();
         btnActualizar = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
@@ -78,10 +121,10 @@ public class frmCambiarDatos extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("boton para subir foto");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnSubirImagen.setText("boton para subir foto");
+        btnSubirImagen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnSubirImagenActionPerformed(evt);
             }
         });
 
@@ -140,7 +183,7 @@ public class frmCambiarDatos extends javax.swing.JFrame {
                     .addGroup(panelFondoLayout.createSequentialGroup()
                         .addComponent(labelUsername)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)
+                        .addComponent(btnSubirImagen)
                         .addGap(211, 211, 211))))
         );
         panelFondoLayout.setVerticalGroup(
@@ -158,7 +201,7 @@ public class frmCambiarDatos extends javax.swing.JFrame {
                         .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
+                            .addComponent(btnSubirImagen)
                             .addComponent(labelUsername)))
                     .addComponent(labelFotoSubir))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -188,9 +231,10 @@ public class frmCambiarDatos extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtUsernameActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnSubirImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubirImagenActionPerformed
+        rutaImagenSeleccionada = subirImagen();
+
+    }//GEN-LAST:event_btnSubirImagenActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         control.mostrarModuloPrincipalUsuarios(usuario);
@@ -198,6 +242,26 @@ public class frmCambiarDatos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        String username = txtUsername.getText();
+        String email = txtEmail.getText();
+        String imagenPerfil = rutaImagenSeleccionada;
+
+        UsuarioDTO usuarioModificado = new UsuarioDTO();
+        usuarioModificado.setUsername(username);
+        usuarioModificado.setEmail(email);
+        usuarioModificado.setImagenPerfil(imagenPerfil);
+
+        try {
+            usuarioBO.modificarUsuario(usuario.getId(), usuarioModificado);
+            JOptionPane.showMessageDialog(this, "El usuario se ha modificado correctamente.", "Info.", JOptionPane.INFORMATION_MESSAGE);
+
+            UsuarioDTO usuarioModificadoObtenido = usuarioBO.consultarPorIdDTO(usuario.getId());
+            control.mostrarModuloPrincipalUsuarios(usuarioModificadoObtenido);
+            this.dispose();
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error.", JOptionPane.ERROR_MESSAGE);
+        }
+
         control.mostrarModuloPrincipalUsuarios(usuario);
         this.dispose();
     }//GEN-LAST:event_btnActualizarActionPerformed
@@ -205,8 +269,8 @@ public class frmCambiarDatos extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnSubirImagen;
     private javax.swing.JButton btnVolver;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel labelEmail;
     private javax.swing.JLabel labelFotoSubir;
     private javax.swing.JLabel labelModifical;
