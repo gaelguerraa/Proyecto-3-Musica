@@ -196,7 +196,7 @@ public class ArtistasDAO implements IArtistasDAO {
         MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Document> coleccion = baseDatos.getCollection("artistas");
 
-        // Crear el documento del integrante
+        // se crea el documento del integrante
         Document integranteDoc = new Document("nombre", nuevoIntegrante.getNombre())
                 .append("rol", nuevoIntegrante.getRol().toString())
                 .append("fechaIngreso", nuevoIntegrante.getFechaIngreso())
@@ -206,13 +206,13 @@ public class ArtistasDAO implements IArtistasDAO {
             integranteDoc.append("fechaSalida", nuevoIntegrante.getFechaSalida());
         }
 
-        // Realizar el push dentro del documento del artista
+        // se realiza el push dentro del documento del artista
         ObjectId id = new ObjectId(idArtista);
         coleccion.updateOne(
                 Filters.eq("_id", id), 
                 Updates.push("integrantes", integranteDoc));
 
-        // Puedes devolver una instancia de Integrante si necesitas
+        //se crea una instancia de integrante para usarlo al buscar integrantes
         Integrante integrante = new Integrante();
         integrante.setNombre(nuevoIntegrante.getNombre());
         integrante.setRol(nuevoIntegrante.getRol());

@@ -522,6 +522,7 @@ public class UsuariosDAO implements IUsuariosDAO {
         coleccion.updateOne(filtro, update);
     }
     
+    @Override
     public List<String> mostrarGenerosRestringidos(String idUsuario){
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Usuario> coleccion = db.getCollection(COLECCION, Usuario.class);
