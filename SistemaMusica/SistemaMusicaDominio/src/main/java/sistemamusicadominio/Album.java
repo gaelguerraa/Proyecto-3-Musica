@@ -94,6 +94,9 @@ public class Album {
         this.canciones = canciones;
     }
 
-    
+    @Override
+    public String toString() {
+        return "Album{" + "id=" + id + ", nombre=" + nombre + ", fechaLanzamiento=" + fechaLanzamiento + ", genero=" + genero + ", imagenPortada=" + imagenPortada + ", idArtista=" + idArtista + ", canciones=" + canciones + '}';
+    }
 
 }
