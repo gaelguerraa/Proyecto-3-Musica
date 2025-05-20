@@ -71,6 +71,7 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
     public void mostrarInfoArtista(ArtistaDTO artista){
         this.txtNombreArtista.setText(artista.getNombre());
         this.txtGenero.setText(artista.getGenero().toString());
+        this.txtTipoArtista.setText(artista.getTipo().toString());
         
         try {
             String rutaImagen = artista.getImagen();
@@ -207,6 +208,7 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
         labelPregunta = new javax.swing.JLabel();
         labelFoto = new javax.swing.JLabel();
         btnAgregarFavoritos = new javax.swing.JButton();
+        txtTipoArtista = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(850, 550));
@@ -375,6 +377,10 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
             }
         });
 
+        txtTipoArtista.setEditable(false);
+        txtTipoArtista.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
+        txtTipoArtista.setText("Tipo Artista");
+
         javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
         panelFondo.setLayout(panelFondoLayout);
         panelFondoLayout.setHorizontalGroup(
@@ -389,7 +395,9 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
                             .addGroup(panelFondoLayout.createSequentialGroup()
                                 .addComponent(btnVolver)
                                 .addGap(26, 26, 26)
-                                .addComponent(txtNombreArtista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtTipoArtista)
+                                    .addComponent(txtNombreArtista))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txtGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -419,7 +427,9 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelArtista, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
+                .addGap(18, 18, 18)
+                .addComponent(txtTipoArtista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnVolver)
                     .addGroup(panelFondoLayout.createSequentialGroup()
@@ -506,5 +516,6 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
     private javax.swing.JTable tablaArtistas;
     private javax.swing.JTextField txtGenero;
     private javax.swing.JTextField txtNombreArtista;
+    private javax.swing.JTextField txtTipoArtista;
     // End of variables declaration//GEN-END:variables
 }

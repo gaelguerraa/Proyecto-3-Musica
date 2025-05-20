@@ -4,8 +4,10 @@
  */
 package sistemamusicanegocio.implementaciones;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.bson.Document;
 import sistemamusica.dtos.AlbumFavoritoDTO;
 import sistemamusica.dtos.ArtistaFavoritoDTO;
 import sistemamusica.dtos.CancionFavoritaDTO;
@@ -339,7 +341,22 @@ public class UsuariosBO implements IUsuariosBO {
      */
     @Override
     public List<AlbumFavoritoDTO> obtenerAlbumesFavoritos(String idUsuario, String nombreAlbum) {
-        return usuariosDAO.obtenerAlbumesFavoritos(idUsuario, nombreAlbum);
+        List<Document> documentos = usuariosDAO.obtenerAlbumesFavoritos(idUsuario, nombreAlbum);
+        
+        List<AlbumFavoritoDTO> resultado = new ArrayList<>();
+        for (Document doc : documentos) {
+            AlbumFavoritoDTO dto = new AlbumFavoritoDTO();
+            dto.setIdFavorito(doc.getObjectId("idFavorito").toString());
+            dto.setIdAlbum(doc.getObjectId("idAlbum").toString());
+            dto.setNombreAlbum(doc.getString("nombreAlbum"));
+            dto.setNombreArtista(doc.getString("nombreArtista"));
+            dto.setGenero(doc.getString("genero"));
+            dto.setFechaLanzamiento(doc.getDate("fechaLanzamiento"));
+            dto.setFechaAgregacion(doc.getDate("fechaAgregacion"));
+             resultado.add(dto);
+        }
+
+        return resultado;
     }
 
     /**
@@ -351,7 +368,22 @@ public class UsuariosBO implements IUsuariosBO {
      */
     @Override
     public List<ArtistaFavoritoDTO> obtenerArtistasFavoritos(String idUsuario, String nombreArtista) {
-        return usuariosDAO.obtenerArtistasFavoritos(idUsuario, nombreArtista);
+        List<Document> documentos = usuariosDAO.obtenerArtistasFavoritos(idUsuario, nombreArtista);
+        
+        List<ArtistaFavoritoDTO> resultado = new ArrayList<>();
+        for (Document doc : documentos) {
+            ArtistaFavoritoDTO dto = new ArtistaFavoritoDTO();
+            dto.setIdFavorito(doc.getObjectId("idFavorito").toString());
+            dto.setIdArtista(doc.getObjectId("idArtista").toString());
+            dto.setNombreArtista(doc.getString("nombreArtista"));
+            dto.setTipoArtista(doc.getString("tipoArtista"));
+            dto.setGeneroArtista(doc.getString("generoArtista"));
+            dto.setFechaAgregacion(doc.getDate("fechaAgregacion"));
+            resultado.add(dto);
+        }
+
+        return resultado;
+  
     }
 
     /**
@@ -363,7 +395,25 @@ public class UsuariosBO implements IUsuariosBO {
      */
     @Override
     public List<CancionFavoritaDTO> obtenerCancionesFavoritas(String idUsuario, String nombreCancion) {
-        return usuariosDAO.obtenerCancionesFavoritas(idUsuario, nombreCancion);
+        
+        List<Document> documentos = usuariosDAO.obtenerCancionesFavoritas(idUsuario, nombreCancion);
+        
+        List<CancionFavoritaDTO> resultado = new ArrayList<>();
+        for (Document doc : documentos) {
+            CancionFavoritaDTO dto = new CancionFavoritaDTO();
+            dto.setIdFavorito(doc.getObjectId("idFavorito").toString());
+            dto.setIdCancion(doc.getObjectId("idCancion").toString());
+            dto.setTitulo(doc.getString("titulo"));
+            dto.setDuracion(doc.getDouble("duracion").floatValue());
+            dto.setNombreArtista(doc.getString("nombreArtista"));
+            dto.setNombreAlbum(doc.getString("nombreAlbum"));
+            dto.setGenero(doc.getString("genero"));
+            dto.setFechaAgregacion(doc.getDate("fechaAgregacion"));
+            resultado.add(dto);
+        }
+
+        return resultado;
+
     }
 
     /**
@@ -375,7 +425,24 @@ public class UsuariosBO implements IUsuariosBO {
      */
     @Override
     public List<GeneroFavoritoDTO> obtenerGenerosFavoritos(String idUsuario, String genero) {
-        return usuariosDAO.obtenerGenerosFavoritos(idUsuario, genero);
+        
+        List<Document> documentos = usuariosDAO.obtenerGenerosFavoritos(idUsuario, genero);
+        List<GeneroFavoritoDTO> resultado = new ArrayList<>();
+        for (Document fav : documentos) {
+                String generoFav = fav.getString("genero");
+                if (generoFav != null && generoFav.toLowerCase().contains(genero.toLowerCase())) {
+                    GeneroFavoritoDTO dto = new GeneroFavoritoDTO();
+                    dto.setIdFavorito(fav.getObjectId("_id").toHexString());
+                    dto.setIdContenido(fav.getObjectId("idContenido").toHexString());
+                    dto.setNombre(fav.getString("nombre"));
+                    dto.setGenero(generoFav);
+                    dto.setTipo(fav.getString("tipo"));
+                    dto.setFechaAgregacion(fav.getDate("fechaAgregacion"));
+                    resultado.add(dto);
+                }
+            }
+        
+        return resultado;
     }
 
     /**
@@ -388,7 +455,25 @@ public class UsuariosBO implements IUsuariosBO {
      */
     @Override
     public List<GeneroFavoritoDTO> consultarFavoritosPorRangoFechas(String idUsuario, Date fechaInicio, Date fechaFin) {
-        return usuariosDAO.consultarFavoritosPorRangoFechas(idUsuario, fechaInicio, fechaFin);
+        
+        List<Document> documentos = usuariosDAO.consultarFavoritosPorRangoFechas(idUsuario, fechaInicio, fechaFin);
+        List<GeneroFavoritoDTO> resultados = new ArrayList<>();
+        
+        for (Document fav : documentos) {
+                Date fecha = fav.getDate("fechaAgregacion");
+                if (fecha != null && !fecha.before(fechaInicio) && !fecha.after(fechaFin)) {
+                    GeneroFavoritoDTO dto = new GeneroFavoritoDTO();
+                    dto.setIdFavorito(fav.getObjectId("_id").toHexString());
+                    dto.setIdContenido(fav.getObjectId("idContenido").toHexString());
+                    dto.setNombre(fav.getString("nombre"));
+                    dto.setGenero(fav.getString("genero"));
+                    dto.setTipo(fav.getString("tipo"));
+                    dto.setFechaAgregacion(fecha);
+                    resultados.add(dto);
+                }
+            }
+        
+        return resultados;
     }
 
     /**
@@ -399,7 +484,20 @@ public class UsuariosBO implements IUsuariosBO {
      */
     @Override
     public List<GeneroFavoritoDTO> obtenerTodosFavoritos(String idUsuario) {
-        return usuariosDAO.obtenerTodosFavoritos(idUsuario);
+        List<Document> documentos = usuariosDAO.obtenerTodosFavoritos(idUsuario);
+        List<GeneroFavoritoDTO> resultado = new ArrayList<>();
+        
+        for (Document fav : documentos) {
+                GeneroFavoritoDTO dto = new GeneroFavoritoDTO();
+                dto.setIdFavorito(fav.getObjectId("_id").toHexString());
+                dto.setIdContenido(fav.getObjectId("idContenido").toHexString());
+                dto.setNombre(fav.getString("nombre"));
+                dto.setGenero(fav.getString("genero"));
+                dto.setTipo(fav.getString("tipo"));
+                dto.setFechaAgregacion(fav.getDate("fechaAgregacion"));
+                resultado.add(dto);
+               } 
+        return resultado;
     }
 
     /**

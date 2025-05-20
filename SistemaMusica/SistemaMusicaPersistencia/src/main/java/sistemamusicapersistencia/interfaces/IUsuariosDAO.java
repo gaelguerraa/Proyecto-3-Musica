@@ -6,6 +6,8 @@ package sistemamusicapersistencia.interfaces;
 
 import java.util.Date;
 import java.util.List;
+import org.bson.Document;
+import org.bson.conversions.Bson;
 import sistemamusica.dtos.AlbumFavoritoDTO;
 import sistemamusica.dtos.ArtistaFavoritoDTO;
 import sistemamusica.dtos.CancionFavoritaDTO;
@@ -30,12 +32,12 @@ public interface IUsuariosDAO {
     
     public abstract boolean agregarFavorito(String idUsuario, FavoritoDTO favoritoDTO);
     public abstract boolean eliminarFavorito(String idUsuario, String idContenido);
-    public abstract List<AlbumFavoritoDTO> obtenerAlbumesFavoritos(String idUsario, String nombreAlbum);
-    public abstract List<ArtistaFavoritoDTO> obtenerArtistasFavoritos(String idUsuario, String nombreArtista);
-    public abstract List<CancionFavoritaDTO> obtenerCancionesFavoritas(String idUsuario, String nombreCancion);
-    public abstract List<GeneroFavoritoDTO> obtenerGenerosFavoritos(String idUsuario, String genero);
-    public abstract List<GeneroFavoritoDTO> consultarFavoritosPorRangoFechas(String idUsuario, Date fechaInicio, Date fechaFin);
-    public abstract List<GeneroFavoritoDTO> obtenerTodosFavoritos(String idUsuario);
+    public abstract List<Document> obtenerAlbumesFavoritos(String idUsario, String nombreAlbum);
+    public abstract List<Document> obtenerArtistasFavoritos(String idUsuario, String nombreArtista);
+    public abstract List<Document> obtenerCancionesFavoritas(String idUsuario, String nombreCancion);
+    public abstract List<Document> obtenerGenerosFavoritos(String idUsuario, String genero);
+    public abstract List<Document> consultarFavoritosPorRangoFechas(String idUsuario, Date fechaInicio, Date fechaFin);
+    public abstract List<Document> obtenerTodosFavoritos(String idUsuario);
     public abstract List<Favorito> consultarFavoritos(String idUsuario);
     
     public abstract void agregarGeneroRestringido(String idUsuario, String genero);

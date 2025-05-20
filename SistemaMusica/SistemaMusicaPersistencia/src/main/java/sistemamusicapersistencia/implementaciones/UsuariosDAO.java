@@ -267,7 +267,7 @@ public class UsuariosDAO implements IUsuariosDAO {
     }
     
     @Override
-    public List<ArtistaFavoritoDTO> obtenerArtistasFavoritos(String idUsuario, String nombreArtista) {
+    public List<Document> obtenerArtistasFavoritos(String idUsuario, String nombreArtista) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Document> usuarios = db.getCollection(COLECCION);
 
@@ -290,24 +290,16 @@ public class UsuariosDAO implements IUsuariosDAO {
 
         ))
     );
-        List<ArtistaFavoritoDTO> resultado = new ArrayList<>();
+        List<Document> resultado = new ArrayList<>();
         for (Document doc : usuarios.aggregate(pipeline)) {
-            ArtistaFavoritoDTO dto = new ArtistaFavoritoDTO();
-            dto.setIdFavorito(doc.getObjectId("idFavorito").toString());
-            dto.setIdArtista(doc.getObjectId("idArtista").toString());
-            dto.setNombreArtista(doc.getString("nombreArtista"));
-            dto.setTipoArtista(doc.getString("tipoArtista"));
-            dto.setGeneroArtista(doc.getString("generoArtista"));
-            dto.setFechaAgregacion(doc.getDate("fechaAgregacion"));
-            resultado.add(dto);
+            resultado.add(doc);
         }
-
         return resultado;
     }
 
 
     @Override
-    public List<AlbumFavoritoDTO> obtenerAlbumesFavoritos(String idUsuario, String nombreAlbum ) {
+    public List<Document> obtenerAlbumesFavoritos(String idUsuario, String nombreAlbum ) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Document> usuarios = db.getCollection(COLECCION);
         
@@ -333,28 +325,17 @@ public class UsuariosDAO implements IUsuariosDAO {
 
         ))
     );
-
-        List<AlbumFavoritoDTO> resultado = new ArrayList<>();
+        List<Document> resultado = new ArrayList<>();
         for (Document doc : usuarios.aggregate(pipeline)) {
-            AlbumFavoritoDTO dto = new AlbumFavoritoDTO();
-            dto.setIdFavorito(doc.getObjectId("idFavorito").toString());
-            dto.setIdAlbum(doc.getObjectId("idAlbum").toString());
-            dto.setNombreAlbum(doc.getString("nombreAlbum"));
-            dto.setNombreArtista(doc.getString("nombreArtista"));
-            dto.setGenero(doc.getString("genero"));
-            dto.setFechaLanzamiento(doc.getDate("fechaLanzamiento"));
-            dto.setFechaAgregacion(doc.getDate("fechaAgregacion"));
-             resultado.add(dto);
+            resultado.add(doc);
         }
-
         return resultado;
 
-
-        
+               
     }
     
     @Override
-    public List<CancionFavoritaDTO> obtenerCancionesFavoritas(String idUsuario, String nombreCancion) {
+    public List<Document> obtenerCancionesFavoritas(String idUsuario, String nombreCancion) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Document> usuarios = db.getCollection(COLECCION);
         
@@ -383,110 +364,62 @@ public class UsuariosDAO implements IUsuariosDAO {
 
         ))
         );
-
-        List<CancionFavoritaDTO> resultado = new ArrayList<>();
+        List<Document> resultado = new ArrayList<>();
         for (Document doc : usuarios.aggregate(pipeline)) {
-            CancionFavoritaDTO dto = new CancionFavoritaDTO();
-            dto.setIdFavorito(doc.getObjectId("idFavorito").toString());
-            dto.setIdCancion(doc.getObjectId("idCancion").toString());
-            dto.setTitulo(doc.getString("titulo"));
-            dto.setDuracion(doc.getDouble("duracion").floatValue());
-            dto.setNombreArtista(doc.getString("nombreArtista"));
-            dto.setNombreAlbum(doc.getString("nombreAlbum"));
-            dto.setGenero(doc.getString("genero"));
-            dto.setFechaAgregacion(doc.getDate("fechaAgregacion"));
-            resultado.add(dto);
+            resultado.add(doc);
         }
-
         return resultado;
+        
 
     }
     
     @Override
-    public List<GeneroFavoritoDTO> obtenerGenerosFavoritos(String idUsuario, String genero) {
+    public List<Document> obtenerGenerosFavoritos(String idUsuario, String genero) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Document> usuarios = db.getCollection(COLECCION); 
 
         Document usuario = usuarios.find(Filters.eq("_id", new ObjectId(idUsuario))).first();
-        List<GeneroFavoritoDTO> resultado = new ArrayList<>();
-
-        if (usuario != null) {
+         if (usuario != null) {
             List<Document> favoritos = usuario.getList("favoritos", Document.class, new ArrayList<>());
 
-            for (Document fav : favoritos) {
-                String generoFav = fav.getString("genero");
-                if (generoFav != null && generoFav.toLowerCase().contains(genero.toLowerCase())) {
-                    GeneroFavoritoDTO dto = new GeneroFavoritoDTO();
-                    dto.setIdFavorito(fav.getObjectId("_id").toHexString());
-                    dto.setIdContenido(fav.getObjectId("idContenido").toHexString());
-                    dto.setNombre(fav.getString("nombre"));
-                    dto.setGenero(generoFav);
-                    dto.setTipo(fav.getString("tipo"));
-                    dto.setFechaAgregacion(fav.getDate("fechaAgregacion"));
-                    resultado.add(dto);
-                }
-            }
+            return favoritos;
         }
 
-        return resultado;
+        return new ArrayList<>();
 
     }
     
     @Override
-    public List<GeneroFavoritoDTO> consultarFavoritosPorRangoFechas(String idUsuario, Date fechaInicio, Date fechaFin) {
+    public List<Document> consultarFavoritosPorRangoFechas(String idUsuario, Date fechaInicio, Date fechaFin) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Document> usuarios = db.getCollection(COLECCION);
         
-         Document usuario = usuarios.find(Filters.eq("_id", new ObjectId(idUsuario))).first();
-        List<GeneroFavoritoDTO> resultado = new ArrayList<>();
+        Document usuario = usuarios.find(Filters.eq("_id", new ObjectId(idUsuario))).first();
 
         if (usuario != null) {
             List<Document> favoritos = usuario.getList("favoritos", Document.class, new ArrayList<>());
 
-            for (Document fav : favoritos) {
-                Date fecha = fav.getDate("fechaAgregacion");
-                if (fecha != null && !fecha.before(fechaInicio) && !fecha.after(fechaFin)) {
-                    GeneroFavoritoDTO dto = new GeneroFavoritoDTO();
-                    dto.setIdFavorito(fav.getObjectId("_id").toHexString());
-                    dto.setIdContenido(fav.getObjectId("idContenido").toHexString());
-                    dto.setNombre(fav.getString("nombre"));
-                    dto.setGenero(fav.getString("genero"));
-                    dto.setTipo(fav.getString("tipo"));
-                    dto.setFechaAgregacion(fecha);
-                    resultado.add(dto);
-                }
-            }
+            return favoritos;
         }
 
-        return resultado;
+        return new ArrayList<>();
        
     }
     
     @Override
-    public List<GeneroFavoritoDTO> obtenerTodosFavoritos(String idUsuario) {
+    public List<Document> obtenerTodosFavoritos(String idUsuario) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Document> usuarios = db.getCollection(COLECCION);
 
         
         Document usuario = usuarios.find(Filters.eq("_id", new ObjectId(idUsuario))).first();
-        List<GeneroFavoritoDTO> resultado = new ArrayList<>();
-
         if (usuario != null) {
             List<Document> favoritos = usuario.getList("favoritos", Document.class, new ArrayList<>());
 
-            for (Document fav : favoritos) {
-                GeneroFavoritoDTO dto = new GeneroFavoritoDTO();
-                dto.setIdFavorito(fav.getObjectId("_id").toHexString());
-                dto.setIdContenido(fav.getObjectId("idContenido").toHexString());
-                dto.setNombre(fav.getString("nombre"));
-                dto.setGenero(fav.getString("genero"));
-                dto.setTipo(fav.getString("tipo"));
-                dto.setFechaAgregacion(fav.getDate("fechaAgregacion"));
-                resultado.add(dto);
-            }
+            return favoritos;
         }
 
-        return resultado;
+        return new ArrayList<>();
        
     }
 
