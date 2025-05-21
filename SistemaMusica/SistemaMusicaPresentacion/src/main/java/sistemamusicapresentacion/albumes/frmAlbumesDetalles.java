@@ -4,6 +4,7 @@
  */
 package sistemamusicapresentacion.albumes;
 
+import sistemamusica.dtos.AlbumDTO;
 import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
@@ -15,16 +16,21 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
 
     UsuarioDTO usuarioActual;
     ControladorUniversal universal;
-    
+    AlbumDTO albumRecibido;
+
     /**
      * Creates new form frmAlbumesDetalles
+     *
+     * @param universal
+     * @param albumRecibido
+     * @param usuarioActual
      */
-    public frmAlbumesDetalles(ControladorUniversal universal, UsuarioDTO usuarioActual) {
+    public frmAlbumesDetalles(ControladorUniversal universal, AlbumDTO albumRecibido, UsuarioDTO usuarioActual) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Album Detalles");
-        this.usuarioActual=usuarioActual;
-        this.universal=universal;
+        this.usuarioActual = usuarioActual;
+        this.universal = universal;
     }
 
     /**
@@ -305,7 +311,6 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
         universal.mostrarModuloPrincipalUsuarios(usuarioActual);
         this.dispose();
     }//GEN-LAST:event_btnUsuarioActionPerformed
-
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

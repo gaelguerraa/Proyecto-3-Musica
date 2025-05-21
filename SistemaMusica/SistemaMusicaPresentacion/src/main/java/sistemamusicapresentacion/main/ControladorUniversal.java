@@ -30,14 +30,10 @@ import sistemamusicapresentacion.usuario.frmUsuarioPrincipal;
  */
 public class ControladorUniversal {
 
-
     private frmIniciarSesion mostrarIniciarSesion;
     private frmRegistrarUsuario mostrarRegistrarUsuario;
-    
-
 
     public ControladorUniversal() {
-
 
     }
 
@@ -76,7 +72,7 @@ public class ControladorUniversal {
         frmFavoritosUsuario frmFavoritosUsuario = new frmFavoritosUsuario(this, usuario);
         frmFavoritosUsuario.setVisible(true);
     }
-    
+
     public void mostrarModuloFavoritosBusqueda(UsuarioDTO usuario) {
         frmFavoritosBusqueda frmFavoritosbusqueda = new frmFavoritosBusqueda(this, usuario);
         frmFavoritosbusqueda.setVisible(true);
@@ -102,52 +98,52 @@ public class ControladorUniversal {
         frmRestringidosUsuario.setVisible(true);
     }
 
-    public void mostrarArtistasPrincipal(UsuarioDTO usuario){
+    public void mostrarArtistasPrincipal(UsuarioDTO usuario) {
         frmArtistasPrincipal artistasPrincipal = new frmArtistasPrincipal(this, usuario);
         artistasPrincipal.setVisible(true);
     }
-    
-    public void mostrarAgregarSolista(UsuarioDTO usuario){
+
+    public void mostrarAgregarSolista(UsuarioDTO usuario) {
         frmAgregarSolista agregarSolista = new frmAgregarSolista(this, usuario);
         agregarSolista.setVisible(true);
     }
-    
-    public void mostrarAgregarBanda(UsuarioDTO usuario){
+
+    public void mostrarAgregarBanda(UsuarioDTO usuario) {
         frmAgregarBanda agregarBanda = new frmAgregarBanda(this, usuario);
         agregarBanda.setVisible(true);
     }
-    
-    public void mostrarAgregarIntegrante(Artista banda, UsuarioDTO usuario){
+
+    public void mostrarAgregarIntegrante(Artista banda, UsuarioDTO usuario) {
         frmAgregarIntegrante agregarIntegrante = new frmAgregarIntegrante(this, banda, usuario);
         agregarIntegrante.setVisible(true);
     }
-    
-    public void mostrarArtistasDetalles(ArtistaDTO artistaSeleccionado, UsuarioDTO usuario){
+
+    public void mostrarArtistasDetalles(ArtistaDTO artistaSeleccionado, UsuarioDTO usuario) {
         frmArtistasDetalles artistasDetalles = new frmArtistasDetalles(this, artistaSeleccionado, usuario);
         artistasDetalles.setVisible(true);
     }
 
-    public void mostrarCanciones(UsuarioDTO usuario){
-        frmCanciones cancionesVentana= new frmCanciones(this, usuario);
+    public void mostrarCanciones(UsuarioDTO usuario) {
+        frmCanciones cancionesVentana = new frmCanciones(this, usuario);
         cancionesVentana.setVisible(true);
     }
-    
-       public void mostrarAlbumesPrincipal(UsuarioDTO usuario){
+
+    public void mostrarAlbumesPrincipal(UsuarioDTO usuario) {
         frmAlbumesPrincipal albumesPrincipal = new frmAlbumesPrincipal(this, usuario);
         albumesPrincipal.setVisible(true);
     }
-    
-    public void mostrarAlbumDetalles(UsuarioDTO usuario){
-        frmAlbumesDetalles albumDetalles = new frmAlbumesDetalles(this, usuario);
+
+    public void mostrarAlbumDetalles(UsuarioDTO usuario, AlbumDTO album) {
+        frmAlbumesDetalles albumDetalles = new frmAlbumesDetalles(this, album, usuario);
         albumDetalles.setVisible(true);
-    } 
-    
-    public void mostrarAgregarAlbum(UsuarioDTO usuario){
-        frmAgregarAlbum agregarAlbum= new frmAgregarAlbum(this, usuario);
+    }
+
+    public void mostrarAgregarAlbum(UsuarioDTO usuario) {
+        frmAgregarAlbum agregarAlbum = new frmAgregarAlbum(this, usuario);
         agregarAlbum.setVisible(true);
     }
-    
-    public void mostrarAgregarCanciones(UsuarioDTO usuario, AlbumDTO album){
+
+    public void mostrarAgregarCanciones(UsuarioDTO usuario, AlbumDTO album) {
         frmAgregarCancionesAlbum agregarCanciones = new frmAgregarCancionesAlbum(this, usuario, album);
         agregarCanciones.setVisible(true);
     }

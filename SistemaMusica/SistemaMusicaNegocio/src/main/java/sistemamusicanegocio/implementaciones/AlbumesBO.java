@@ -216,9 +216,49 @@ public class AlbumesBO implements IAlbumesBO {
 
             return albumesDTO;
         } else {
-            throw new NegocioException("No se podueron obtener los albumes de la base de datos.");
+            throw new NegocioException("No se pudieron obtener los albumes de la base de datos.");
         }
 
+    }
+
+    /**
+     * Metodo para obtener un album de la base de datos y se obtiene por nombre
+     *
+     * @param nombreBuscado Nombre de album por el que se busca
+     * @return Album que coincide con el nombre
+     * @throws NegocioException Si ocurre una incidencia al obtener el album de
+     * la base de datos
+     */
+    @Override
+    public AlbumDTO obtenerAlbumPorNombre(String nombreBuscado) throws NegocioException {
+        Album album = albumesDAO.obtenerAlbumPorNombre(nombreBuscado);
+
+        if (album != null) {
+            AlbumDTO albumDTO = new AlbumDTO();
+            albumDTO.setNombre(album.getNombre());
+            albumDTO.setFechaLanzamiento(album.getFechaLanzamiento());
+            albumDTO.setGenero(album.getGenero());
+            albumDTO.setImagenPortada(album.getImagenPortada());
+            albumDTO.setIdArtista(album.getIdArtista().toString());
+            if (album.getCanciones() != null) {
+                List<CancionDTO> cancionesDTO = new ArrayList<>();
+
+                for (Cancion c : album.getCanciones()) {
+                    CancionDTO cancionDTO = new CancionDTO();
+                    cancionDTO.setTitulo(c.getTitulo());
+                    cancionDTO.setDuracion(c.getDuracion());
+                    cancionDTO.setIdArtista(c.getIdArtista().toString());
+
+                    cancionesDTO.add(cancionDTO);
+                }
+
+                albumDTO.setCanciones(cancionesDTO);
+            }
+
+            return albumDTO;
+        } else {
+            throw new NegocioException("No se pudo obtener el album.");
+        }
     }
 
     /**

@@ -38,7 +38,32 @@ public class frmAlbumesPrincipal extends javax.swing.JFrame {
         setTitle("Albumes");
         this.usuarioActual = usuarioActual;
         this.universal = universal;
+        seleccionarAlbum();
         llenarTablaAlbumes();
+    }
+
+    /**
+     * Mertodo para seleccionar un album de la tabla de albumes
+     */
+    private void seleccionarAlbum() {
+        this.tablaAlbumes.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int selectedRow = tablaAlbumes.getSelectedRow();
+                if (selectedRow != -1) {
+                    try {
+                        String nombreAlbum = (String) tablaAlbumes.getValueAt(selectedRow, 0);
+                        AlbumDTO albumSeleccionado = albumesBO.obtenerAlbumPorNombre(nombreAlbum);
+                        universal.mostrarAlbumDetalles(usuarioActual, albumSeleccionado);
+                        System.out.println(nombreAlbum);
+                        this.dispose();
+                    } catch (NegocioException ex) {
+                        JOptionPane.showMessageDialog(this,
+                                "Error al seleccionar album: " + ex.getMessage(),
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
     }
 
     private void llenarTablaAlbumes() {
@@ -74,13 +99,13 @@ public class frmAlbumesPrincipal extends javax.swing.JFrame {
             modeloTabla.setRowCount(0);
 
             SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-            
+
             for (AlbumDTO album : albumesConsultados) {
 
                 ArtistaDTO artistaId = artistasBO.buscarArtistaPorId(album.getIdArtista());
 
                 String fechaFormateada = formatoFecha.format(album.getFechaLanzamiento());
-                
+
                 Object[] fila = {
                     album.getNombre(),
                     album.getGenero(),

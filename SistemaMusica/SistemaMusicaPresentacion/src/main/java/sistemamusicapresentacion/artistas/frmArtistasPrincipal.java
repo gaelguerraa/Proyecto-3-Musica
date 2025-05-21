@@ -22,10 +22,10 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
     private IArtistasBO artistasBO = FabricaObjetosNegocio.crearArtistasBO();
     UsuarioDTO usuarioActual;
     ControladorUniversal universal;
-    
+
     String nombreArtista;
     ArtistaDTO artistaSeleccionado;
-    
+
     /**
      * Creates new form frmArtistasPrincipal
      */
@@ -33,21 +33,21 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Artistas");
-        this.universal=universal;
+        this.universal = universal;
         this.usuarioActual = usuarioActual;
         this.seleccionarArtista();
         LlenarCBGenero();
         this.LlenarTablaArtistas();
     }
-    
-    private void LlenarCBGenero(){
-        for(Genero tipo : Genero.values()){
-                CBGenero.addItem(tipo.toString());
-            }
+
+    private void LlenarCBGenero() {
+        for (Genero tipo : Genero.values()) {
+            CBGenero.addItem(tipo.toString());
+        }
     }
-    
-    private void seleccionarArtista(){
-            this.tablaArtistas.getSelectionModel().addListSelectionListener(e -> {
+
+    private void seleccionarArtista() {
+        this.tablaArtistas.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 int selectedRow = tablaArtistas.getSelectedRow();
                 if (selectedRow != -1) {
@@ -60,7 +60,7 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
             }
         });
     }
-    
+
     private void LlenarTablaArtistas() {
         List<ArtistaDTO> artistasConsultados;
 
@@ -72,15 +72,15 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
             DefaultTableModel modeloTabla = (DefaultTableModel) tablaArtistas.getModel();
             modeloTabla.setRowCount(0);
             for (ArtistaDTO a : artistasConsultados) {
-            Object[] fila = {
-                a.getNombre(),
-                a.getGenero(),
-                a.getTipo()
-            };
-            modeloTabla.addRow(fila);
-        }
+                Object[] fila = {
+                    a.getNombre(),
+                    a.getGenero(),
+                    a.getTipo()
+                };
+                modeloTabla.addRow(fila);
+            }
         } else if (!nombreBuscado.isEmpty() && generoSeleccionado.equals("CUALQUIERA")) {
-            artistasConsultados = artistasBO.buscarArtistasPorNombre(usuarioActual.getId(),nombreBuscado);
+            artistasConsultados = artistasBO.buscarArtistasPorNombre(usuarioActual.getId(), nombreBuscado);
             DefaultTableModel modeloTabla = (DefaultTableModel) tablaArtistas.getModel();
             modeloTabla.setRowCount(0);
             for (ArtistaDTO a : artistasConsultados) {
@@ -117,9 +117,7 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
             }
         }
 
-
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.

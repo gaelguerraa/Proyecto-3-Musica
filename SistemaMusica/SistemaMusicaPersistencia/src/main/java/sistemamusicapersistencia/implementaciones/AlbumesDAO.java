@@ -4,6 +4,7 @@
  */
 package sistemamusicapersistencia.implementaciones;
 
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
@@ -264,6 +265,35 @@ public class AlbumesDAO implements IAlbumesDAO {
         );
 
         return ejecutarConsultaAlbumes(pipeline, coleccion);
+    }
+
+    /**
+     * Metodo para obtener un album por nombre de la base de datos
+     *
+     * @param nombreBuscado Nombre por el que es buscado el album
+     * @return Album obtenido que comparte el mismo nombre
+     */
+    @Override
+    public Album obtenerAlbumPorNombre(String nombreBuscado) {
+        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Document> coleccion = baseDatos.getCollection(COLECCION);
+
+        List<Bson> pipeline = Arrays.asList(
+                Aggregates.match(Filters.eq(CAMPO_NOMBRE, nombreBuscado)),
+                Aggregates.lookup("artistas", CAMPO_ID_ARTISTA, CAMPO_ID, CAMPO_ARTISTA_INFO),
+                Aggregates.unwind("$" + CAMPO_ARTISTA_INFO),
+                Aggregates.project(Projections.fields(
+                        Projections.computed("id", "$" + CAMPO_ID),
+                        Projections.include(CAMPO_NOMBRE, CAMPO_FECHA_LANZAMIENTO, CAMPO_GENERO, CAMPO_IMAGEN_PORTADA),
+                        Projections.computed(CAMPO_ID_ARTISTA, "$" + CAMPO_ID_ARTISTA),
+                        Projections.computed("nombreArtista", "$" + CAMPO_ARTISTA_INFO + ".nombre"),
+                        Projections.include(CAMPO_CANCIONES)
+                )),
+                Aggregates.limit(1) // <-- Importante: limitar a un resultado
+        );
+
+        List<Album> resultado = ejecutarConsultaAlbumes(pipeline, coleccion);
+        return resultado.isEmpty() ? null : resultado.get(0);
     }
 
     /**

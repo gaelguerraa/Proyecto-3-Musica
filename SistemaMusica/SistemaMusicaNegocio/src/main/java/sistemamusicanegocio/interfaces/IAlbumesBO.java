@@ -59,6 +59,16 @@ public interface IAlbumesBO {
     public List<AlbumDTO> obtenerAlbumesPorNombre(String nombreBuscado) throws NegocioException;
 
     /**
+     * Metodo para obtener un album de la base de datos y se obtiene por nombre
+     *
+     * @param nombreBuscado Nombre de album por el que se busca
+     * @return Album que coincide con el nombre
+     * @throws NegocioException Si ocurre una incidencia al obtener el album de
+     * la base de datos
+     */
+    public AlbumDTO obtenerAlbumPorNombre(String nombreBuscado) throws NegocioException;
+
+    /**
      * Metodo para obtener todos los algumes de la base de datos y se obtiene
      * por fecha
      *
