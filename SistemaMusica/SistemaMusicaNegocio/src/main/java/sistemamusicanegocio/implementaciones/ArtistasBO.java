@@ -6,10 +6,12 @@ package sistemamusicanegocio.implementaciones;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.Document;
 import sistemamusica.dtos.ArtistaDTO;
 import sistemamusica.dtos.IntegranteDTO;
 import sistemamusicadominio.Artista;
 import sistemamusicadominio.Integrante;
+import sistemamusicadominio.RolIntegrante;
 import sistemamusicanegocio.exception.NegocioException;
 import sistemamusicanegocio.interfaces.IArtistasBO;
 import sistemamusicapersistencia.interfaces.IArtistasDAO;
@@ -68,7 +70,7 @@ public class ArtistasBO implements IArtistasBO {
      * @throws NegocioException Si los datos del integrante no son válidos.
      */
     @Override
-    public Integrante agregarIntegrante(String idArtista, IntegranteDTO nuevoIntegrante ) throws NegocioException{
+    public boolean agregarIntegrante(String idArtista, IntegranteDTO nuevoIntegrante ) throws NegocioException{
         if (nuevoIntegrante == null || nuevoIntegrante.getNombre() == null || nuevoIntegrante.getNombre().isEmpty()) {
             throw new NegocioException("El nombre del integrante no puede estar vacío.");
         }
@@ -213,17 +215,17 @@ public class ArtistasBO implements IArtistasBO {
      */
     @Override
     public List<IntegranteDTO> consultarTodosLosIntegrantes(String idArtista) {
-        List<Integrante> integrantes = artistasDAO.consultarTodosLosIntegrantes(idArtista);
+        List<Document> integrantes = artistasDAO.consultarTodosLosIntegrantes(idArtista);
 
         List<IntegranteDTO> integrantesDTO = new ArrayList<>();
 
         if (integrantes != null) {
-            for (Integrante i : integrantes) {
+            for (Document i : integrantes) {
                 IntegranteDTO dto = new IntegranteDTO();
-                dto.setNombre(i.getNombre());
-                dto.setRol(i.getRol());
-                dto.setFechaIngreso(i.getFechaIngreso());
-                dto.setFechaSalida(i.getFechaSalida());
+                dto.setNombre(i.getString("nombre"));
+                dto.setRol(RolIntegrante.valueOf(i.getString("rol")));
+                dto.setFechaIngreso(i.getDate("fechaIngreso"));
+                dto.setFechaSalida(i.getDate("fechaSalida")); // Puede ser null
 
                 integrantesDTO.add(dto);
             }
@@ -240,17 +242,17 @@ public class ArtistasBO implements IArtistasBO {
      */
     @Override
     public List<IntegranteDTO> consultarIntegrantesActivos(String idArtista) {
-        List<Integrante> integrantes = artistasDAO.consultarIntegrantesActivos(idArtista);
+        List<Document> integrantes = artistasDAO.consultarIntegrantesActivos(idArtista);
 
         List<IntegranteDTO> integrantesDTO = new ArrayList<>();
 
         if (integrantes != null) {
-            for (Integrante i : integrantes) {
+            for (Document i : integrantes) {
                 IntegranteDTO dto = new IntegranteDTO();
-                dto.setNombre(i.getNombre());
-                dto.setRol(i.getRol());
-                dto.setFechaIngreso(i.getFechaIngreso());
-                dto.setFechaSalida(i.getFechaSalida());
+                dto.setNombre(i.getString("nombre"));
+                dto.setRol(RolIntegrante.valueOf(i.getString("rol")));
+                dto.setFechaIngreso(i.getDate("fechaIngreso"));
+                dto.setFechaSalida(i.getDate("fechaSalida"));
 
                 integrantesDTO.add(dto);
             }

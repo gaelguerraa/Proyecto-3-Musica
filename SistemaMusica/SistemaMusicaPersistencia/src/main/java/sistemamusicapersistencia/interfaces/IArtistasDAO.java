@@ -5,6 +5,7 @@
 package sistemamusicapersistencia.interfaces;
 
 import java.util.List;
+import org.bson.Document;
 import sistemamusica.dtos.ArtistaDTO;
 import sistemamusica.dtos.IntegranteDTO;
 import sistemamusicadominio.Artista;
@@ -23,8 +24,8 @@ public interface IArtistasDAO {
     public abstract List<Artista> buscarArtistas(String idUsuario);
     public abstract Artista buscarArtistaPorNombre(String nombre);
     
-    public abstract Integrante agregarIntegrante(String idArtista, IntegranteDTO nuevoIntegrante);
-    public abstract List<Integrante> consultarTodosLosIntegrantes(String idArtista);
-    public abstract List<Integrante> consultarIntegrantesActivos(String idArtista);
+    public abstract boolean agregarIntegrante(String idArtista, IntegranteDTO nuevoIntegrante);
+    public abstract List<Document> consultarTodosLosIntegrantes(String idArtista);
+    public abstract List<Document> consultarIntegrantesActivos(String idArtista);
 
 }
