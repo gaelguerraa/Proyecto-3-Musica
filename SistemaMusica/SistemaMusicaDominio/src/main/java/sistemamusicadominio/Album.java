@@ -38,6 +38,16 @@ public class Album {
         this.canciones = canciones;
     }
 
+    public Album(String nombre, Date fechaLanzamiento, Genero genero, String imagenPortada, ObjectId idArtista) {
+        this.nombre = nombre;
+        this.fechaLanzamiento = fechaLanzamiento;
+        this.genero = genero;
+        this.imagenPortada = imagenPortada;
+        this.idArtista = idArtista;
+    }
+    
+    
+
     public ObjectId getId() {
         return id;
     }

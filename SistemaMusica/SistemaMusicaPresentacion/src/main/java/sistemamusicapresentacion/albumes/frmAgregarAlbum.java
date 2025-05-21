@@ -4,8 +4,16 @@
  */
 package sistemamusicapresentacion.albumes;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
+import sistemamusica.dtos.AlbumDTO;
+import sistemamusica.dtos.ArtistaDTO;
 import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicadominio.Genero;
+import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
+import sistemamusicanegocio.interfaces.IArtistasBO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
@@ -13,10 +21,11 @@ import sistemamusicapresentacion.main.ControladorUniversal;
  * @author gael_
  */
 public class frmAgregarAlbum extends javax.swing.JFrame {
-    
+
     UsuarioDTO usuario;
+    private IArtistasBO artistasBO = FabricaObjetosNegocio.crearArtistasBO();
     ControladorUniversal controlador;
-    
+
     /**
      * Creates new form frmAgregarAlbum
      */
@@ -24,15 +33,44 @@ public class frmAgregarAlbum extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Agregar Album");
-        this.controlador=controlador;
-        this.usuario=usuario;
+        this.controlador = controlador;
+        this.usuario = usuario;
         LlenarCBGenero();
+        llenarComboBoxArtistas();
     }
-    
-    public void LlenarCBGenero(){
-        for(Genero tipo : Genero.values()){
-                comboboxGenero.addItem(tipo.toString());
-            }
+
+    private void LlenarCBGenero() {
+        for (Genero tipo : Genero.values()) {
+            comboboxGenero.addItem(tipo.toString());
+        }
+    }
+
+    private String obtenerRutaImagen() {
+        return null;
+    }
+
+    /**
+     * Metodo para llenar el comboBox de artistas
+     */
+    private void llenarComboBoxArtistas() {
+        List<ArtistaDTO> artistas = artistasBO.buscarArtistas(usuario.getId());
+
+        comboboxArtista.removeAllItems();
+
+        for (ArtistaDTO a : artistas) {
+            comboboxArtista.addItem(a.getNombre());
+        }
+    }
+
+    /**
+     * Metodo para otbener el id del artista segun su nombre
+     *
+     * @param nombreArtista Nombre del artista
+     * @return ID del artista en forma de String
+     */
+    private String obtenerIdArtistaString(String nombreArtista) {
+        ArtistaDTO artista = artistasBO.buscarArtistaPorNombre(nombreArtista);
+        return artista.getId();
     }
 
     /**
@@ -344,7 +382,24 @@ public class frmAgregarAlbum extends javax.swing.JFrame {
     }//GEN-LAST:event_btnFotoActionPerformed
 
     private void btnAgregarAlbumContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarAlbumContinuarActionPerformed
-        controlador.mostrarAlbumesPrincipal(usuario);
+        String nombreAlbum = txtNombre.getText();
+        String generoSeleccionadoComboBox = (String) comboboxGenero.getSelectedItem();
+        Genero generoSeleccionadoAlbum = Genero.valueOf(generoSeleccionadoComboBox);
+        String artistaSeleccionadoComboBox = (String) comboboxArtista.getSelectedItem();
+        String artistaSeleccionadoAlbum = obtenerIdArtistaString(artistaSeleccionadoComboBox);
+        LocalDate localDate = fechaLanzamiento.getDate();
+        Date fechaSalidaAlbum = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        String rutaImagenAlbum = obtenerRutaImagen();
+
+        AlbumDTO albumEnviar = new AlbumDTO(
+                nombreAlbum,
+                fechaSalidaAlbum,
+                generoSeleccionadoAlbum,
+                rutaImagenAlbum,
+                artistaSeleccionadoAlbum
+        );
+
+        controlador.mostrarAgregarCanciones(usuario, albumEnviar);
         this.dispose();
     }//GEN-LAST:event_btnAgregarAlbumContinuarActionPerformed
 
@@ -356,7 +411,6 @@ public class frmAgregarAlbum extends javax.swing.JFrame {
     private void comboboxArtistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboboxArtistaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_comboboxArtistaActionPerformed
-
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

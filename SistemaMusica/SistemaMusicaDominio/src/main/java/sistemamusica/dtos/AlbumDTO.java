@@ -4,7 +4,6 @@
  */
 package sistemamusica.dtos;
 
-
 import java.util.Date;
 import java.util.List;
 import sistemamusicadominio.Cancion;
@@ -15,6 +14,7 @@ import sistemamusicadominio.Genero;
  * @author gael_
  */
 public class AlbumDTO {
+
     private String id;
     private String nombre;
     private Date fechaLanzamiento;
@@ -33,6 +33,14 @@ public class AlbumDTO {
         this.imagenPortada = imagenPortada;
         this.idArtista = idArtista;
         this.canciones = canciones;
+    }
+
+    public AlbumDTO(String nombre, Date fechaLanzamiento, Genero genero, String imagenPortada, String idArtista) {
+        this.nombre = nombre;
+        this.fechaLanzamiento = fechaLanzamiento;
+        this.genero = genero;
+        this.imagenPortada = imagenPortada;
+        this.idArtista = idArtista;
     }
 
     public String getId() {
@@ -90,6 +98,5 @@ public class AlbumDTO {
     public void setCanciones(List<CancionDTO> canciones) {
         this.canciones = canciones;
     }
-    
-    
+
 }

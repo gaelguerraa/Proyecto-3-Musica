@@ -67,6 +67,7 @@ public class ArtistasDAO implements IArtistasDAO {
      * Se buscaran los artistas que su nombre coincida con el nombre introducido por el usuario, siendo insensible a mayusculas o minusculas
      * Se guardaran los artistas que coincidieron con el nombre en una lista y se regresara la lista. 
      * 
+     * @param idUsuario
      * @param nombre
      * @return lista de artisas
      */
@@ -91,6 +92,7 @@ public class ArtistasDAO implements IArtistasDAO {
      * Metodo para buscar artistas con un genero
      * Accede a la coleccion "artistas", crea un nuevo documento para filtrar los resultados con base al genero del artista
      * Se buscaran los artistas que su genero coincida con el genero introducido y se guardaran en una lista y se regresara.
+     * @param idUsuario
      * @param genero
      * @return lista de artistas
      */
@@ -118,6 +120,7 @@ public class ArtistasDAO implements IArtistasDAO {
      * Accede a la coleccion "artistas", crea un nuevo documento para filtrar los resultados con base al genero y al nombre del artista
      * Se buscaran los artistas que tengan el mismo genero que el introducido y el mismo nombre que el introducido siendo insensible a mayusculas o minusculas
      * Se guardaran los resultados en una lista y se regresara.
+     * @param idUsuario
      * @param nombre
      * @param genero
      * @return 
@@ -145,6 +148,7 @@ public class ArtistasDAO implements IArtistasDAO {
     /**
      * Metodo que busca todos los artistas
      * Accede a la coleccion atristas y regresa todos los artistas
+     * @param idUsuario
      * @return lista de artistas
      */
     @Override

@@ -4,7 +4,15 @@
  */
 package sistemamusicapresentacion.albumes;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import sistemamusica.dtos.AlbumDTO;
+import sistemamusica.dtos.CancionDTO;
 import sistemamusica.dtos.UsuarioDTO;
+import sistemamusicanegocio.exception.NegocioException;
+import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
+import sistemamusicanegocio.interfaces.IAlbumesBO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
@@ -13,18 +21,43 @@ import sistemamusicapresentacion.main.ControladorUniversal;
  */
 public class frmAgregarCancionesAlbum extends javax.swing.JFrame {
 
+    private final IAlbumesBO albumesBO = FabricaObjetosNegocio.crearAlbumesBO();
     UsuarioDTO usuario;
     ControladorUniversal controlador;
-    
+    AlbumDTO albumRecibido;
+    private List<CancionDTO> cancionesAgregar = new ArrayList<>();
+
     /**
      * Creates new form frmAgregarCancionesAlbum
+     *
+     * @param controlador Controlador
+     * @param usuario Usuario
+     * @param album Album
      */
-    public frmAgregarCancionesAlbum(ControladorUniversal controlador, UsuarioDTO usuario) {
+    public frmAgregarCancionesAlbum(ControladorUniversal controlador, UsuarioDTO usuario, AlbumDTO album) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Agregar Cancion Album");
-        this.usuario=usuario;
-        this.controlador=controlador;
+        this.albumRecibido = album;
+        this.usuario = usuario;
+        this.controlador = controlador;
+    }
+
+    /**
+     * Metodo para facilitar la lectura de la operacion realizada
+     *
+     * @param cancion Cancion a enlistar
+     */
+    private void enlistarCancion(CancionDTO cancion) {
+        this.cancionesAgregar.add(cancion);
+    }
+
+    /**
+     * Metodo para facilitar la lectura de la operacion realizada
+     */
+    private void limpiarCampos() {
+        txtNombreCancion.setText("");
+        txtDuracion.setText("");
     }
 
     /**
@@ -182,12 +215,6 @@ public class frmAgregarCancionesAlbum extends javax.swing.JFrame {
         labelDuracion.setForeground(new java.awt.Color(30, 215, 96));
         labelDuracion.setText("duracion:");
 
-        txtDuracion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDuracionActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout panelFondo2Layout = new javax.swing.GroupLayout(panelFondo2);
         panelFondo2.setLayout(panelFondo2Layout);
         panelFondo2Layout.setHorizontalGroup(
@@ -202,7 +229,7 @@ public class frmAgregarCancionesAlbum extends javax.swing.JFrame {
                         .addComponent(labelMusicio1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(24, 24, 24))
                     .addGroup(panelFondo2Layout.createSequentialGroup()
-                        .addGap(278, 278, 278)
+                        .addGap(262, 262, 262)
                         .addGroup(panelFondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtNombreCancion, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(labelNombreCancin)
@@ -221,18 +248,18 @@ public class frmAgregarCancionesAlbum extends javax.swing.JFrame {
                     .addGroup(panelFondo2Layout.createSequentialGroup()
                         .addGap(47, 47, 47)
                         .addComponent(textoAgregarCancion, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(37, 37, 37)
+                        .addGap(39, 39, 39)
                         .addComponent(labelNombreCancin)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtNombreCancion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(labelDuracion)
-                .addGap(18, 18, 18)
-                .addComponent(txtDuracion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(53, 53, 53)
-                .addComponent(btnAgregarCancionAlbum)
-                .addGap(38, 38, 38)
-                .addComponent(btnTerminar)
+                        .addComponent(txtNombreCancion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(labelDuracion)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtDuracion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(53, 53, 53)
+                        .addComponent(btnAgregarCancionAlbum)
+                        .addGap(38, 38, 38)
+                        .addComponent(btnTerminar)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -263,17 +290,48 @@ public class frmAgregarCancionesAlbum extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUsuarioActionPerformed
 
     private void btnTerminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminarActionPerformed
-        controlador.mostrarAlbumesPrincipal(usuario);
-        this.dispose();
+
+        try {
+            AlbumDTO albumAgregar = new AlbumDTO(
+                    albumRecibido.getNombre(),
+                    albumRecibido.getFechaLanzamiento(),
+                    albumRecibido.getGenero(),
+                    albumRecibido.getImagenPortada(),
+                    albumRecibido.getIdArtista(),
+                    cancionesAgregar
+            );
+
+            AlbumDTO albumObtenido = albumesBO.agregarAlbum(albumAgregar);
+
+            if (albumObtenido != null) {
+                System.out.println("Album Obtenido: " + albumObtenido.toString());
+            }
+
+            JOptionPane.showMessageDialog(this, "Album agregado exitosamente.", "Info.",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            controlador.mostrarAlbumesPrincipal(usuario);
+            this.dispose();
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Info.",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_btnTerminarActionPerformed
 
     private void btnAgregarCancionAlbumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCancionAlbumActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAgregarCancionAlbumActionPerformed
+        String nombreCancion = txtNombreCancion.getText();
+        float duracionCancion = Float.parseFloat(txtDuracion.getText());
+        String idArtistaObtenido = albumRecibido.getIdArtista();
 
-    private void txtDuracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDuracionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDuracionActionPerformed
+        CancionDTO cancionEnlistar = new CancionDTO();
+        cancionEnlistar.setTitulo(nombreCancion);
+        cancionEnlistar.setDuracion(duracionCancion);
+        cancionEnlistar.setIdArtista(idArtistaObtenido);
+
+        enlistarCancion(cancionEnlistar);
+
+        limpiarCampos();
+    }//GEN-LAST:event_btnAgregarCancionAlbumActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
