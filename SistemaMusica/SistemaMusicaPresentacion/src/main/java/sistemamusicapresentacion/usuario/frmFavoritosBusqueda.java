@@ -39,13 +39,13 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Busqueda Favoritos");
-        mostrarTodo();
+        this.mostrarTodo();
         LlenarComboboxGenero();
         buscarPorGenero();
 
     }
     
-    public void LlenarComboboxGenero(){
+    private void LlenarComboboxGenero(){
         cbGenero.removeAllItems(); 
         for(Genero genero : Genero.values()){
             cbGenero.addItem(genero.name());
@@ -54,7 +54,7 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
     
 
     
-    public void mostrarTodo(){
+    private void mostrarTodo(){
         String idUsuario = usuario.getId();
         List<GeneroFavoritoDTO> resultados = usuariosBO.obtenerTodosFavoritos(idUsuario);
         
@@ -65,7 +65,6 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
 
             for(GeneroFavoritoDTO gf : resultados) {
                 modelo.addRow(new Object[]{
-                    gf.getIdFavorito(),
                     gf.getIdContenido(),
                     gf.getTipo(),
                     gf.getNombre(),
@@ -75,7 +74,7 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
             }
     }
 
-    public void buscarPorGenero() {
+    private void buscarPorGenero() {
     
             String idUsuario = usuario.getId();
             String genero = (String) this.cbGenero.getSelectedItem();
@@ -89,7 +88,6 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
 
             for(GeneroFavoritoDTO gf : resultados) {
                 modelo.addRow(new Object[]{
-                    gf.getIdFavorito(),
                     gf.getIdContenido(),
                     gf.getTipo(),
                     gf.getNombre(),
@@ -123,7 +121,6 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
 
             for(GeneroFavoritoDTO gf : resultados) {
                 modelo.addRow(new Object[]{
-                    gf.getIdFavorito(),
                     gf.getIdContenido(),
                     gf.getTipo(),
                     gf.getNombre(),
@@ -140,7 +137,7 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
                 return null;
             }
         
-        String id = (String) tablaFavoritos.getValueAt(filaSeleccionada, 1); 
+        String id = (String) tablaFavoritos.getValueAt(filaSeleccionada, 0); 
         return id;
     }
     
@@ -201,44 +198,44 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
 
         panelVerde.setBackground(new java.awt.Color(30, 215, 96));
 
-        btnArtistas.setBackground(new java.awt.Color(30, 215, 96));
         btnArtistas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/BlackStar.png"))); // NOI18N
+        btnArtistas.setBackground(new java.awt.Color(30, 215, 96));
         btnArtistas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnArtistasActionPerformed(evt);
             }
         });
 
-        labelArtistas.setFont(new java.awt.Font("Gotham Black", 0, 12)); // NOI18N
         labelArtistas.setText("Artistas");
+        labelArtistas.setFont(new java.awt.Font("Gotham Black", 0, 12)); // NOI18N
 
-        labelAlbumes.setFont(new java.awt.Font("Gotham Black", 0, 12)); // NOI18N
         labelAlbumes.setText("Albumes");
+        labelAlbumes.setFont(new java.awt.Font("Gotham Black", 0, 12)); // NOI18N
 
-        btnAlbumes.setBackground(new java.awt.Color(30, 215, 96));
         btnAlbumes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/musica.png"))); // NOI18N
+        btnAlbumes.setBackground(new java.awt.Color(30, 215, 96));
         btnAlbumes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAlbumesActionPerformed(evt);
             }
         });
 
-        btnCanciones.setBackground(new java.awt.Color(30, 215, 96));
         btnCanciones.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/disco.png"))); // NOI18N
+        btnCanciones.setBackground(new java.awt.Color(30, 215, 96));
         btnCanciones.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancionesActionPerformed(evt);
             }
         });
 
-        labelCanciones.setFont(new java.awt.Font("Gotham Black", 0, 12)); // NOI18N
         labelCanciones.setText("Canciones");
+        labelCanciones.setFont(new java.awt.Font("Gotham Black", 0, 12)); // NOI18N
 
-        labelUsuario.setFont(new java.awt.Font("Gotham Black", 0, 12)); // NOI18N
         labelUsuario.setText("Usuario");
+        labelUsuario.setFont(new java.awt.Font("Gotham Black", 0, 12)); // NOI18N
 
-        btnUsuario.setBackground(new java.awt.Color(30, 215, 96));
         btnUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/usuario.png"))); // NOI18N
+        btnUsuario.setBackground(new java.awt.Color(30, 215, 96));
 
         javax.swing.GroupLayout panelVerdeLayout = new javax.swing.GroupLayout(panelVerde);
         panelVerde.setLayout(panelVerdeLayout);
@@ -286,27 +283,27 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
                 .addGap(15, 15, 15))
         );
 
+        labelMusicio1.setText("Music.io");
         labelMusicio1.setFont(new java.awt.Font("Gotham Black", 1, 36)); // NOI18N
         labelMusicio1.setForeground(new java.awt.Color(30, 215, 96));
-        labelMusicio1.setText("Music.io");
 
+        labelFavoritos.setText("Favoritos");
         labelFavoritos.setFont(new java.awt.Font("Gotham Black", 1, 36)); // NOI18N
         labelFavoritos.setForeground(new java.awt.Color(30, 215, 96));
-        labelFavoritos.setText("Favoritos");
 
         tablaFavoritos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Id Favorito", "Id Contenido", "Tipo", "Nombre", "Genero", "Fecha de Agregacion"
+                "Id Contenido", "Tipo", "Nombre", "Genero", "Fecha de Agregacion"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -320,52 +317,52 @@ public class frmFavoritosBusqueda extends javax.swing.JFrame {
         tablaFavoritos.setFont(new java.awt.Font("Gotham Black", 1, 12)); // NOI18N
         jScrollPane1.setViewportView(tablaFavoritos);
 
+        btnBorrarFavorito.setText("Borrar Favorito");
         btnBorrarFavorito.setBackground(new java.awt.Color(30, 215, 96));
         btnBorrarFavorito.setFont(new java.awt.Font("Gotham Black", 1, 18)); // NOI18N
-        btnBorrarFavorito.setText("Borrar Favorito");
         btnBorrarFavorito.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBorrarFavoritoActionPerformed(evt);
             }
         });
 
+        btnVolver.setText("Volver");
         btnVolver.setBackground(new java.awt.Color(30, 215, 96));
         btnVolver.setFont(new java.awt.Font("Gotham Black", 1, 18)); // NOI18N
-        btnVolver.setText("Volver");
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVolverActionPerformed(evt);
             }
         });
 
+        cbGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ARTISTAS", "CANCIONES", "ALBUMES" }));
         cbGenero.setBackground(new java.awt.Color(30, 215, 96));
         cbGenero.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
-        cbGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ARTISTAS", "CANCIONES", "ALBUMES" }));
 
+        btnBuscar1.setText("Buscar por Genero");
         btnBuscar1.setBackground(new java.awt.Color(0, 0, 0));
+        btnBuscar1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
         btnBuscar1.setFont(new java.awt.Font("Gotham Black", 0, 10)); // NOI18N
         btnBuscar1.setForeground(new java.awt.Color(30, 215, 96));
-        btnBuscar1.setText("Buscar por Genero");
-        btnBuscar1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
         btnBuscar1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscar1ActionPerformed(evt);
             }
         });
 
+        filtro.setText("genero:");
         filtro.setFont(new java.awt.Font("Gotham Bold", 1, 14)); // NOI18N
         filtro.setForeground(new java.awt.Color(30, 215, 96));
-        filtro.setText("genero:");
 
+        filtro1.setText("fechas de agregacion: ");
         filtro1.setFont(new java.awt.Font("Gotham Bold", 1, 14)); // NOI18N
         filtro1.setForeground(new java.awt.Color(30, 215, 96));
-        filtro1.setText("fechas de agregacion: ");
 
+        btnBuscarFecha.setText("Buscar por Fecha");
         btnBuscarFecha.setBackground(new java.awt.Color(0, 0, 0));
+        btnBuscarFecha.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
         btnBuscarFecha.setFont(new java.awt.Font("Gotham Black", 0, 10)); // NOI18N
         btnBuscarFecha.setForeground(new java.awt.Color(30, 215, 96));
-        btnBuscarFecha.setText("Buscar por Fecha");
-        btnBuscarFecha.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
         btnBuscarFecha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarFechaActionPerformed(evt);

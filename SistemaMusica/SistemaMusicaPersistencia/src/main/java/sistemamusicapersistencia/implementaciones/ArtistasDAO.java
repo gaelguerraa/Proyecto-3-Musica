@@ -216,11 +216,12 @@ public class ArtistasDAO implements IArtistasDAO {
             integranteDoc.append("fechaSalida", nuevoIntegrante.getFechaSalida());
         }
 
-        // se realiza el push dentro del documento del artista
+        // convierte el string idArtista en un objectid
+        // y agrega el integrante en el documento con ese mismo id
         ObjectId id = new ObjectId(idArtista);
         UpdateResult result = coleccion.updateOne(
-            Filters.eq(CAMPO_ID, id), 
-            Updates.push("integrantes", integranteDoc));
+            Filters.eq(CAMPO_ID, id), //filtro
+            Updates.push("integrantes", integranteDoc)); //accion
 
 
 
@@ -303,6 +304,7 @@ public class ArtistasDAO implements IArtistasDAO {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Usuario> coleccion = db.getCollection("usuarios", Usuario.class);
 
+        //si el usuario existe y tiene generos en restricciones devolver las restricciones y agregarlas en una lista
         Usuario usuario = coleccion.find(new Document("_id", new ObjectId(idUsuario))).first();
         return (usuario != null && usuario.getRestricciones() != null)
                 ? usuario.getRestricciones()
