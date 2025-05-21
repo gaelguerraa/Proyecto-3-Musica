@@ -40,7 +40,7 @@ public class frmArtistasPrincipal extends javax.swing.JFrame {
         this.LlenarTablaArtistas();
     }
     
-    public void LlenarCBGenero(){
+    private void LlenarCBGenero(){
         for(Genero tipo : Genero.values()){
                 CBGenero.addItem(tipo.toString());
             }

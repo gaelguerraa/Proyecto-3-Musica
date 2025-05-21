@@ -18,14 +18,23 @@ import sistemamusicadominio.Integrante;
 public interface IArtistasDAO {
 
     public abstract Artista registrarArtista(ArtistaDTO nuevoArtista);
+
     public abstract List<Artista> buscarArtistasPorNombre(String idUsuario, String nombre);
+
+    public abstract Artista buscarArtistaPorId(String idArtista);
+
     public abstract List<Artista> buscarArtistasPorGenero(String idUsuario, String genero);
+
     public abstract List<Artista> buscarArtistasPorNombreGenero(String idUsuario, String nombre, String genero);
+
     public abstract List<Artista> buscarArtistas(String idUsuario);
+
     public abstract Artista buscarArtistaPorNombre(String nombre);
-    
+
     public abstract boolean agregarIntegrante(String idArtista, IntegranteDTO nuevoIntegrante);
+
     public abstract List<Document> consultarTodosLosIntegrantes(String idArtista);
+
     public abstract List<Document> consultarIntegrantesActivos(String idArtista);
 
 }

@@ -175,7 +175,7 @@ public class AlbumesDAO implements IAlbumesDAO {
         MongoCollection<Document> coleccion = baseDatos.getCollection(COLECCION);
 
         List<Bson> pipeline = Arrays.asList(
-                Aggregates.match(Filters.eq(CAMPO_GENERO, generoBuscado)),
+                Aggregates.match(Filters.regex(CAMPO_GENERO, ".*" + generoBuscado + ".*", "i")),
                 Aggregates.lookup("artistas", CAMPO_ID_ARTISTA, CAMPO_ID, CAMPO_ARTISTA_INFO),
                 Aggregates.unwind("$" + CAMPO_ARTISTA_INFO),
                 Aggregates.project(Projections.fields(

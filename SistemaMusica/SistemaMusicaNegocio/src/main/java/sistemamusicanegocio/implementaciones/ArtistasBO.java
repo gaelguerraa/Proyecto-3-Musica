@@ -23,29 +23,31 @@ import sistemamusicapersistencia.interfaces.IArtistasDAO;
 public class ArtistasBO implements IArtistasBO {
 
     IArtistasDAO artistasDAO;
-    
+
     /**
      * Constructor que recibe una implementación de IArtistasDAO.
-     * 
-     * @param artistasDAO Objeto que implementa la interfaz IArtistasDAO para el acceso a datos.
+     *
+     * @param artistasDAO Objeto que implementa la interfaz IArtistasDAO para el
+     * acceso a datos.
      */
     public ArtistasBO(IArtistasDAO artistasDAO) {
-        this.artistasDAO=artistasDAO;
+        this.artistasDAO = artistasDAO;
     }
 
     /**
      * Registra un nuevo artista después de validar sus datos.
-     * 
+     *
      * @param nuevoArtista DTO con la información del artista a registrar.
      * @return El artista registrado.
-     * @throws NegocioException Si los datos del artista no son válidos o si ya existe un artista con ese nombre.
-     */   
+     * @throws NegocioException Si los datos del artista no son válidos o si ya
+     * existe un artista con ese nombre.
+     */
     @Override
     public Artista registrarArtista(ArtistaDTO nuevoArtista) throws NegocioException {
         if (nuevoArtista == null || nuevoArtista.getNombre() == null || nuevoArtista.getNombre().isEmpty()) {
             throw new NegocioException("El nombre de la banda no puede estar vacío.");
         }
-        if (nuevoArtista.getGenero() == null || nuevoArtista.getGenero()== null) {
+        if (nuevoArtista.getGenero() == null || nuevoArtista.getGenero() == null) {
             throw new NegocioException("El género de la banda no puede estar vacío.");
         }
         if (!nuevoArtista.getNombre().matches("^[a-zA-Z0-9 ]+$")) {
@@ -60,17 +62,17 @@ public class ArtistasBO implements IArtistasBO {
         }
         return artistasDAO.registrarArtista(nuevoArtista);
     }
-    
+
     /**
      * Agrega un nuevo integrante a un artista existente.
-     * 
+     *
      * @param idArtista ID del artista al que se agregará el integrante.
      * @param nuevoIntegrante DTO con la información del nuevo integrante.
      * @return El integrante agregado.
      * @throws NegocioException Si los datos del integrante no son válidos.
      */
     @Override
-    public boolean agregarIntegrante(String idArtista, IntegranteDTO nuevoIntegrante ) throws NegocioException{
+    public boolean agregarIntegrante(String idArtista, IntegranteDTO nuevoIntegrante) throws NegocioException {
         if (nuevoIntegrante == null || nuevoIntegrante.getNombre() == null || nuevoIntegrante.getNombre().isEmpty()) {
             throw new NegocioException("El nombre del integrante no puede estar vacío.");
         }
@@ -81,14 +83,39 @@ public class ArtistasBO implements IArtistasBO {
     }
 
     /**
+     * Metodo para obtener un artista mediante su id en la base de datos
+     *
+     * @param idArtista ID de artista a buscar en la base de datos
+     * @return ArtistaDTO con los datos del artista
+     * @throws NegocioException Si ocurre una incidencia al obtener el artista
+     * de la base de datos
+     */
+    @Override
+    public ArtistaDTO buscarArtistaPorId(String idArtista) throws NegocioException {
+        Artista artista = artistasDAO.buscarArtistaPorId(idArtista);
+
+        if (artista != null) {
+            ArtistaDTO artistaDTO = new ArtistaDTO();
+            artistaDTO.setTipo(artista.getTipo());
+            artistaDTO.setNombre(artista.getNombre());
+            artistaDTO.setImagen(artista.getImagen());
+            artistaDTO.setGenero(artista.getGenero());
+
+            return artistaDTO;
+        } else {
+            throw new NegocioException("No se pudo obtener el artista.");
+        }
+    }
+
+    /**
      * Busca artistas por nombre.
-     * 
+     *
      * @param idUsuario ID del usuario que realiza la búsqueda.
      * @param nombre Nombre o parte del nombre a buscar.
      * @return Lista de artistas que coinciden con el criterio de búsqueda.
      */
     @Override
-     public List<ArtistaDTO> buscarArtistasPorNombre(String idUsuario, String nombre) {
+    public List<ArtistaDTO> buscarArtistasPorNombre(String idUsuario, String nombre) {
         List<Artista> artistas = artistasDAO.buscarArtistasPorNombre(idUsuario, nombre);
 
         List<ArtistaDTO> artistasDTO = new ArrayList<>();
@@ -99,23 +126,22 @@ public class ArtistasBO implements IArtistasBO {
                 dto.setNombre(a.getNombre());
                 dto.setGenero(a.getGenero());
                 dto.setTipo(a.getTipo());
-                artistasDTO.add(dto); 
+                artistasDTO.add(dto);
             }
         }
 
-        return artistasDTO; 
+        return artistasDTO;
     }
-
 
     /**
      * Busca artistas por género musical.
-     * 
+     *
      * @param idUsuario ID del usuario que realiza la búsqueda.
      * @param genero Género musical a buscar.
      * @return Lista de artistas que coinciden con el género especificado.
      */
     @Override
-    public List<ArtistaDTO> buscarArtistasPorGenero(String idUsuario,String genero) {
+    public List<ArtistaDTO> buscarArtistasPorGenero(String idUsuario, String genero) {
         List<Artista> artistas = artistasDAO.buscarArtistasPorGenero(idUsuario, genero);
 
         List<ArtistaDTO> artistasDTO = new ArrayList<>();
@@ -126,23 +152,23 @@ public class ArtistasBO implements IArtistasBO {
                 dto.setNombre(a.getNombre());
                 dto.setGenero(a.getGenero());
                 dto.setTipo(a.getTipo());
-                artistasDTO.add(dto); 
+                artistasDTO.add(dto);
             }
         }
 
-        return artistasDTO; 
+        return artistasDTO;
     }
 
     /**
      * Busca artistas por nombre y género musical.
-     * 
+     *
      * @param idUsuario ID del usuario que realiza la búsqueda.
      * @param nombre Nombre o parte del nombre a buscar.
      * @param genero Género musical a buscar.
      * @return Lista de artistas que coinciden con ambos criterios de búsqueda.
      */
     @Override
-    public List<ArtistaDTO> buscarArtistasPorNombreGenero(String idUsuario,String nombre, String genero) {
+    public List<ArtistaDTO> buscarArtistasPorNombreGenero(String idUsuario, String nombre, String genero) {
         List<Artista> artistas = artistasDAO.buscarArtistasPorNombreGenero(idUsuario, nombre, genero);
 
         List<ArtistaDTO> artistasDTO = new ArrayList<>();
@@ -153,16 +179,16 @@ public class ArtistasBO implements IArtistasBO {
                 dto.setNombre(a.getNombre());
                 dto.setGenero(a.getGenero());
                 dto.setTipo(a.getTipo());
-                artistasDTO.add(dto); 
+                artistasDTO.add(dto);
             }
         }
 
-        return artistasDTO; 
+        return artistasDTO;
     }
 
     /**
      * Obtiene todos los artistas disponibles para un usuario.
-     * 
+     *
      * @param idUsuario ID del usuario que realiza la consulta.
      * @return Lista de todos los artistas disponibles.
      */
@@ -178,16 +204,16 @@ public class ArtistasBO implements IArtistasBO {
                 dto.setNombre(a.getNombre());
                 dto.setGenero(a.getGenero());
                 dto.setTipo(a.getTipo());
-                artistasDTO.add(dto); 
+                artistasDTO.add(dto);
             }
         }
 
-        return artistasDTO; 
+        return artistasDTO;
     }
 
     /**
      * Busca un artista por su nombre exacto.
-     * 
+     *
      * @param nombre Nombre exacto del artista a buscar.
      * @return El artista encontrado o null si no existe.
      */
@@ -195,21 +221,21 @@ public class ArtistasBO implements IArtistasBO {
     public ArtistaDTO buscarArtistaPorNombre(String nombre) {
         Artista artista = artistasDAO.buscarArtistaPorNombre(nombre);
         ArtistaDTO artistaDTO = new ArtistaDTO();
-        
-        if (artista != null){
+
+        if (artista != null) {
             artistaDTO.setId(artista.getId().toString());
             artistaDTO.setTipo(artista.getTipo());
             artistaDTO.setNombre(artista.getNombre());
             artistaDTO.setImagen(artista.getImagen());
             artistaDTO.setGenero(artista.getGenero());
             artistaDTO.setIntegrantes(artista.getIntegrantes());
-        } 
+        }
         return artistaDTO;
     }
-    
+
     /**
      * Consulta todos los integrantes de un artista.
-     * 
+     *
      * @param idArtista ID del artista cuyos integrantes se consultarán.
      * @return Lista de todos los integrantes del artista.
      */
@@ -236,7 +262,7 @@ public class ArtistasBO implements IArtistasBO {
 
     /**
      * Consulta los integrantes activos de un artista.
-     * 
+     *
      * @param idArtista ID del artista cuyos integrantes activos se consultarán.
      * @return Lista de los integrantes activos del artista.
      */
@@ -259,6 +285,6 @@ public class ArtistasBO implements IArtistasBO {
         }
 
         return integrantesDTO;
-        }
+    }
 
 }

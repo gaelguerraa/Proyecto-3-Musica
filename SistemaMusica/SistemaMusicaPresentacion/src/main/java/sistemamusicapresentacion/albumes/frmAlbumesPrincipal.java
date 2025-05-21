@@ -4,7 +4,18 @@
  */
 package sistemamusicapresentacion.albumes;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import sistemamusica.dtos.AlbumDTO;
+import sistemamusica.dtos.ArtistaDTO;
 import sistemamusica.dtos.UsuarioDTO;
+import sistemamusicanegocio.exception.NegocioException;
+import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
+import sistemamusicanegocio.interfaces.IAlbumesBO;
+import sistemamusicanegocio.interfaces.IArtistasBO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
@@ -15,7 +26,9 @@ public class frmAlbumesPrincipal extends javax.swing.JFrame {
 
     UsuarioDTO usuarioActual;
     ControladorUniversal universal;
-    
+    private IAlbumesBO albumesBO = FabricaObjetosNegocio.crearAlbumesBO();
+    private IArtistasBO artistasBO = FabricaObjetosNegocio.crearArtistasBO();
+
     /**
      * Creates new form frmAlbumesPrincipal
      */
@@ -23,8 +36,63 @@ public class frmAlbumesPrincipal extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Albumes");
-        this.usuarioActual=usuarioActual;
+        this.usuarioActual = usuarioActual;
         this.universal = universal;
+        llenarTablaAlbumes();
+    }
+
+    private void llenarTablaAlbumes() {
+        String filtroSeleccionado = (String) comboboxFiltro.getSelectedItem();
+        String textoBuscado = txtBuscador.getText().trim();
+
+        List<AlbumDTO> albumesConsultados = new ArrayList<>();
+
+        try {
+            if (textoBuscado.isEmpty()) {
+                albumesConsultados = albumesBO.obtenerAlbumes();
+            } else {
+                switch (filtroSeleccionado) {
+                    case "Genero":
+                        albumesConsultados
+                                = albumesBO.obtenerAlbumesPorGenero(textoBuscado);
+                        break;
+                    case "Nombre":
+                        albumesConsultados
+                                = albumesBO.obtenerAlbumesPorNombre(textoBuscado);
+                        break;
+                    case "Fecha de Lanzamiento":
+                        albumesConsultados
+                                = albumesBO.obtenerAlgumesPorFecha(textoBuscado);
+                        break;
+                    default:
+                        albumesConsultados = albumesBO.obtenerAlbumes();
+                        break;
+                }
+            }
+
+            DefaultTableModel modeloTabla = (DefaultTableModel) tablaAlbumes.getModel();
+            modeloTabla.setRowCount(0);
+
+            SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+            
+            for (AlbumDTO album : albumesConsultados) {
+
+                ArtistaDTO artistaId = artistasBO.buscarArtistaPorId(album.getIdArtista());
+
+                String fechaFormateada = formatoFecha.format(album.getFechaLanzamiento());
+                
+                Object[] fila = {
+                    album.getNombre(),
+                    album.getGenero(),
+                    artistaId.getNombre(),
+                    fechaFormateada
+                };
+                modeloTabla.addRow(fila);
+            }
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar albumes: "
+                    + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -161,6 +229,11 @@ public class frmAlbumesPrincipal extends javax.swing.JFrame {
         btnBuscar.setBackground(new java.awt.Color(30, 215, 96));
         btnBuscar.setFont(new java.awt.Font("Gotham Black", 0, 18)); // NOI18N
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         tablaAlbumes.setFont(new java.awt.Font("Gotham Black", 1, 12)); // NOI18N
         tablaAlbumes.setModel(new javax.swing.table.DefaultTableModel(
@@ -285,6 +358,9 @@ public class frmAlbumesPrincipal extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnUsuarioActionPerformed
 
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        llenarTablaAlbumes();
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
