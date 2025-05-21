@@ -10,8 +10,10 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -202,16 +204,27 @@ public class AlbumesDAO implements IAlbumesDAO {
         MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Document> coleccion = baseDatos.getCollection(COLECCION);
 
-        Date fecha;
+        // Convertir texto a rango de fechas UTC
+        ZonedDateTime inicioZdt, finZdt;
+
         try {
-            fecha = new SimpleDateFormat("yyyy-MM-dd").parse(fechaTexto);
-        } catch (ParseException e) {
+            LocalDate fechaLocal = LocalDate.parse(fechaTexto); //yyyy-MM-dd
+            inicioZdt = fechaLocal.atStartOfDay(ZoneOffset.UTC);
+            finZdt = fechaLocal.plusDays(1).atStartOfDay(ZoneOffset.UTC).minusNanos(1);
+        } catch (DateTimeParseException e) {
             System.out.println("Fecha invalida: " + fechaTexto);
             return new ArrayList<>();
         }
 
+        Date inicio = Date.from(inicioZdt.toInstant());
+        Date fin = Date.from(finZdt.toInstant());
+
+        // Buscar dentro del rango de ese dia (en UTC)
         List<Bson> pipeline = Arrays.asList(
-                Aggregates.match(Filters.eq(CAMPO_FECHA_LANZAMIENTO, fecha)),
+                Aggregates.match(Filters.and(
+                        Filters.gte(CAMPO_FECHA_LANZAMIENTO, inicio),
+                        Filters.lte(CAMPO_FECHA_LANZAMIENTO, fin)
+                )),
                 Aggregates.lookup("artistas", CAMPO_ID_ARTISTA, CAMPO_ID, CAMPO_ARTISTA_INFO),
                 Aggregates.unwind("$" + CAMPO_ARTISTA_INFO),
                 Aggregates.project(Projections.fields(
