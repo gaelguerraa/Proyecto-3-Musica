@@ -32,30 +32,26 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
     public frmFavoritosUsuario(ControladorUniversal control, UsuarioDTO usuario) {
         initComponents();
         tablaFavoritos = new javax.swing.JTable();
-        tablaFavoritos.setFont(new java.awt.Font("Gotham Black", 1, 12)); // NOI18N
+        tablaFavoritos.setFont(new java.awt.Font("Gotham Black", 1, 12)); 
         tablaFavoritos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
 
-            } // Inicializar sin nombres de columna
+            } 
         ) {
             @Override
             public Class getColumnClass(int columnIndex) {
-                // Asegúrate de que columnIndex esté dentro de los límites del modelo actual
                 if (columnIndex < getColumnCount()) {
-                    // Puedes definir la clase de columna basada en el índice si es necesario
-                    // Por ejemplo:
-                    // if (columnIndex == ...) { return Integer.class; }
-                    return String.class; // O la clase predeterminada que necesites
+                    return String.class; 
                 }
-                return Object.class; // Valor predeterminado si el índice está fuera de rango
+                return Object.class;
             }
 
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false; // Por defecto, las celdas no son editables
+                return false; 
             }
         });
         jScrollPane1.setViewportView(tablaFavoritos);
@@ -78,12 +74,11 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
         if (filtro.equals("ARTISTAS")) {
-            String[] columnasArtista = {"Id Favorito", "Id Artista", "Nombre", "Género", "Tipo", "Agregado el"};
+            String[] columnasArtista = {"Id Artista", "Nombre", "Género", "Tipo", "Agregado el"};
             modeloTabla.setColumnIdentifiers(columnasArtista);
             List<ArtistaFavoritoDTO> artistas = usuariosBO.obtenerArtistasFavoritos(idUsuario, nombreBuscado);
             for (ArtistaFavoritoDTO a : artistas) {
                 modeloTabla.addRow(new Object[]{
-                    a.getIdFavorito(),
                     a.getIdArtista(),
                     a.getNombreArtista(),
                     a.getGeneroArtista(),
@@ -92,12 +87,11 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
                 });
             }
         } else if (filtro.equals("ALBUMES")) {
-            String[] columnasAlbum = {"Id Favorito", "Id Album","Nombre", "Artista", "Género", "Lanzamiento", "Agregado el"};
+            String[] columnasAlbum = {"Id Album","Nombre", "Artista", "Género", "Lanzamiento", "Agregado el"};
             modeloTabla.setColumnIdentifiers(columnasAlbum);
             List<AlbumFavoritoDTO> albumes = usuariosBO.obtenerAlbumesFavoritos(idUsuario, nombreBuscado);
             for (AlbumFavoritoDTO a : albumes) {
                 modeloTabla.addRow(new Object[]{
-                    a.getIdFavorito(),
                     a.getIdAlbum(),
                     a.getNombreAlbum(),
                     a.getNombreArtista(),
@@ -107,12 +101,11 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
                 });
             }
         } else if (filtro.equals("CANCIONES")) {
-           String[] columnasCancion = {"Id Favorito", "Título", "Duración", "Artista", "Álbum", "Género", "Lanzamiento", "Agregado el"};
+           String[] columnasCancion = {"Título", "Duración", "Artista", "Álbum", "Género", "Lanzamiento", "Agregado el"};
             modeloTabla.setColumnIdentifiers(columnasCancion);
             List<CancionFavoritaDTO> canciones = usuariosBO.obtenerCancionesFavoritas(idUsuario, nombreBuscado);
             for (CancionFavoritaDTO c : canciones) {
                 modeloTabla.addRow(new Object[]{
-                    c.getIdFavorito(),
                     c.getTitulo(),
                     c.getDuracion(),
                     c.getNombreArtista(),
@@ -124,12 +117,11 @@ public class frmFavoritosUsuario extends javax.swing.JFrame {
             }
 
         }else{
-            String[] columnaGlobal = {"Id Favorito", "Id Contenido", "Nombre", "Género", "Tipo", "Agregado el"};
+            String[] columnaGlobal = {"Id Contenido", "Nombre", "Género", "Tipo", "Agregado el"};
             modeloTabla.setColumnIdentifiers(columnaGlobal);
             List<GeneroFavoritoDTO> todo = usuariosBO.obtenerTodosFavoritos(idUsuario);
             for(GeneroFavoritoDTO g : todo){
                 modeloTabla.addRow(new Object[]{
-                g.getIdFavorito(),
                 g.getIdContenido(),
                 g.getNombre(),
                 g.getGenero(),

@@ -24,7 +24,7 @@ public interface IArtistasBO {
     public abstract List<ArtistaDTO> buscarArtistas(String idUsuario);
     public abstract ArtistaDTO buscarArtistaPorNombre(String nombre);
     
-    public abstract Integrante agregarIntegrante(String idArtista, IntegranteDTO nuevoIntegrante) throws NegocioException;
+    public abstract boolean agregarIntegrante(String idArtista, IntegranteDTO nuevoIntegrante) throws NegocioException;
     public abstract List<IntegranteDTO> consultarTodosLosIntegrantes(String idArtista);
     public abstract List<IntegranteDTO> consultarIntegrantesActivos(String idArtista);
 }

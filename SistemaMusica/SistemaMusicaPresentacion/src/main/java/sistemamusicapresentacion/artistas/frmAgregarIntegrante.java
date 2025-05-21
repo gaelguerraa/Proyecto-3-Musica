@@ -45,7 +45,7 @@ public class frmAgregarIntegrante extends javax.swing.JFrame {
     }
 
     public void LlenarComboboxRol(){
-        cbRol.removeAllItems(); // Limpia los elementos actuales, por si ya hay
+        cbRol.removeAllItems(); 
         for(RolIntegrante rol : RolIntegrante.values()){
             cbRol.addItem(rol.name());
         }
@@ -58,17 +58,17 @@ public class frmAgregarIntegrante extends javax.swing.JFrame {
 
     if (nombre.isEmpty()) {
         JOptionPane.showMessageDialog(this, "El nombre del integrante es obligatorio.", "Error", JOptionPane.ERROR_MESSAGE);
-        return; // Detener la ejecución si el nombre está vacío
+        return; 
     }
 
     if (rolSeleccionado == null) {
         JOptionPane.showMessageDialog(this, "Debe seleccionar un rol para el integrante.", "Error", JOptionPane.ERROR_MESSAGE);
-        return; // Detener la ejecución si no se ha seleccionado un rol
+        return; 
     }
 
     if (fechaIng == null) {
         JOptionPane.showMessageDialog(this, "La fecha de ingreso del integrante es obligatoria.", "Error", JOptionPane.ERROR_MESSAGE);
-        return; // Detener la ejecución si no se ha seleccionado una fecha de ingreso
+        return; 
     }
 
     try {
@@ -84,7 +84,7 @@ public class frmAgregarIntegrante extends javax.swing.JFrame {
                 : null;
 
         IntegranteDTO integrante = new IntegranteDTO(nombre, rol, fechaIngDate, fechaSalDate, activo);
-        Integrante integrantePersistido = artistasBO.agregarIntegrante(idArtista, integrante);
+        boolean integrantePersistido = artistasBO.agregarIntegrante(idArtista, integrante);
         contadorIntegrantes++;
 
         JOptionPane.showMessageDialog(this, "Integrante agregado con éxito.");

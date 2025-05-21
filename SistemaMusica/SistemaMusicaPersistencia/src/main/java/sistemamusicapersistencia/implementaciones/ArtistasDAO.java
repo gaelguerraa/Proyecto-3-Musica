@@ -9,6 +9,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.UpdateResult;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -195,10 +196,19 @@ public class ArtistasDAO implements IArtistasDAO {
         }
     }
     
+    /**
+     * Crea un nuevo documento integrante dentro del documento artista
+     * Crea el documento integrante con los atributos savados del nuevoIntegranteDTO y los inserta en el documento artista
+     * que coincida con el idArtista y los añade al espacio "integrantes"
+     * 
+     * @param idArtista
+     * @param nuevoIntegrante
+     * @return boolean
+     */
     @Override
-    public Integrante agregarIntegrante(String idArtista, IntegranteDTO nuevoIntegrante) {
+    public boolean agregarIntegrante(String idArtista, IntegranteDTO nuevoIntegrante) {
         MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
-        MongoCollection<Document> coleccion = baseDatos.getCollection("artistas");
+        MongoCollection<Document> coleccion = baseDatos.getCollection(COLECCION);
 
         // se crea el documento del integrante
         Document integranteDoc = new Document("nombre", nuevoIntegrante.getNombre())
@@ -210,21 +220,16 @@ public class ArtistasDAO implements IArtistasDAO {
             integranteDoc.append("fechaSalida", nuevoIntegrante.getFechaSalida());
         }
 
-        // se realiza el push dentro del documento del artista
+        // convierte el string idArtista en un objectid
+        // y agrega el integrante en el documento con ese mismo id
         ObjectId id = new ObjectId(idArtista);
-        coleccion.updateOne(
-                Filters.eq("_id", id), 
-                Updates.push("integrantes", integranteDoc));
+        UpdateResult result = coleccion.updateOne(
+            Filters.eq(CAMPO_ID, id), //filtro
+            Updates.push("integrantes", integranteDoc)); //accion
 
-        //se crea una instancia de integrante para usarlo al buscar integrantes
-        Integrante integrante = new Integrante();
-        integrante.setNombre(nuevoIntegrante.getNombre());
-        integrante.setRol(nuevoIntegrante.getRol());
-        integrante.setFechaIngreso(nuevoIntegrante.getFechaIngreso());
-        integrante.setFechaSalida(nuevoIntegrante.getFechaSalida());
-        integrante.setActivo(nuevoIntegrante.isActivo());
 
-        return integrante;
+
+        return result.getModifiedCount() >0;
     }
 
     
@@ -235,33 +240,26 @@ public class ArtistasDAO implements IArtistasDAO {
      * 2. Selecciona el campo "integrantes" y excluye el campo "_id" del documento,
      * 3. Ejecuta la consulta con el filtro y la proyeccion y agarra el primer resultado (solo hay uno),
      * 4. Verifica que existe el resultado y que es de tipo "integrantes"
-     * 5. Extrae los documentos que contienen los integrantes y por cada documento integrante lo convierte a a un objeto Integrante
+     * 5. Extrae los documentos que contienen los integrantes
      * 6. Agrega los resultados a la lista y la devuelve
      * @param idArtista
      * @return lista de integrantes
      */
     @Override
-    public List<Integrante> consultarTodosLosIntegrantes(String idArtista) {
+    public List<Document> consultarTodosLosIntegrantes(String idArtista) {
         MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
-        MongoCollection<Document> coleccion = baseDatos.getCollection("artistas");
+        MongoCollection<Document> coleccion = baseDatos.getCollection(COLECCION);
 
-        Document filtro = new Document("_id", new ObjectId(idArtista));
+        Document filtro = new Document(CAMPO_ID, new ObjectId(idArtista));
         Document proyeccion = new Document("integrantes", 1).append("_id", 0);
 
         Document resultado = coleccion.find(filtro).projection(proyeccion).first();
 
-        List<Integrante> lista = new ArrayList<>();
-
         if (resultado != null && resultado.containsKey("integrantes")) {
-            List<Document> docs = (List<Document>) resultado.get("integrantes");
-
-            for (Document doc : docs) {
-                Integrante integrante = convertirDocumentoAIntegrante(doc);
-                lista.add(integrante);
-            }
+            return (List<Document>) resultado.get("integrantes");
         }
 
-        return lista;
+        return new ArrayList<>();
     }
 
     /**
@@ -271,30 +269,28 @@ public class ArtistasDAO implements IArtistasDAO {
      * 3. Ejecuta la consulta con el filtro y la proyeccion y agarra el primer resultado (solo hay uno),
      * 4. Verifica que existe el resultado y que es de tipo "integrantes"
      * 5. Extrae los documentos que contienen los integrantes y verifica que su estado sea activo, si no tiene estado lo tomara como no activo(false)  
-     *    y por cada documento integrante que su estado sea activo lo convierte a a un objeto Integrante
      * 6. Agrega los resultados a la lista y la devuelve
      * @param idArtista
      * @return lista de integrantes
      */
     @Override
-    public List<Integrante> consultarIntegrantesActivos(String idArtista) {
+    public List<Document> consultarIntegrantesActivos(String idArtista) {
         MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
-        MongoCollection<Document> coleccion = baseDatos.getCollection("artistas");
+        MongoCollection<Document> coleccion = baseDatos.getCollection(COLECCION);
 
-        Document filtro = new Document("_id", new ObjectId(idArtista));
+        Document filtro = new Document(CAMPO_ID, new ObjectId(idArtista));
         Document proyeccion = new Document("integrantes", 1).append("_id", 0);
 
         Document resultado = coleccion.find(filtro).projection(proyeccion).first();
 
-        List<Integrante> lista = new ArrayList<>();
+        List<Document> lista = new ArrayList<>();
 
         if (resultado != null && resultado.containsKey("integrantes")) {
             List<Document> docs = (List<Document>) resultado.get("integrantes");
 
             for (Document doc : docs) {
                 if (doc.getBoolean("activo", false)) {
-                    Integrante integrante = convertirDocumentoAIntegrante(doc);
-                    lista.add(integrante);
+                    lista.add(doc);
                 }
             }
         }
@@ -303,27 +299,16 @@ public class ArtistasDAO implements IArtistasDAO {
     }
 
     /**
-     * Metodo de soporte para realizar la conversion de documento integrante a objeto integrante
-     * Crea un objeto integrante con todos los datos del documento integrante y devuelve el objeto integrante
-     * @param doc
-     * @return integrante
+     * Metodo que obtiene los generos restringidos por el usuario
+     * busca el documento con el id del usuario y devuelve sus restricciones si es que tiene
+     * @param idUsuario
+     * @return lista de generos restringidos
      */
-    public Integrante convertirDocumentoAIntegrante(Document doc) {
-        Integrante integrante = new Integrante();
-        
-        integrante.setNombre(doc.getString("nombre"));
-        integrante.setRol(RolIntegrante.valueOf(doc.getString("rol")));
-        integrante.setActivo(doc.getBoolean("activo", false));
-        integrante.setFechaIngreso(doc.getDate("fechaIngreso"));
-        integrante.setFechaSalida(doc.getDate("fechaSalida")); // puede ser null
-        
-        return integrante;
-    }
-    
     private List<String> obtenerGenerosRestringidos(String idUsuario) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Usuario> coleccion = db.getCollection("usuarios", Usuario.class);
 
+        //si el usuario existe y tiene generos en restricciones devolver las restricciones y agregarlas en una lista
         Usuario usuario = coleccion.find(new Document("_id", new ObjectId(idUsuario))).first();
         return (usuario != null && usuario.getRestricciones() != null)
                 ? usuario.getRestricciones()

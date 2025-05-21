@@ -12,7 +12,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import sistemamusica.dtos.UsuarioDTO;
-import sistemamusicadominio.Usuario;
 import sistemamusicanegocio.exception.NegocioException;
 import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
 import sistemamusicanegocio.interfaces.IUsuariosBO;
@@ -93,6 +92,8 @@ public class frmCambiarDatos extends javax.swing.JFrame {
         labelFotoSubir = new javax.swing.JLabel();
         btnActualizar = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
+        labelContrasenia = new javax.swing.JLabel();
+        txtContrasenia = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(850, 550));
@@ -150,6 +151,16 @@ public class frmCambiarDatos extends javax.swing.JFrame {
             }
         });
 
+        labelContrasenia.setFont(new java.awt.Font("Gotham Bold", 1, 14)); // NOI18N
+        labelContrasenia.setForeground(new java.awt.Color(30, 215, 96));
+        labelContrasenia.setText("contraseña:");
+
+        txtContrasenia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtContraseniaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
         panelFondo.setLayout(panelFondoLayout);
         panelFondoLayout.setHorizontalGroup(
@@ -167,7 +178,14 @@ public class frmCambiarDatos extends javax.swing.JFrame {
                 .addGap(111, 111, 111)
                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addComponent(labelUsername)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSubirImagen)
+                        .addGap(211, 211, 211))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
                         .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelContrasenia)
                             .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(labelEmail)
                             .addGroup(panelFondoLayout.createSequentialGroup()
@@ -179,12 +197,7 @@ public class frmCambiarDatos extends javax.swing.JFrame {
                                 .addComponent(btnVolver)
                                 .addGap(93, 93, 93)
                                 .addComponent(btnActualizar)))
-                        .addGap(0, 172, Short.MAX_VALUE))
-                    .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addComponent(labelUsername)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnSubirImagen)
-                        .addGap(211, 211, 211))))
+                        .addGap(0, 172, Short.MAX_VALUE))))
         );
         panelFondoLayout.setVerticalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,7 +219,11 @@ public class frmCambiarDatos extends javax.swing.JFrame {
                     .addComponent(labelFotoSubir))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 142, Short.MAX_VALUE)
+                .addGap(29, 29, 29)
+                .addComponent(labelContrasenia)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnActualizar)
                     .addComponent(btnVolver))
@@ -245,11 +262,13 @@ public class frmCambiarDatos extends javax.swing.JFrame {
         String username = txtUsername.getText();
         String email = txtEmail.getText();
         String imagenPerfil = rutaImagenSeleccionada;
+        String contrasenia = txtContrasenia.getText();
 
         UsuarioDTO usuarioModificado = new UsuarioDTO();
         usuarioModificado.setUsername(username);
         usuarioModificado.setEmail(email);
         usuarioModificado.setImagenPerfil(imagenPerfil);
+        usuarioModificado.setContrasenia(contrasenia);
 
         try {
             usuarioBO.modificarUsuario(usuario.getId(), usuarioModificado);
@@ -266,17 +285,23 @@ public class frmCambiarDatos extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnActualizarActionPerformed
 
+    private void txtContraseniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtContraseniaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtContraseniaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnSubirImagen;
     private javax.swing.JButton btnVolver;
+    private javax.swing.JLabel labelContrasenia;
     private javax.swing.JLabel labelEmail;
     private javax.swing.JLabel labelFotoSubir;
     private javax.swing.JLabel labelModifical;
     private javax.swing.JLabel labelMusicio1;
     private javax.swing.JLabel labelUsername;
     private javax.swing.JPanel panelFondo;
+    private javax.swing.JTextField txtContrasenia;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
