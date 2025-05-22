@@ -26,6 +26,7 @@ import sistemamusica.dtos.CancionDTO;
 import sistemamusicadominio.Album;
 import sistemamusicadominio.Cancion;
 import sistemamusicadominio.Genero;
+import sistemamusicadominio.Usuario;
 import sistemamusicapersistencia.interfaces.IAlbumesDAO;
 
 /**
@@ -97,134 +98,114 @@ public class AlbumesDAO implements IAlbumesDAO {
     /**
      * Metodo para obtener todos los albumes de la base de datos
      *
+     * @param idUsuario
      * @return Lista con todos los albumes de la base de datos
      */
     @Override
-    public List<Album> obtenerAlbumes() {
-        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
-        MongoCollection<Document> coleccion = baseDatos.getCollection(
-                COLECCION);
-
-        List<Bson> pipeLine = Arrays.asList(
-                Aggregates.lookup("artistas", CAMPO_ID_ARTISTA, CAMPO_ID, CAMPO_ARTISTA_INFO),
-                Aggregates.unwind("$" + CAMPO_ARTISTA_INFO),
-                Aggregates.project(Projections.fields(
-                        Projections.computed("id", "$" + CAMPO_ID),
-                        Projections.include(CAMPO_NOMBRE, CAMPO_FECHA_LANZAMIENTO, CAMPO_GENERO, CAMPO_IMAGEN_PORTADA),
-                        Projections.computed(CAMPO_ID_ARTISTA, "$" + CAMPO_ID_ARTISTA),
-                        Projections.computed("nombreArtista", "$" + CAMPO_ARTISTA_INFO + ".nombre"),
-                        Projections.include(CAMPO_CANCIONES)
-                ))
-        );
-
-        List<Album> resultado = new ArrayList<>();
-
-        try (MongoCursor<Document> cursor = coleccion.aggregate(pipeLine).iterator()) {
-            while (cursor.hasNext()) {
-                Document doc = cursor.next();
-
-                Album album = new Album();
-                album.setId(doc.getObjectId("id")); // Aqui tengo dudas, no se si es "id" o "_id"
-                album.setNombre(doc.getString(CAMPO_NOMBRE));
-                album.setFechaLanzamiento(doc.getDate(CAMPO_FECHA_LANZAMIENTO));
-                album.setGenero(Genero.valueOf(doc.getString(CAMPO_GENERO)));
-                album.setImagenPortada(doc.getString(CAMPO_IMAGEN_PORTADA));
-                album.setIdArtista(doc.getObjectId(CAMPO_ID_ARTISTA));
-
-                List<Cancion> canciones = new ArrayList<>();
-                List<Document> cancionesDoc = (List<Document>) doc.get(CAMPO_CANCIONES, List.class);
-
-                if (cancionesDoc != null) {
-                    for (Document c : cancionesDoc) {
-                        Cancion cancion = new Cancion();
-
-                        if (c.containsKey(CAMPO_ID)) {
-                            cancion.setId(c.getObjectId(CAMPO_ID));
-                        }
-
-                        cancion.setTitulo(c.getString("titulo"));
-                        cancion.setDuracion(((Number) c.get("duracion")).floatValue());
-
-                        if (c.containsKey(CAMPO_ID_ARTISTA)) {
-                            cancion.setIdArtista(c.getObjectId(CAMPO_ID_ARTISTA));
-                        }
-
-                        canciones.add(cancion);
-                    }
-                }
-
-                album.setCanciones(canciones);
-                resultado.add(album);
-
-            }
-        } catch (Exception e) {
-            System.out.println("Error al obtener los albumes: " + e);
-        }
-
-        return resultado;
-
-    }
-
-    /**
-     * Metodo para obtener albumes por genero de la base de datos
-     *
-     * @param generoBuscado Genero por el que son buscados los albumes
-     * @return Albumes obtenidos que compartan el mismo genero
-     */
-    @Override
-    public List<Album> obtenerAlbumesPorGenero(String generoBuscado) {
+    public List<Album> obtenerAlbumes(String idUsuario) {
         MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Document> coleccion = baseDatos.getCollection(COLECCION);
 
-        List<Bson> pipeline = Arrays.asList(
-                Aggregates.match(Filters.regex(CAMPO_GENERO, ".*" + generoBuscado + ".*", "i")),
-                Aggregates.lookup("artistas", CAMPO_ID_ARTISTA, CAMPO_ID, CAMPO_ARTISTA_INFO),
-                Aggregates.unwind("$" + CAMPO_ARTISTA_INFO),
-                Aggregates.project(Projections.fields(
-                        Projections.computed("id", "$" + CAMPO_ID),
-                        Projections.include(CAMPO_NOMBRE, CAMPO_FECHA_LANZAMIENTO, CAMPO_GENERO, CAMPO_IMAGEN_PORTADA),
-                        Projections.computed(CAMPO_ID_ARTISTA, "$" + CAMPO_ID_ARTISTA),
-                        Projections.computed("nombreArtista", "$" + CAMPO_ARTISTA_INFO + ".nombre"),
-                        Projections.include(CAMPO_CANCIONES)
-                ))
-        );
+        List<Bson> pipeline = new ArrayList<>();
+
+        // Paso 1: aplicar restricciones de géneros si existen
+        List<String> restricciones = obtenerGenerosRestringidos(idUsuario);
+        if (!restricciones.isEmpty()) {
+            pipeline.add(Aggregates.match(Filters.nin(CAMPO_GENERO, restricciones)));
+        }
+
+        // Paso 2: continuar con el pipeline normal
+        pipeline.addAll(Arrays.asList(
+            Aggregates.lookup("artistas", CAMPO_ID_ARTISTA, CAMPO_ID, CAMPO_ARTISTA_INFO),
+            Aggregates.unwind("$" + CAMPO_ARTISTA_INFO),
+            Aggregates.project(Projections.fields(
+                Projections.computed("id", "$" + CAMPO_ID),
+                Projections.include(CAMPO_NOMBRE, CAMPO_FECHA_LANZAMIENTO, CAMPO_GENERO, CAMPO_IMAGEN_PORTADA),
+                Projections.computed(CAMPO_ID_ARTISTA, "$" + CAMPO_ID_ARTISTA),
+                Projections.computed("nombreArtista", "$" + CAMPO_ARTISTA_INFO + ".nombre"),
+                Projections.include(CAMPO_CANCIONES)
+            ))
+        ));
 
         return ejecutarConsultaAlbumes(pipeline, coleccion);
     }
 
+
+    /**
+     * Metodo para obtener albumes por genero de la base de datos
+     *
+     * @param idUsuario
+     * @param generoBuscado Genero por el que son buscados los albumes
+     * @return Albumes obtenidos que compartan el mismo genero
+     */
+    @Override
+    public List<Album> obtenerAlbumesPorGenero(String idUsuario, String generoBuscado) {
+        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Document> coleccion = baseDatos.getCollection(COLECCION);
+
+        List<String> restricciones = obtenerGenerosRestringidos(idUsuario);
+
+        List<Bson> pipeline = new ArrayList<>();
+        pipeline.add(Aggregates.match(Filters.regex(CAMPO_GENERO, ".*" + generoBuscado + ".*", "i")));
+        if (!restricciones.isEmpty()) {
+            pipeline.add(Aggregates.match(Filters.nin(CAMPO_GENERO, restricciones)));
+        }
+
+        pipeline.addAll(Arrays.asList(
+                Aggregates.lookup("artistas", CAMPO_ID_ARTISTA, CAMPO_ID, CAMPO_ARTISTA_INFO),
+                Aggregates.unwind("$" + CAMPO_ARTISTA_INFO),
+                Aggregates.project(Projections.fields(
+                        Projections.computed("id", "$" + CAMPO_ID),
+                        Projections.include(CAMPO_NOMBRE, CAMPO_FECHA_LANZAMIENTO, CAMPO_GENERO, CAMPO_IMAGEN_PORTADA),
+                        Projections.computed(CAMPO_ID_ARTISTA, "$" + CAMPO_ID_ARTISTA),
+                        Projections.computed("nombreArtista", "$" + CAMPO_ARTISTA_INFO + ".nombre"),
+                        Projections.include(CAMPO_CANCIONES)
+                ))
+        ));
+
+        return ejecutarConsultaAlbumes(pipeline, coleccion);
+    }
+
+
     /**
      * Metodo para obtener albumes por fecha de lanzamiento de la base de datos
      *
+     * @param idUsuario
      * @param fechaTexto Fecha de lanzamiento del album por el cual se va a
      * buscar
      * @return Albumes obtenidos que compratan la misma fecha de lanzamiento
      */
     @Override
-    public List<Album> obtenerAlbumesPorFecha(String fechaTexto) {
+    public List<Album> obtenerAlbumesPorFecha(String idUsuario, String fechaTexto) {
         MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Document> coleccion = baseDatos.getCollection(COLECCION);
 
-        // Convertir texto a rango de fechas UTC
         ZonedDateTime inicioZdt, finZdt;
 
         try {
-            LocalDate fechaLocal = LocalDate.parse(fechaTexto); //yyyy-MM-dd
+            LocalDate fechaLocal = LocalDate.parse(fechaTexto); // yyyy-MM-dd
             inicioZdt = fechaLocal.atStartOfDay(ZoneOffset.UTC);
             finZdt = fechaLocal.plusDays(1).atStartOfDay(ZoneOffset.UTC).minusNanos(1);
         } catch (DateTimeParseException e) {
-            System.out.println("Fecha invalida: " + fechaTexto);
+            System.out.println("Fecha inválida: " + fechaTexto);
             return new ArrayList<>();
         }
 
         Date inicio = Date.from(inicioZdt.toInstant());
         Date fin = Date.from(finZdt.toInstant());
 
-        // Buscar dentro del rango de ese dia (en UTC)
-        List<Bson> pipeline = Arrays.asList(
-                Aggregates.match(Filters.and(
-                        Filters.gte(CAMPO_FECHA_LANZAMIENTO, inicio),
-                        Filters.lte(CAMPO_FECHA_LANZAMIENTO, fin)
-                )),
+        List<String> restricciones = obtenerGenerosRestringidos(idUsuario);
+
+        List<Bson> pipeline = new ArrayList<>();
+        pipeline.add(Aggregates.match(Filters.and(
+                Filters.gte(CAMPO_FECHA_LANZAMIENTO, inicio),
+                Filters.lte(CAMPO_FECHA_LANZAMIENTO, fin)
+        )));
+        if (!restricciones.isEmpty()) {
+            pipeline.add(Aggregates.match(Filters.nin(CAMPO_GENERO, restricciones)));
+        }
+
+        pipeline.addAll(Arrays.asList(
                 Aggregates.lookup("artistas", CAMPO_ID_ARTISTA, CAMPO_ID, CAMPO_ARTISTA_INFO),
                 Aggregates.unwind("$" + CAMPO_ARTISTA_INFO),
                 Aggregates.project(Projections.fields(
@@ -234,24 +215,33 @@ public class AlbumesDAO implements IAlbumesDAO {
                         Projections.computed("nombreArtista", "$" + CAMPO_ARTISTA_INFO + ".nombre"),
                         Projections.include(CAMPO_CANCIONES)
                 ))
-        );
+        ));
 
         return ejecutarConsultaAlbumes(pipeline, coleccion);
     }
+
 
     /**
      * Metodo para obtener albumes por nombre de la base de datos
      *
+     * @param idUsuario
      * @param nombreBuscado Nombre por el que son buscados los albumes
      * @return Albumes obtenidos que comparten el mismo nombre
      */
     @Override
-    public List<Album> obtenerAlbumesPorNombre(String nombreBuscado) {
+    public List<Album> obtenerAlbumesPorNombre(String idUsuario, String nombreBuscado) {
         MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Document> coleccion = baseDatos.getCollection(COLECCION);
 
-        List<Bson> pipeline = Arrays.asList(
-                Aggregates.match(Filters.regex(CAMPO_NOMBRE, ".*" + nombreBuscado + ".*", "i")),
+        List<String> restricciones = obtenerGenerosRestringidos(idUsuario);
+
+        List<Bson> pipeline = new ArrayList<>();
+        pipeline.add(Aggregates.match(Filters.regex(CAMPO_NOMBRE, ".*" + nombreBuscado + ".*", "i")));
+        if (!restricciones.isEmpty()) {
+            pipeline.add(Aggregates.match(Filters.nin(CAMPO_GENERO, restricciones)));
+        }
+
+        pipeline.addAll(Arrays.asList(
                 Aggregates.lookup("artistas", CAMPO_ID_ARTISTA, CAMPO_ID, CAMPO_ARTISTA_INFO),
                 Aggregates.unwind("$" + CAMPO_ARTISTA_INFO),
                 Aggregates.project(Projections.fields(
@@ -261,10 +251,11 @@ public class AlbumesDAO implements IAlbumesDAO {
                         Projections.computed("nombreArtista", "$" + CAMPO_ARTISTA_INFO + ".nombre"),
                         Projections.include(CAMPO_CANCIONES)
                 ))
-        );
+        ));
 
         return ejecutarConsultaAlbumes(pipeline, coleccion);
     }
+
 
     /**
      * Metodo para obtener un album por nombre de la base de datos
@@ -396,6 +387,25 @@ public class AlbumesDAO implements IAlbumesDAO {
         }
 
         return resultado;
+    }
+    
+    /**
+     * Metodo que obtiene los generos restringidos por el usuario busca el
+     * documento con el id del usuario y devuelve sus restricciones si es que
+     * tiene
+     *
+     * @param idUsuario
+     * @return lista de generos restringidos
+     */
+    private List<String> obtenerGenerosRestringidos(String idUsuario) {
+        MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Usuario> coleccion = db.getCollection("usuarios", Usuario.class);
+
+        //si el usuario existe y tiene generos en restricciones devolver las restricciones y agregarlas en una lista
+        Usuario usuario = coleccion.find(new Document("_id", new ObjectId(idUsuario))).first();
+        return (usuario != null && usuario.getRestricciones() != null)
+                ? usuario.getRestricciones()
+                : new ArrayList<>();
     }
 
 }

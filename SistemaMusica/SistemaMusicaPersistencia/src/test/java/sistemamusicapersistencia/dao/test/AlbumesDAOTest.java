@@ -7,8 +7,10 @@ package sistemamusicapersistencia.dao.test;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import org.bson.Document;
@@ -22,6 +24,7 @@ import sistemamusicadominio.Album;
 import sistemamusicadominio.Artista;
 import sistemamusicadominio.Genero;
 import sistemamusicadominio.TipoArtista;
+import sistemamusicadominio.Usuario;
 import sistemamusicapersistencia.implementaciones.AlbumesDAO;
 import sistemamusicapersistencia.implementaciones.ArtistasDAO;
 import sistemamusicapersistencia.implementaciones.ManejadorConexiones;
@@ -124,50 +127,75 @@ public class AlbumesDAOTest {
 
     @Test
     public void testObtenerAlbumes() {
-        final String NOMBRE_ALBUM_ESPERADO = "21st Century Breakdown";
+    final String NOMBRE_ALBUM_ESPERADO = "21st Century Breakdown";
 
-        MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
-        MongoCollection<Document> albumes = db.getCollection("albumes");
-        MongoCollection<Document> artistas = db.getCollection("artistas");
+    MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
+    MongoCollection<Document> albumes = db.getCollection("albumes");
+    MongoCollection<Document> artistas = db.getCollection("artistas");
+    MongoCollection<Document> usuarios = db.getCollection("usuarios");
 
-        // Limpia la colección para un entorno limpio
-        albumes.deleteMany(new Document());
-        artistas.deleteMany(new Document());
+    // Limpiar colecciones
+    albumes.deleteMany(new Document());
+    artistas.deleteMany(new Document());
+    usuarios.deleteMany(new Document());
 
-        // Insertar artista
-        ObjectId idArtista = new ObjectId();
-        Document artista = new Document("_id", idArtista)
-                .append("tipo", TipoArtista.BANDA.toString())
-                .append("nombre", "Green Day")
-                .append("genero", Genero.ROCK.toString());
-        artistas.insertOne(artista);
+    // Crear usuario
+    ObjectId idUsuario = new ObjectId();
 
-        // Insertar álbum con canciones embebidas
-        Document cancion = new Document("titulo", "Know Your Enemy")
-                .append("duracion", 3.11f)
-                .append("idArtista", idArtista);
+    Usuario usuarioPojo = new Usuario();
+    usuarioPojo.setId(idUsuario);
+    usuarioPojo.setUsername("Usuario Prueba");
+    usuarioPojo.setEmail("prueba@test.com");
+    usuarioPojo.setContrasenia("1234");
+    usuarioPojo.setRestricciones(Collections.emptyList());
+    usuarioPojo.setFavoritos(new ArrayList<>());
 
-        Document album = new Document("nombre", "21st Century Breakdown")
-                .append("fechaLanzamiento", new Date())
-                .append("genero", Genero.ROCK.toString())
-                .append("imagenPortada", "imagen.jpg")
-                .append("idArtista", idArtista)
-                .append("canciones", Arrays.asList(cancion));
-        albumes.insertOne(album);
 
-        // Probar método
-        AlbumesDAO dao = new AlbumesDAO();
-        List<Album> resultado = dao.obtenerAlbumes();
+    // Insertar artista
+    ObjectId idArtista = new ObjectId();
+    Document artista = new Document("_id", idArtista)
+            .append("tipo", TipoArtista.BANDA.toString())
+            .append("nombre", "Green Day")
+            .append("genero", Genero.ROCK.toString());
+    artistas.insertOne(artista);
 
-        assertFalse(resultado.isEmpty());
-        assertEquals(NOMBRE_ALBUM_ESPERADO, resultado.get(0).getNombre());
-    }
+    // Insertar álbum con canciones embebidas
+    Document cancion = new Document("titulo", "Know Your Enemy")
+            .append("duracion", 3.11f)
+            .append("idArtista", idArtista);
+
+    Document album = new Document("nombre", "21st Century Breakdown")
+            .append("fechaLanzamiento", new Date())
+            .append("genero", Genero.ROCK.toString())
+            .append("imagenPortada", "imagen.jpg")
+            .append("idArtista", idArtista)
+            .append("canciones", Arrays.asList(cancion));
+    albumes.insertOne(album);
+
+    // Probar método
+    AlbumesDAO dao = new AlbumesDAO();
+    List<Album> resultado = dao.obtenerAlbumes(idUsuario.toHexString());
+
+    assertFalse(resultado.isEmpty());
+    assertEquals(NOMBRE_ALBUM_ESPERADO, resultado.get(0).getNombre());
+}
 
     @Test
     public void testObtenerAlbumesPorGenero() {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Document> coleccion = db.getCollection("albumes");
         MongoCollection<Document> coleccionArtistas = db.getCollection("artistas");
+        MongoCollection<Document> usuarios = db.getCollection("usuarios");
+
+        ObjectId idUsuario = new ObjectId();
+
+        Usuario usuarioPojo = new Usuario();
+        usuarioPojo.setId(idUsuario);
+        usuarioPojo.setUsername("Usuario Prueba");
+        usuarioPojo.setEmail("prueba@test.com");
+        usuarioPojo.setContrasenia("1234");
+        usuarioPojo.setRestricciones(Collections.emptyList());
+        usuarioPojo.setFavoritos(new ArrayList<>());
 
         ObjectId artistaId = new ObjectId();
         Document artista = new Document("_id", artistaId)
@@ -191,7 +219,7 @@ public class AlbumesDAOTest {
         coleccion.insertOne(album);
 
         AlbumesDAO dao = new AlbumesDAO();
-        List<Album> albumes = dao.obtenerAlbumesPorGenero("ROCK");
+        List<Album> albumes = dao.obtenerAlbumesPorGenero(idUsuario.toHexString(),"ROCK");
 
         assertNotNull(albumes);
         assertFalse(albumes.isEmpty(), "La lista no debe estar vacia");
@@ -206,6 +234,17 @@ public class AlbumesDAOTest {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Document> coleccion = db.getCollection("albumes");
         MongoCollection<Document> coleccionArtistas = db.getCollection("artistas");
+        MongoCollection<Document> usuarios = db.getCollection("usuarios");
+
+       ObjectId idUsuario = new ObjectId();
+
+        Usuario usuarioPojo = new Usuario();
+        usuarioPojo.setId(idUsuario);
+        usuarioPojo.setUsername("Usuario Prueba");
+        usuarioPojo.setEmail("prueba@test.com");
+        usuarioPojo.setContrasenia("1234");
+        usuarioPojo.setRestricciones(Collections.emptyList());
+        usuarioPojo.setFavoritos(new ArrayList<>());
 
         ObjectId artistaId = new ObjectId();
         Document artista = new Document("_id", artistaId)
@@ -244,7 +283,7 @@ public class AlbumesDAOTest {
         coleccion.insertOne(album2);
 
         AlbumesDAO dao = new AlbumesDAO();
-        List<Album> albumes = dao.obtenerAlbumesPorNombre("Hits");
+        List<Album> albumes = dao.obtenerAlbumesPorNombre(idUsuario.toHexString(),"Hits");
 
         assertNotNull(albumes);
         assertFalse(albumes.isEmpty(), "La lista no debe estar vacia");
@@ -258,6 +297,17 @@ public class AlbumesDAOTest {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Document> coleccion = db.getCollection("albumes");
         MongoCollection<Document> coleccionArtistas = db.getCollection("artistas");
+        MongoCollection<Document> usuarios = db.getCollection("usuarios");
+
+        ObjectId idUsuario = new ObjectId();
+
+        Usuario usuarioPojo = new Usuario();
+        usuarioPojo.setId(idUsuario);
+        usuarioPojo.setUsername("Usuario Prueba");
+        usuarioPojo.setEmail("prueba@test.com");
+        usuarioPojo.setContrasenia("1234");
+        usuarioPojo.setRestricciones(Collections.emptyList());
+        usuarioPojo.setFavoritos(new ArrayList<>());
 
         ObjectId artistaId = new ObjectId();
         Date fechaLanzamiento = java.sql.Date.valueOf("2024-10-15");
@@ -282,7 +332,7 @@ public class AlbumesDAOTest {
         coleccion.insertOne(album);
 
         AlbumesDAO dao = new AlbumesDAO();
-        List<Album> albumes = dao.obtenerAlbumesPorFecha("2024-10-15");
+        List<Album> albumes = dao.obtenerAlbumesPorFecha(idUsuario.toHexString(),"2024-10-15");
 
         assertNotNull(albumes);
         assertFalse(albumes.isEmpty(), "La lista no debe estar vacia");

@@ -28,7 +28,7 @@ public interface IAlbumesDAO {
      *
      * @return Lista con todos los albumes de la base de datos
      */
-    public List<Album> obtenerAlbumes();
+    public List<Album> obtenerAlbumes(String idUsuario);
 
     /**
      * Metodo para obtener alumnos por genero de la base de datos
@@ -36,7 +36,7 @@ public interface IAlbumesDAO {
      * @param generoBuscado Genero por el que son buscados los albumes
      * @return Albumes obtenidos que compartan el mismo genero
      */
-    public List<Album> obtenerAlbumesPorGenero(String generoBuscado);
+    public List<Album> obtenerAlbumesPorGenero(String idUsuario, String generoBuscado);
 
     /**
      * Metodo para obtener alumnos por nombre de la base de datos
@@ -44,7 +44,7 @@ public interface IAlbumesDAO {
      * @param nombreBuscado Nombre por el que son buscados los albumes
      * @return Albumes obtenidos que comparten el mismo nombre
      */
-    public List<Album> obtenerAlbumesPorNombre(String nombreBuscado);
+    public List<Album> obtenerAlbumesPorNombre(String idUsuario,String nombreBuscado);
 
     /**
      * Metodo para obtener un album por nombre de la base de datos
@@ -61,7 +61,7 @@ public interface IAlbumesDAO {
      * buscar
      * @return Albumes obtenidos que compratan la misma fecha de lanzamiento
      */
-    public List<Album> obtenerAlbumesPorFecha(String fechaTexto);
+    public List<Album> obtenerAlbumesPorFecha(String idUsuario,String fechaTexto);
 
     /**
      * Metodo para obtener todas las canciones de un album.

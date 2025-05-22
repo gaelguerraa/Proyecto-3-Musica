@@ -32,7 +32,7 @@ public interface IAlbumesBO {
      * @throws NegocioException Si ocurre una incidencia al obtener los albumes
      * de la base de datos
      */
-    public List<AlbumDTO> obtenerAlbumes() throws NegocioException;
+    public List<AlbumDTO> obtenerAlbumes(String idUsuario) throws NegocioException;
 
     /**
      * Metodo para obtener todos los albumes de la base de datos y se obtiene
@@ -43,7 +43,7 @@ public interface IAlbumesBO {
      * @throws NegocioException Si ocurre una incidencia al obtener los albumes
      * de la base de datos
      */
-    public List<AlbumDTO> obtenerAlbumesPorGenero(String generoBuscado) throws NegocioException;
+    public List<AlbumDTO> obtenerAlbumesPorGenero(String idUsuario, String generoBuscado) throws NegocioException;
 
     /**
      * Metodo para obtener todos los albumes de la base de datos y se obtiene
@@ -54,7 +54,7 @@ public interface IAlbumesBO {
      * @throws NegocioException Si ocurre una incidencia al obtener los albumes
      * de la base de datos
      */
-    public List<AlbumDTO> obtenerAlbumesPorNombre(String nombreBuscado) throws NegocioException;
+    public List<AlbumDTO> obtenerAlbumesPorNombre(String idUsuario, String nombreBuscado) throws NegocioException;
 
     /**
      * Metodo para obtener un album de la base de datos y se obtiene por nombre
@@ -76,7 +76,7 @@ public interface IAlbumesBO {
      * @throws NegocioException Si ocurre una incidencia al obtener los albumes
      * de la base de datos
      */
-    public List<AlbumDTO> obtenerAlgumesPorFecha(String fechaTexto) throws NegocioException;
+    public List<AlbumDTO> obtenerAlgumesPorFecha(String idUsuario, String fechaTexto) throws NegocioException;
 
     /**
      * Metodo para obtener la lista de todas las canciones pertenecientes a un

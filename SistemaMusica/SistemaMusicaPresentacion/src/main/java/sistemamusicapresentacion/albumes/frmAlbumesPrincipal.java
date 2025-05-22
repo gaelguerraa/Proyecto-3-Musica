@@ -78,23 +78,23 @@ public class frmAlbumesPrincipal extends javax.swing.JFrame {
 
         try {
             if (textoBuscado.isEmpty()) {
-                albumesConsultados = albumesBO.obtenerAlbumes();
+                albumesConsultados = albumesBO.obtenerAlbumes(usuarioActual.getId());
             } else {
                 switch (filtroSeleccionado) {
                     case "Genero":
                         albumesConsultados
-                                = albumesBO.obtenerAlbumesPorGenero(textoBuscado);
+                                = albumesBO.obtenerAlbumesPorGenero(usuarioActual.getId(),textoBuscado);
                         break;
                     case "Nombre":
                         albumesConsultados
-                                = albumesBO.obtenerAlbumesPorNombre(textoBuscado);
+                                = albumesBO.obtenerAlbumesPorNombre(usuarioActual.getId(),textoBuscado);
                         break;
                     case "Fecha de Lanzamiento":
                         albumesConsultados
-                                = albumesBO.obtenerAlgumesPorFecha(textoBuscado);
+                                = albumesBO.obtenerAlgumesPorFecha(usuarioActual.getId(), textoBuscado);
                         break;
                     default:
-                        albumesConsultados = albumesBO.obtenerAlbumes();
+                        albumesConsultados = albumesBO.obtenerAlbumes(usuarioActual.getId());
                         break;
                 }
             }

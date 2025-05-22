@@ -89,8 +89,8 @@ public class AlbumesBO implements IAlbumesBO {
      * de la base de datos
      */
     @Override
-    public List<AlbumDTO> obtenerAlbumes() throws NegocioException {
-        List<Album> albumes = albumesDAO.obtenerAlbumes();
+    public List<AlbumDTO> obtenerAlbumes(String idUsuario) throws NegocioException {
+        List<Album> albumes = albumesDAO.obtenerAlbumes(idUsuario);
 
         if (albumes != null) {
             List<AlbumDTO> albumesDTO = new ArrayList<>();
@@ -130,14 +130,15 @@ public class AlbumesBO implements IAlbumesBO {
      * Metodo para obtener todos los albumes de la base de datos y se obtiene
      * por genero
      *
+     * @param idUsuario
      * @param generoBuscado Genero por el que se busca
      * @return Lista con todos los albumes que coinciden con el genero
      * @throws NegocioException Si ocurre una incidencia al obtener los albumes
      * de la base de datos
      */
     @Override
-    public List<AlbumDTO> obtenerAlbumesPorGenero(String generoBuscado) throws NegocioException {
-        List<Album> albumes = albumesDAO.obtenerAlbumesPorGenero(generoBuscado);
+    public List<AlbumDTO> obtenerAlbumesPorGenero(String idUsuario, String generoBuscado) throws NegocioException {
+        List<Album> albumes = albumesDAO.obtenerAlbumesPorGenero(idUsuario, generoBuscado);
 
         if (albumes != null) {
             List<AlbumDTO> albumesDTO = new ArrayList<>();
@@ -177,14 +178,15 @@ public class AlbumesBO implements IAlbumesBO {
      * Metodo para obtener todos los albumes de la base de datos y se obtiene
      * por nombre
      *
+     * @param idUsuario
      * @param nombreBuscado Nombre de album por el que se busca
      * @return Lista con todos los albumes que coinciden con el genero
      * @throws NegocioException Si ocurre una incidencia al obtener los albumes
      * de la base de datos
      */
     @Override
-    public List<AlbumDTO> obtenerAlbumesPorNombre(String nombreBuscado) throws NegocioException {
-        List<Album> albumes = albumesDAO.obtenerAlbumesPorNombre(nombreBuscado);
+    public List<AlbumDTO> obtenerAlbumesPorNombre(String idUsuario, String nombreBuscado) throws NegocioException {
+        List<Album> albumes = albumesDAO.obtenerAlbumesPorNombre(idUsuario, nombreBuscado);
 
         if (albumes != null) {
             List<AlbumDTO> albumesDTO = new ArrayList<>();
@@ -266,6 +268,7 @@ public class AlbumesBO implements IAlbumesBO {
      * Metodo para obtener todos los algumes de la base de datos y se obtiene
      * por fecha
      *
+     * @param idUsuario
      * @param fechaTexto Fecha por la que se va a buscar los albumes en la base
      * de datos
      * @return Lista con todos los albumes de quinciden con la fecha
@@ -273,10 +276,10 @@ public class AlbumesBO implements IAlbumesBO {
      * de la base de datos
      */
     @Override
-    public List<AlbumDTO> obtenerAlgumesPorFecha(String fechaTexto) throws NegocioException {
+    public List<AlbumDTO> obtenerAlgumesPorFecha(String idUsuario, String fechaTexto) throws NegocioException {
         validarFormatoFecha(fechaTexto);
 
-        List<Album> albumes = albumesDAO.obtenerAlbumesPorFecha(fechaTexto);
+        List<Album> albumes = albumesDAO.obtenerAlbumesPorFecha(idUsuario, fechaTexto);
 
         if (albumes != null) {
             List<AlbumDTO> albumesDTO = new ArrayList<>();
