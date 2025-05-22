@@ -31,6 +31,9 @@ public class frmAlbumesPrincipal extends javax.swing.JFrame {
 
     /**
      * Creates new form frmAlbumesPrincipal
+     *
+     * @param universal
+     * @param usuarioActual
      */
     public frmAlbumesPrincipal(ControladorUniversal universal, UsuarioDTO usuarioActual) {
         initComponents();
@@ -53,8 +56,9 @@ public class frmAlbumesPrincipal extends javax.swing.JFrame {
                     try {
                         String nombreAlbum = (String) tablaAlbumes.getValueAt(selectedRow, 0);
                         AlbumDTO albumSeleccionado = albumesBO.obtenerAlbumPorNombre(nombreAlbum);
-                        universal.mostrarAlbumDetalles(usuarioActual, albumSeleccionado);
                         System.out.println(nombreAlbum);
+                        System.out.println("ID ALBUM SELECCIONADO: " + albumSeleccionado.getId());
+                        universal.mostrarAlbumDetalles(usuarioActual, albumSeleccionado);
                         this.dispose();
                     } catch (NegocioException ex) {
                         JOptionPane.showMessageDialog(this,

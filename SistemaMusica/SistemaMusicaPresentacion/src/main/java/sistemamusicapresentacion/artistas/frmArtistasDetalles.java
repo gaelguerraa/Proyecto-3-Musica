@@ -36,29 +36,33 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
     private IArtistasBO artistasBO = FabricaObjetosNegocio.crearArtistasBO();
     ControladorUniversal universal;
     ArtistaDTO artistaSeleccionado;
-    
+
     /**
      * Creates new form frmArtistasDetalles
+     *
+     * @param universal
+     * @param artistaSeleccionado
+     * @param usuarioActual
      */
     public frmArtistasDetalles(ControladorUniversal universal, ArtistaDTO artistaSeleccionado, UsuarioDTO usuarioActual) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Artistas Detalles");
-        this.universal=universal;
+        this.universal = universal;
         this.usuarioActual = usuarioActual;
-        this.artistaSeleccionado=artistasBO.buscarArtistaPorNombre(artistaSeleccionado.getNombre());
+        this.artistaSeleccionado = artistasBO.buscarArtistaPorNombre(artistaSeleccionado.getNombre());
         this.mostrarInfoArtista(artistaSeleccionado);
         cbMostrarInactivos.addItemListener(new ItemListener() {
-        @Override
-        public void itemStateChanged(ItemEvent e) {
-            if (e.getStateChange() == ItemEvent.SELECTED) {
-                if (cbMostrarInactivos.getSelectedItem().toString().equalsIgnoreCase("si")) {
-                    LlenarTablaIntegrantesTodos();
-                } else {
-                    LlenarTablaIntegrantesActivos();
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    if (cbMostrarInactivos.getSelectedItem().toString().equalsIgnoreCase("si")) {
+                        LlenarTablaIntegrantesTodos();
+                    } else {
+                        LlenarTablaIntegrantesActivos();
+                    }
                 }
             }
-        }
         });
         if (cbMostrarInactivos.getSelectedItem().toString().equalsIgnoreCase("si")) {
             LlenarTablaIntegrantesTodos();
@@ -67,12 +71,12 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
         }
 
     }
-    
-    public void mostrarInfoArtista(ArtistaDTO artista){
+
+    public void mostrarInfoArtista(ArtistaDTO artista) {
         this.txtNombreArtista.setText(artista.getNombre());
         this.txtGenero.setText(artista.getGenero().toString());
         this.txtTipoArtista.setText(artista.getTipo().toString());
-        
+
         try {
             String rutaImagen = artista.getImagen();
 
@@ -96,18 +100,18 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
             labelFoto.setText("Error al cargar imagen");
             System.err.println("Error al mostrar imagen del artista: " + e.getMessage());
         }
-    } 
-    
-    private void LlenarTablaIntegrantesTodos(){
+    }
+
+    private void LlenarTablaIntegrantesTodos() {
         String idArtista = artistaSeleccionado.getId().toString();
         List<IntegranteDTO> integrantes = artistasBO.consultarTodosLosIntegrantes(idArtista);
-        
+
         DefaultTableModel modelo = (DefaultTableModel) tablaArtistas.getModel();
-        modelo.setRowCount(0); 
+        modelo.setRowCount(0);
 
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
-        
-        for(IntegranteDTO i : integrantes){
+
+        for (IntegranteDTO i : integrantes) {
             Object[] fila = {
                 i.getNombre(),
                 i.getRol(),
@@ -117,17 +121,17 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
             modelo.addRow(fila);
         }
     }
-    
-    private void LlenarTablaIntegrantesActivos(){
+
+    private void LlenarTablaIntegrantesActivos() {
         String idArtista = artistaSeleccionado.getId().toString();
         List<IntegranteDTO> integrantes = artistasBO.consultarIntegrantesActivos(idArtista);
-        
+
         DefaultTableModel modelo = (DefaultTableModel) tablaArtistas.getModel();
-        modelo.setRowCount(0); 
+        modelo.setRowCount(0);
 
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
-        
-        for(IntegranteDTO i : integrantes){
+
+        for (IntegranteDTO i : integrantes) {
             Object[] fila = {
                 i.getNombre(),
                 i.getRol(),
@@ -137,33 +141,33 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
             modelo.addRow(fila);
         }
     }
-    
+
     public void agregarArtistaAFavoritos() {
         try {
             String idUsuario = usuarioActual.getId();
             FavoritoDTO nuevoFavorito = new FavoritoDTO(
-                artistaSeleccionado.getNombre(),
-                artistaSeleccionado.getGenero().toString(),
-                TipoContenido.ARTISTA, 
-                artistaSeleccionado.getId().toString(), 
-                new Date()
+                    artistaSeleccionado.getNombre(),
+                    artistaSeleccionado.getGenero().toString(),
+                    TipoContenido.ARTISTA,
+                    artistaSeleccionado.getId().toString(),
+                    new Date()
             );
 
             boolean artistaAgregado = usuariosBO.agregarFavorito(idUsuario, nuevoFavorito);
 
             if (artistaAgregado) {
                 JOptionPane.showMessageDialog(null, "Artista agregado a tus favoritos", "Operación exitosa",
-                    JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null,
-                    "Este artista ya está en tus favoritos", "Información",
-                    JOptionPane.INFORMATION_MESSAGE);
+                        "Este artista ya está en tus favoritos", "Información",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
 
         } catch (NegocioException e) {
 
             JOptionPane.showMessageDialog(null, "Error al agregar artista: " + e.getMessage(), "Error de negocio",
-                JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.ERROR_MESSAGE);
 
             System.err.println("Error de negocio al agregar favorito: " + e.getMessage());
             e.printStackTrace();
@@ -171,7 +175,7 @@ public class frmArtistasDetalles extends javax.swing.JFrame {
         } catch (Exception e) {
 
             JOptionPane.showMessageDialog(null, "️Ocurrió un error inesperado", "Error",
-                JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.ERROR_MESSAGE);
 
             System.err.println("Error inesperado al agregar favorito: " + e.getMessage());
             e.printStackTrace();

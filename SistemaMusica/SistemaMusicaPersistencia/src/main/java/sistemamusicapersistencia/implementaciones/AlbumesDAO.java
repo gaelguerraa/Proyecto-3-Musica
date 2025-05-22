@@ -4,7 +4,6 @@
  */
 package sistemamusicapersistencia.implementaciones;
 
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
@@ -294,6 +293,59 @@ public class AlbumesDAO implements IAlbumesDAO {
 
         List<Album> resultado = ejecutarConsultaAlbumes(pipeline, coleccion);
         return resultado.isEmpty() ? null : resultado.get(0);
+    }
+
+    /**
+     * Metodo para obtener todas las canciones de un album.
+     *
+     * @param idAlbum ID del album a obtener sus canciones
+     * @return Lista de canciones que contiene el album
+     */
+    @Override
+    public List<Cancion> obtenerCancionesPorIdAlbum(String idAlbum) {
+        MongoDatabase baseDatos = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Document> coleccion = baseDatos.getCollection(COLECCION);
+        
+        ObjectId objectId;
+        try {
+            objectId = new ObjectId(idAlbum);
+        } catch (IllegalArgumentException e) {
+            System.out.println("ID de album invalido:" + idAlbum);
+            return new ArrayList<>();
+        }
+        
+        Document filtro = new Document();
+        filtro.append("_id", objectId);
+        Document albumDoc = coleccion.find(filtro).first();
+        
+        if (albumDoc == null) {
+            System.out.println("No se encontro el album con ID: " + idAlbum);
+            return new ArrayList<>();
+        }
+        
+        List<Cancion> canciones = new ArrayList<>();
+        List<Document> cancionesDoc = (List<Document>) albumDoc.get(CAMPO_CANCIONES, List.class);
+        
+        if (cancionesDoc != null){
+            for (Document c : cancionesDoc) {
+                Cancion cancion = new Cancion();
+                
+                if (c.containsKey(CAMPO_ID)) {
+                    cancion.setId(c.getObjectId(CAMPO_ID));
+                }
+                
+                cancion.setTitulo(c.getString("titulo"));
+                cancion.setDuracion(((Number) c.get("duracion")).floatValue());
+                
+                if (c.containsKey(CAMPO_ID_ARTISTA)) {
+                    cancion.setIdArtista(c.getObjectId(CAMPO_ID_ARTISTA));
+                }
+                
+                canciones.add(cancion);
+            }
+        }
+        
+        return canciones;
     }
 
     /**

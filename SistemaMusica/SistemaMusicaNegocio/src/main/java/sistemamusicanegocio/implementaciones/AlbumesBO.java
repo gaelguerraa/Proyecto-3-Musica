@@ -235,6 +235,7 @@ public class AlbumesBO implements IAlbumesBO {
 
         if (album != null) {
             AlbumDTO albumDTO = new AlbumDTO();
+            albumDTO.setId(album.getId().toString());
             albumDTO.setNombre(album.getNombre());
             albumDTO.setFechaLanzamiento(album.getFechaLanzamiento());
             albumDTO.setGenero(album.getGenero());
@@ -307,9 +308,40 @@ public class AlbumesBO implements IAlbumesBO {
 
             return albumesDTO;
         } else {
-            throw new NegocioException("No se podueron obtener los albumes de la base de datos.");
+            throw new NegocioException("No se pudieron obtener los albumes de la base de datos.");
         }
 
+    }
+
+    /**
+     * Metodo para obtener la lista de todas las canciones pertenecientes a un
+     * album
+     *
+     * @param idAlbum ID del album a obtener sus canciones
+     * @return Lista de todas las canciones pertenecientes al album
+     * @throws NegocioException Si ocurre una incidencia al obtener las
+     * canciones de la base de datos
+     */
+    @Override
+    public List<CancionDTO> obtenerCancionesPorIdAlbum(String idAlbum) throws NegocioException {
+        List<Cancion> canciones = albumesDAO.obtenerCancionesPorIdAlbum(idAlbum);
+
+        if (canciones != null) {
+            List<CancionDTO> cancionesDTO = new ArrayList<>();
+
+            for (Cancion cancion : canciones) {
+                CancionDTO cancionDTO = new CancionDTO();
+                cancionDTO.setTitulo(cancion.getTitulo());
+                cancionDTO.setDuracion(cancion.getDuracion());
+                cancionDTO.setIdArtista(cancion.getIdArtista().toString());
+
+                cancionesDTO.add(cancionDTO);
+            }
+
+            return cancionesDTO;
+        } else {
+            throw new NegocioException("No se pudieron obtener las canciones del album.");
+        }
     }
 
     /**

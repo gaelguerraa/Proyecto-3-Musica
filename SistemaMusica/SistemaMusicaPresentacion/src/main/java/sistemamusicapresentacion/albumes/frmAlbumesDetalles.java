@@ -4,8 +4,20 @@
  */
 package sistemamusicapresentacion.albumes;
 
+import java.awt.Dimension;
+import java.awt.Image;
+import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import sistemamusica.dtos.AlbumDTO;
+import sistemamusica.dtos.ArtistaDTO;
+import sistemamusica.dtos.CancionDTO;
 import sistemamusica.dtos.UsuarioDTO;
+import sistemamusicanegocio.exception.NegocioException;
+import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
+import sistemamusicanegocio.interfaces.IAlbumesBO;
+import sistemamusicanegocio.interfaces.IArtistasBO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
@@ -17,6 +29,8 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
     UsuarioDTO usuarioActual;
     ControladorUniversal universal;
     AlbumDTO albumRecibido;
+    private final IArtistasBO artistasBO = FabricaObjetosNegocio.crearArtistasBO();
+    private final IAlbumesBO albumesBO = FabricaObjetosNegocio.crearAlbumesBO();
 
     /**
      * Creates new form frmAlbumesDetalles
@@ -31,6 +45,72 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
         setTitle("Album Detalles");
         this.usuarioActual = usuarioActual;
         this.universal = universal;
+        this.albumRecibido = albumRecibido;
+        mostrarInfoAlbum();
+        llenarTablaCanciones();
+    }
+
+    /**
+     * Metodo para mostrar la informacion del album
+     *
+     */
+    private void mostrarInfoAlbum() {
+
+        try {
+            ArtistaDTO artistaInfo = artistasBO.buscarArtistaPorId(albumRecibido.getIdArtista());
+
+            txtNombreArtista.setText(artistaInfo.getNombre());
+            txtAlbum.setText(albumRecibido.getNombre());
+
+            try {
+                String rutaImagen = albumRecibido.getImagenPortada();
+
+                if (rutaImagen == null || rutaImagen.isEmpty()) {
+                    labelFoto.setIcon(null); // Limpiar si no hay imagen
+                    labelFoto.setText("Sin imagen");
+                    return;
+                }
+
+                ImageIcon imagenOriginal = new ImageIcon(rutaImagen);
+
+                Image imagenEscalada = imagenOriginal.getImage()
+                        .getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+                labelFoto.setIcon(null);
+                labelFoto.setPreferredSize(new Dimension(80, 80));
+                labelFoto.setText(""); // Quitar el texto por si habia "Sin imagen"
+            } catch (Exception e) {
+                labelFoto.setIcon(null);
+                labelFoto.setText("Error al cargar la imagen");
+                System.err.println("Error al mostrar imagen del artista: " + e.getMessage());
+            }
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al mostrar info del album: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void llenarTablaCanciones() {
+        try {
+            List<CancionDTO> canciones
+                    = albumesBO.obtenerCancionesPorIdAlbum(albumRecibido.getId());
+            System.out.println("ID ALBUM: " + albumRecibido.getId());
+
+            DefaultTableModel modelo = (DefaultTableModel) tablaAlbumDetalles.getModel();
+            modelo.setRowCount(0);
+            
+            for (CancionDTO c : canciones){
+                Object[] fila = {
+                    c.getTitulo(),
+                    c.getDuracion()
+                };
+                modelo.addRow(fila);
+            }
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar las canciones: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -301,6 +381,7 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         universal.mostrarAlbumesPrincipal(usuarioActual);
+        this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void txtAlbumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAlbumActionPerformed

@@ -4,11 +4,9 @@
  */
 package sistemamusicanegocio.interfaces;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 import sistemamusica.dtos.AlbumDTO;
+import sistemamusica.dtos.CancionDTO;
 import sistemamusicanegocio.exception.NegocioException;
 
 /**
@@ -79,5 +77,16 @@ public interface IAlbumesBO {
      * de la base de datos
      */
     public List<AlbumDTO> obtenerAlgumesPorFecha(String fechaTexto) throws NegocioException;
+
+    /**
+     * Metodo para obtener la lista de todas las canciones pertenecientes a un
+     * album
+     *
+     * @param idAlbum ID del album a obtener sus canciones
+     * @return Lista de todas las canciones pertenecientes al album
+     * @throws NegocioException Si ocurre una incidencia al obtener las
+     * canciones de la base de datos
+     */
+    public List<CancionDTO> obtenerCancionesPorIdAlbum(String idAlbum) throws NegocioException;
 
 }

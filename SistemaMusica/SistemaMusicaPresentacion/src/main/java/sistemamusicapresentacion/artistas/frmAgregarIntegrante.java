@@ -27,93 +27,97 @@ public class frmAgregarIntegrante extends javax.swing.JFrame {
     UsuarioDTO usuario;
     ControladorUniversal controlador;
     Artista banda;
-    private IArtistasBO artistasBO = FabricaObjetosNegocio.crearArtistasBO(); 
+    private IArtistasBO artistasBO = FabricaObjetosNegocio.crearArtistasBO();
     private int contadorIntegrantes = 0;
-    
+
     /**
      * Creates new form frmAgregarIntegrante
+     *
+     * @param controlador
+     * @param banda
+     * @param usuario
      */
     public frmAgregarIntegrante(ControladorUniversal controlador, Artista banda, UsuarioDTO usuario) {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Agregar Integrantes");
-        this.controlador=controlador;
-        this.usuario=usuario;
-        this.banda=banda;
+        this.controlador = controlador;
+        this.usuario = usuario;
+        this.banda = banda;
         LlenarComboboxRol();
         btnRegistrarArtista.setEnabled(false);
     }
 
-    public void LlenarComboboxRol(){
-        cbRol.removeAllItems(); 
-        for(RolIntegrante rol : RolIntegrante.values()){
+    public void LlenarComboboxRol() {
+        cbRol.removeAllItems();
+        for (RolIntegrante rol : RolIntegrante.values()) {
             cbRol.addItem(rol.name());
         }
     }
-    
-    public void guardarIntegrante(){
-    String nombre = txtNombreIntegrante.getText().trim();
-    String rolSeleccionado = (String) this.cbRol.getSelectedItem();
-    LocalDate fechaIng = fechaIngreso.getDate();
 
-    if (nombre.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "El nombre del integrante es obligatorio.", "Error", JOptionPane.ERROR_MESSAGE);
-        return; 
-    }
+    public void guardarIntegrante() {
+        String nombre = txtNombreIntegrante.getText().trim();
+        String rolSeleccionado = (String) this.cbRol.getSelectedItem();
+        LocalDate fechaIng = fechaIngreso.getDate();
 
-    if (rolSeleccionado == null) {
-        JOptionPane.showMessageDialog(this, "Debe seleccionar un rol para el integrante.", "Error", JOptionPane.ERROR_MESSAGE);
-        return; 
-    }
-
-    if (fechaIng == null) {
-        JOptionPane.showMessageDialog(this, "La fecha de ingreso del integrante es obligatoria.", "Error", JOptionPane.ERROR_MESSAGE);
-        return; 
-    }
-
-    try {
-        String idArtista = banda.getId().toString();
-        RolIntegrante rol = RolIntegrante.valueOf(rolSeleccionado);
-        LocalDate fechaSal = fechaSalida.getDate(); // Puede ser null si sigue activo
-        boolean activo = checkActivo.isSelected();
-
-        Date fechaIngDate = Date.from(fechaIng.atStartOfDay(ZoneId.systemDefault()).toInstant());
-
-        Date fechaSalDate = (fechaSal != null)
-                ? Date.from(fechaSal.atStartOfDay(ZoneId.systemDefault()).toInstant())
-                : null;
-
-        IntegranteDTO integrante = new IntegranteDTO(nombre, rol, fechaIngDate, fechaSalDate, activo);
-        boolean integrantePersistido = artistasBO.agregarIntegrante(idArtista, integrante);
-        contadorIntegrantes++;
-
-        JOptionPane.showMessageDialog(this, "Integrante agregado con éxito.");
-        limpiarFormulario(); 
-        if (contadorIntegrantes >= 2) {
-            btnRegistrarArtista.setEnabled(true);
+        if (nombre.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El nombre del integrante es obligatorio.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
-    } catch (NegocioException ex) {
-        JOptionPane.showMessageDialog(this, "Error al agregar integrante: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        if (rolSeleccionado == null) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un rol para el integrante.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (fechaIng == null) {
+            JOptionPane.showMessageDialog(this, "La fecha de ingreso del integrante es obligatoria.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            String idArtista = banda.getId().toString();
+            RolIntegrante rol = RolIntegrante.valueOf(rolSeleccionado);
+            LocalDate fechaSal = fechaSalida.getDate(); // Puede ser null si sigue activo
+            boolean activo = checkActivo.isSelected();
+
+            Date fechaIngDate = Date.from(fechaIng.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+            Date fechaSalDate = (fechaSal != null)
+                    ? Date.from(fechaSal.atStartOfDay(ZoneId.systemDefault()).toInstant())
+                    : null;
+
+            IntegranteDTO integrante = new IntegranteDTO(nombre, rol, fechaIngDate, fechaSalDate, activo);
+            boolean integrantePersistido = artistasBO.agregarIntegrante(idArtista, integrante);
+            contadorIntegrantes++;
+
+            JOptionPane.showMessageDialog(this, "Integrante agregado con éxito.");
+            limpiarFormulario();
+            if (contadorIntegrantes >= 2) {
+                btnRegistrarArtista.setEnabled(true);
+            }
+
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(this, "Error al agregar integrante: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
-    }
-    
-    public void limpiarFormulario(){
+
+    public void limpiarFormulario() {
         this.txtNombreIntegrante.setText("");
         this.fechaIngreso.setDate(null);
         this.fechaSalida.setDate(null);
         this.checkActivo.setSelected(false);
     }
-    
-    public void limpiarFormularioFinal(){
+
+    public void limpiarFormularioFinal() {
         this.txtNombreIntegrante.setText("");
         this.fechaIngreso.setDate(null);
         this.fechaSalida.setDate(null);
         this.checkActivo.setSelected(false);
-        this.contadorIntegrantes=0;
+        this.contadorIntegrantes = 0;
         btnRegistrarArtista.setEnabled(false);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -290,9 +294,9 @@ public class frmAgregarIntegrante extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarArtistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarArtistaActionPerformed
-        if(contadorIntegrantes < 2) {
-            JOptionPane.showMessageDialog(this, "Debe agregar al menos 2 integrantes antes de guardar el artista", 
-                "Error", JOptionPane.ERROR_MESSAGE);
+        if (contadorIntegrantes < 2) {
+            JOptionPane.showMessageDialog(this, "Debe agregar al menos 2 integrantes antes de guardar el artista",
+                    "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         controlador.mostrarArtistasPrincipal(usuario);
