@@ -4,10 +4,14 @@
  */
 package sistemamusicapresentacion.albumes;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import sistemamusica.dtos.AlbumDTO;
 import sistemamusica.dtos.ArtistaDTO;
 import sistemamusica.dtos.UsuarioDTO;
@@ -25,7 +29,8 @@ public class frmAgregarAlbum extends javax.swing.JFrame {
     UsuarioDTO usuario;
     private IArtistasBO artistasBO = FabricaObjetosNegocio.crearArtistasBO();
     ControladorUniversal controlador;
-
+    private String rutaImagenSeleccionada;
+    
     /**
      * Creates new form frmAgregarAlbum
      */
@@ -45,8 +50,24 @@ public class frmAgregarAlbum extends javax.swing.JFrame {
         }
     }
 
-    private String obtenerRutaImagen() {
-        return null;
+    public String subirImagen(){
+        JFileChooser selector = new JFileChooser();
+        selector.setDialogTitle("Selecciona una imagen");
+
+        // Filtro de archivos de imagen
+        FileNameExtensionFilter filtroImagenes = new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif");
+        selector.setFileFilter(filtroImagenes);
+
+        int resultado = selector.showOpenDialog(null);
+
+        String rutaImagen = null;
+        
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            File archivoSeleccionado = selector.getSelectedFile();
+            rutaImagen = archivoSeleccionado.getAbsolutePath();
+
+        }
+        return rutaImagen;
     }
 
     /**
@@ -378,7 +399,12 @@ public class frmAgregarAlbum extends javax.swing.JFrame {
     }//GEN-LAST:event_comboboxGeneroActionPerformed
 
     private void btnFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFotoActionPerformed
-        // TODO add your handling code here:
+        this.rutaImagenSeleccionada = subirImagen();
+        if (rutaImagenSeleccionada != null) {
+            JOptionPane.showMessageDialog(this, "Imagen seleccionada exitosamente.");
+        } else {
+            JOptionPane.showMessageDialog(this, "No se seleccionó ninguna imagen.");
+        }
     }//GEN-LAST:event_btnFotoActionPerformed
 
     private void btnAgregarAlbumContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarAlbumContinuarActionPerformed
@@ -389,7 +415,7 @@ public class frmAgregarAlbum extends javax.swing.JFrame {
         String artistaSeleccionadoAlbum = obtenerIdArtistaString(artistaSeleccionadoComboBox);
         LocalDate localDate = fechaLanzamiento.getDate();
         Date fechaSalidaAlbum = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        String rutaImagenAlbum = obtenerRutaImagen();
+        String rutaImagenAlbum = rutaImagenSeleccionada;
 
         AlbumDTO albumEnviar = new AlbumDTO(
                 nombreAlbum,

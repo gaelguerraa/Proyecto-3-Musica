@@ -6,6 +6,7 @@ package sistemamusicapresentacion.albumes;
 
 import java.awt.Dimension;
 import java.awt.Image;
+import java.util.Date;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -13,11 +14,14 @@ import javax.swing.table.DefaultTableModel;
 import sistemamusica.dtos.AlbumDTO;
 import sistemamusica.dtos.ArtistaDTO;
 import sistemamusica.dtos.CancionDTO;
+import sistemamusica.dtos.FavoritoDTO;
 import sistemamusica.dtos.UsuarioDTO;
+import sistemamusicadominio.TipoContenido;
 import sistemamusicanegocio.exception.NegocioException;
 import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
 import sistemamusicanegocio.interfaces.IAlbumesBO;
 import sistemamusicanegocio.interfaces.IArtistasBO;
+import sistemamusicanegocio.interfaces.IUsuariosBO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
@@ -26,6 +30,7 @@ import sistemamusicapresentacion.main.ControladorUniversal;
  */
 public class frmAlbumesDetalles extends javax.swing.JFrame {
 
+    private IUsuariosBO usuariosBO = FabricaObjetosNegocio.crearUsuariosBO();
     UsuarioDTO usuarioActual;
     ControladorUniversal universal;
     AlbumDTO albumRecibido;
@@ -110,6 +115,46 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this,
                     "Error al cargar las canciones: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+     public void agregarAlbumAFavoritos() {
+        try {
+            String idUsuario = usuarioActual.getId();
+            FavoritoDTO nuevoFavorito = new FavoritoDTO(
+                    albumRecibido.getNombre(),
+                    albumRecibido.getGenero().toString(),
+                    TipoContenido.ALBUM,
+                    albumRecibido.getId(),
+                    new Date()
+            );
+
+            boolean artistaAgregado = usuariosBO.agregarFavorito(idUsuario, nuevoFavorito);
+
+            if (artistaAgregado) {
+                JOptionPane.showMessageDialog(null, "Album agregado a tus favoritos", "Operación exitosa",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Este album ya está en tus favoritos", "Información",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        } catch (NegocioException e) {
+
+            JOptionPane.showMessageDialog(null, "Error al agregar el album: " + e.getMessage(), "Error de negocio",
+                    JOptionPane.ERROR_MESSAGE);
+
+            System.err.println("Error de negocio al agregar favorito: " + e.getMessage());
+            e.printStackTrace();
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(null, "️Ocurrió un error inesperado", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+
+            System.err.println("Error inesperado al agregar favorito: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -296,6 +341,11 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
         btnAgregarFavoritos.setBackground(new java.awt.Color(255, 204, 0));
         btnAgregarFavoritos.setFont(new java.awt.Font("Gotham Black", 0, 14)); // NOI18N
         btnAgregarFavoritos.setText("Agregar a Favoritos");
+        btnAgregarFavoritos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarFavoritosActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
         panelFondo.setLayout(panelFondoLayout);
@@ -392,6 +442,10 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
         universal.mostrarModuloPrincipalUsuarios(usuarioActual);
         this.dispose();
     }//GEN-LAST:event_btnUsuarioActionPerformed
+
+    private void btnAgregarFavoritosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarFavoritosActionPerformed
+        agregarAlbumAFavoritos();
+    }//GEN-LAST:event_btnAgregarFavoritosActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
