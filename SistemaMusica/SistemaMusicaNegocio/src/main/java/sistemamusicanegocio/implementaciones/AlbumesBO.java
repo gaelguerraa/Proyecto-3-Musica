@@ -63,6 +63,7 @@ public class AlbumesBO implements IAlbumesBO {
 
                     for (Cancion c : album.getCanciones()) {
                         CancionDTO cancionDTO = new CancionDTO();
+                        cancionDTO.setId(c.getId().toString());
                         cancionDTO.setTitulo(c.getTitulo());
                         cancionDTO.setDuracion(c.getDuracion());
                         cancionDTO.setIdArtista(c.getIdArtista().toString());
@@ -107,6 +108,7 @@ public class AlbumesBO implements IAlbumesBO {
 
                     for (Cancion c : a.getCanciones()) {
                         CancionDTO cancionDTO = new CancionDTO();
+                        cancionDTO.setId(c.getId().toString());
                         cancionDTO.setTitulo(c.getTitulo());
                         cancionDTO.setDuracion(c.getDuracion());
                         cancionDTO.setIdArtista(c.getIdArtista().toString());
@@ -155,6 +157,7 @@ public class AlbumesBO implements IAlbumesBO {
 
                     for (Cancion c : a.getCanciones()) {
                         CancionDTO cancionDTO = new CancionDTO();
+                        cancionDTO.setId(c.getId().toString());
                         cancionDTO.setTitulo(c.getTitulo());
                         cancionDTO.setDuracion(c.getDuracion());
                         cancionDTO.setIdArtista(c.getIdArtista().toString());
@@ -203,6 +206,7 @@ public class AlbumesBO implements IAlbumesBO {
 
                     for (Cancion c : a.getCanciones()) {
                         CancionDTO cancionDTO = new CancionDTO();
+                        cancionDTO.setId(c.getId().toString());
                         cancionDTO.setTitulo(c.getTitulo());
                         cancionDTO.setDuracion(c.getDuracion());
                         cancionDTO.setIdArtista(c.getIdArtista().toString());
@@ -248,6 +252,7 @@ public class AlbumesBO implements IAlbumesBO {
 
                 for (Cancion c : album.getCanciones()) {
                     CancionDTO cancionDTO = new CancionDTO();
+                    cancionDTO.setId(c.getId().toString());
                     cancionDTO.setTitulo(c.getTitulo());
                     cancionDTO.setDuracion(c.getDuracion());
                     cancionDTO.setIdArtista(c.getIdArtista().toString());
@@ -296,6 +301,7 @@ public class AlbumesBO implements IAlbumesBO {
 
                     for (Cancion c : a.getCanciones()) {
                         CancionDTO cancionDTO = new CancionDTO();
+                        cancionDTO.setId(c.getId().toString());
                         cancionDTO.setTitulo(c.getTitulo());
                         cancionDTO.setDuracion(c.getDuracion());
                         cancionDTO.setIdArtista(c.getIdArtista().toString());
@@ -334,6 +340,7 @@ public class AlbumesBO implements IAlbumesBO {
 
             for (Cancion cancion : canciones) {
                 CancionDTO cancionDTO = new CancionDTO();
+                cancionDTO.setId(cancion.getId().toString());
                 cancionDTO.setTitulo(cancion.getTitulo());
                 cancionDTO.setDuracion(cancion.getDuracion());
                 cancionDTO.setIdArtista(cancion.getIdArtista().toString());
@@ -360,6 +367,11 @@ public class AlbumesBO implements IAlbumesBO {
         } catch (DateTimeParseException e) {
             throw new NegocioException("La fecha debe tener el formato yyyy-MM-dd");
         }
+    }
+
+    @Override
+    public CancionDTO buscarCancionPorId(String idCancion) {
+        return albumesDAO.buscarCancionPorId(idCancion);
     }
 
 }

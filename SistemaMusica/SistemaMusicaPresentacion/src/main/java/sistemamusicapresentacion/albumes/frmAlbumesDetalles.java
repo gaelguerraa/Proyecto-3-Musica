@@ -106,6 +106,7 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
             
             for (CancionDTO c : canciones){
                 Object[] fila = {
+                    c.getId(),
                     c.getTitulo(),
                     c.getDuracion()
                 };
@@ -115,6 +116,61 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this,
                     "Error al cargar las canciones: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private String obtenerCancionSeleccionada(){
+        int filaSeleccionada = tablaAlbumDetalles.getSelectedRow();
+        if (filaSeleccionada == -1) {
+                JOptionPane.showMessageDialog(this, "Seleccione una cancion de la tabla", "Error", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+        
+        String idCancion = (String) tablaAlbumDetalles.getValueAt(filaSeleccionada, 0); 
+        return idCancion;
+    }
+    
+    public void agregarCancionAFavoritos() {
+        try {
+            
+            String idCancion = obtenerCancionSeleccionada();
+            CancionDTO cancionDTO = albumesBO.buscarCancionPorId(idCancion);
+            
+            String idUsuario = usuarioActual.getId();
+            FavoritoDTO nuevoFavorito = new FavoritoDTO(
+                    cancionDTO.getTitulo(),
+                    albumRecibido.getGenero().toString(),
+                    TipoContenido.CANCION,
+                    cancionDTO.getId(),
+                    new Date()
+            );
+
+            boolean cancionAgregada = usuariosBO.agregarFavorito(idUsuario, nuevoFavorito);
+
+            if (cancionAgregada) {
+                JOptionPane.showMessageDialog(null, "Cancion agregada a tus favoritos", "Operación exitosa",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Esta cancion ya está en tus favoritos", "Información",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        } catch (NegocioException e) {
+
+            JOptionPane.showMessageDialog(null, "Error al agregar la cancion : " + e.getMessage(), "Error de negocio",
+                    JOptionPane.ERROR_MESSAGE);
+
+            System.err.println("Error de negocio al agregar favorito: " + e.getMessage());
+            e.printStackTrace();
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(null, "️Ocurrió un error inesperado", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+
+            System.err.println("Error inesperado al agregar favorito: " + e.getMessage());
+            e.printStackTrace();
         }
     }
     
@@ -129,9 +185,9 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
                     new Date()
             );
 
-            boolean artistaAgregado = usuariosBO.agregarFavorito(idUsuario, nuevoFavorito);
+            boolean albumAgregado = usuariosBO.agregarFavorito(idUsuario, nuevoFavorito);
 
-            if (artistaAgregado) {
+            if (albumAgregado) {
                 JOptionPane.showMessageDialog(null, "Album agregado a tus favoritos", "Operación exitosa",
                         JOptionPane.INFORMATION_MESSAGE);
             } else {
@@ -186,6 +242,7 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
         labelAlbum = new javax.swing.JLabel();
         labelFoto = new javax.swing.JLabel();
         btnAgregarFavoritos = new javax.swing.JButton();
+        btnAgregarCancionFavoritos = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(850, 550));
@@ -285,14 +342,14 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nombre", "Duracion"
+                "id", "Nombre", "Duracion"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -340,10 +397,19 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
 
         btnAgregarFavoritos.setBackground(new java.awt.Color(255, 204, 0));
         btnAgregarFavoritos.setFont(new java.awt.Font("Gotham Black", 0, 14)); // NOI18N
-        btnAgregarFavoritos.setText("Agregar a Favoritos");
+        btnAgregarFavoritos.setText("Agregar Album a Favoritos");
         btnAgregarFavoritos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAgregarFavoritosActionPerformed(evt);
+            }
+        });
+
+        btnAgregarCancionFavoritos.setBackground(new java.awt.Color(255, 204, 0));
+        btnAgregarCancionFavoritos.setFont(new java.awt.Font("Gotham Black", 0, 14)); // NOI18N
+        btnAgregarCancionFavoritos.setText("Agregar Cancion a Favoritos");
+        btnAgregarCancionFavoritos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarCancionFavoritosActionPerformed(evt);
             }
         });
 
@@ -367,8 +433,11 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
                                 .addComponent(labelFoto)
                                 .addGap(280, 280, 280))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
-                                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(btnAgregarFavoritos)
+                                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(panelFondoLayout.createSequentialGroup()
+                                        .addComponent(btnAgregarCancionFavoritos)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnAgregarFavoritos))
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(40, 40, 40))))
                     .addGroup(panelFondoLayout.createSequentialGroup()
@@ -401,7 +470,9 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
                         .addGap(29, 29, 29)
                         .addComponent(labelFoto)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnAgregarFavoritos, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAgregarFavoritos, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAgregarCancionFavoritos, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(45, Short.MAX_VALUE))
         );
 
@@ -447,8 +518,13 @@ public class frmAlbumesDetalles extends javax.swing.JFrame {
         agregarAlbumAFavoritos();
     }//GEN-LAST:event_btnAgregarFavoritosActionPerformed
 
+    private void btnAgregarCancionFavoritosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCancionFavoritosActionPerformed
+        agregarCancionAFavoritos();
+    }//GEN-LAST:event_btnAgregarCancionFavoritosActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarCancionFavoritos;
     private javax.swing.JButton btnAgregarFavoritos;
     private javax.swing.JButton btnAlbumes;
     private javax.swing.JButton btnArtistas;

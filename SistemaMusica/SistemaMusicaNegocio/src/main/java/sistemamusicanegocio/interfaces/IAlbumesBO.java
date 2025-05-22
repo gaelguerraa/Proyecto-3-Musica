@@ -28,6 +28,7 @@ public interface IAlbumesBO {
     /**
      * Metodo para obtener todos los albumes de la base de datos
      *
+     * @param idUsuario
      * @return Lista con todos los albumes que se encuentren en la base de datos
      * @throws NegocioException Si ocurre una incidencia al obtener los albumes
      * de la base de datos
@@ -38,6 +39,7 @@ public interface IAlbumesBO {
      * Metodo para obtener todos los albumes de la base de datos y se obtiene
      * por genero
      *
+     * @param idUsuario
      * @param generoBuscado Genero por el que se busca
      * @return Lista con todos los albumes que coinciden con el genero
      * @throws NegocioException Si ocurre una incidencia al obtener los albumes
@@ -49,6 +51,7 @@ public interface IAlbumesBO {
      * Metodo para obtener todos los albumes de la base de datos y se obtiene
      * por nombre
      *
+     * @param idUsuario
      * @param nombreBuscado Nombre de album por el que se busca
      * @return Lista con todos los albumes que coinciden con el nombre
      * @throws NegocioException Si ocurre una incidencia al obtener los albumes
@@ -70,6 +73,7 @@ public interface IAlbumesBO {
      * Metodo para obtener todos los algumes de la base de datos y se obtiene
      * por fecha
      *
+     * @param idUsuario
      * @param fechaTexto Fecha por la que se va a buscar los albumes en la base
      * de datos
      * @return Lista con todos los albumes de quinciden con la fecha
@@ -88,5 +92,7 @@ public interface IAlbumesBO {
      * canciones de la base de datos
      */
     public List<CancionDTO> obtenerCancionesPorIdAlbum(String idAlbum) throws NegocioException;
+    
+    public CancionDTO buscarCancionPorId(String idCancion);
 
 }

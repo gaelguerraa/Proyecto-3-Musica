@@ -4,6 +4,7 @@
  */
 package sistemamusicapersistencia.implementaciones;
 
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
@@ -71,7 +72,7 @@ public class AlbumesDAO implements IAlbumesDAO {
                 List<Cancion> canciones = new ArrayList<>();
                 for (CancionDTO cancion : nuevoAlbum.getCanciones()) {
                     Cancion nuevaCancion = new Cancion();
-
+                    nuevaCancion.setId(new ObjectId());
                     nuevaCancion.setTitulo(cancion.getTitulo());
                     nuevaCancion.setDuracion(cancion.getDuracion());
 
@@ -123,7 +124,7 @@ public class AlbumesDAO implements IAlbumesDAO {
                 Projections.include(CAMPO_NOMBRE, CAMPO_FECHA_LANZAMIENTO, CAMPO_GENERO, CAMPO_IMAGEN_PORTADA),
                 Projections.computed(CAMPO_ID_ARTISTA, "$" + CAMPO_ID_ARTISTA),
                 Projections.computed("nombreArtista", "$" + CAMPO_ARTISTA_INFO + ".nombre"),
-                Projections.include(CAMPO_CANCIONES)
+                 Projections.include(CAMPO_CANCIONES)
             ))
         ));
 
@@ -338,6 +339,42 @@ public class AlbumesDAO implements IAlbumesDAO {
         
         return canciones;
     }
+    
+    public CancionDTO buscarCancionPorId(String idCancion) {
+        MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Document> albumes = db.getCollection("albumes", Document.class);
+
+        ObjectId id = new ObjectId(idCancion);
+
+        List<Bson> pipeline = Arrays.asList(
+            Aggregates.unwind("$canciones"),
+            Aggregates.match(Filters.eq("canciones._id", id)),
+            Aggregates.project(Projections.fields(
+                Projections.include("canciones"),
+                Projections.computed("idArtista", "$idArtista")
+            ))
+        );
+
+        AggregateIterable<Document> resultado = albumes.aggregate(pipeline);
+
+        Document doc = resultado.first();
+        if (doc == null) return null;
+
+        Document cancionDoc = (Document) doc.get("canciones");
+
+        CancionDTO dto = new CancionDTO();
+        dto.setId(cancionDoc.getObjectId("_id").toHexString());
+        dto.setTitulo(cancionDoc.getString("titulo"));
+        dto.setDuracion(cancionDoc.getDouble("duracion").floatValue());
+
+        ObjectId idArtista = cancionDoc.getObjectId("idArtista");
+        if (idArtista != null) {
+            dto.setIdArtista(idArtista.toHexString());
+        }
+
+        return dto;
+    }
+
 
     /**
      * Metodo para ejecutar la consulta a los albumes.

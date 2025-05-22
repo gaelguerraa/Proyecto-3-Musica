@@ -6,6 +6,7 @@ package sistemamusicapersistencia.interfaces;
 
 import java.util.List;
 import sistemamusica.dtos.AlbumDTO;
+import sistemamusica.dtos.CancionDTO;
 import sistemamusicadominio.Album;
 import sistemamusicadominio.Cancion;
 
@@ -26,6 +27,7 @@ public interface IAlbumesDAO {
     /**
      * Metodo para obtener todos los albumes de la base de datos
      *
+     * @param idUsuario
      * @return Lista con todos los albumes de la base de datos
      */
     public List<Album> obtenerAlbumes(String idUsuario);
@@ -33,6 +35,7 @@ public interface IAlbumesDAO {
     /**
      * Metodo para obtener alumnos por genero de la base de datos
      *
+     * @param idUsuario
      * @param generoBuscado Genero por el que son buscados los albumes
      * @return Albumes obtenidos que compartan el mismo genero
      */
@@ -41,6 +44,7 @@ public interface IAlbumesDAO {
     /**
      * Metodo para obtener alumnos por nombre de la base de datos
      *
+     * @param idUsuario
      * @param nombreBuscado Nombre por el que son buscados los albumes
      * @return Albumes obtenidos que comparten el mismo nombre
      */
@@ -57,6 +61,7 @@ public interface IAlbumesDAO {
     /**
      * Metodo para obtener albumes por fecha de lanzamiento de la base de datos
      *
+     * @param idUsuario
      * @param fechaTexto Fecha de lanzamiento del album por el cual se va a
      * buscar
      * @return Albumes obtenidos que compratan la misma fecha de lanzamiento
@@ -70,5 +75,7 @@ public interface IAlbumesDAO {
      * @return Lista de canciones que contiene el album
      */
     public List<Cancion> obtenerCancionesPorIdAlbum(String idAlbum);
+    
+    public CancionDTO buscarCancionPorId(String idCancion);
 
 }
