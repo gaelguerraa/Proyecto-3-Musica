@@ -5,6 +5,7 @@
 package sistemamusicanegocio.interfaces;
 
 import java.util.List;
+import org.bson.Document;
 import sistemamusica.dtos.AlbumDTO;
 import sistemamusica.dtos.CancionDTO;
 import sistemamusicanegocio.exception.NegocioException;
@@ -94,5 +95,8 @@ public interface IAlbumesBO {
     public List<CancionDTO> obtenerCancionesPorIdAlbum(String idAlbum) throws NegocioException;
     
     public CancionDTO buscarCancionPorId(String idCancion);
+    
+    public List<CancionDTO> buscarCancionesPorNombre(String nombre, String idUsuario);
+    public List<CancionDTO> obtenerTodasLasCanciones(String idUsuario);
 
 }

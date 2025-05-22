@@ -5,6 +5,7 @@
 package sistemamusicapersistencia.interfaces;
 
 import java.util.List;
+import org.bson.Document;
 import sistemamusica.dtos.AlbumDTO;
 import sistemamusica.dtos.CancionDTO;
 import sistemamusicadominio.Album;
@@ -77,5 +78,7 @@ public interface IAlbumesDAO {
     public List<Cancion> obtenerCancionesPorIdAlbum(String idAlbum);
     
     public CancionDTO buscarCancionPorId(String idCancion);
+    public List<Document> buscarCancionesPorNombre(String nombre, String idUsuario);
+    public List<Document> obtenerTodasLasCanciones(String idUsuario);
 
 }

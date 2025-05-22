@@ -4,7 +4,13 @@
  */
 package sistemamusicapresentacion.canciones;
 
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import sistemamusica.dtos.CancionDTO;
 import sistemamusica.dtos.UsuarioDTO;
+import sistemamusicanegocio.fabrica.FabricaObjetosNegocio;
+import sistemamusicanegocio.interfaces.IAlbumesBO;
 import sistemamusicapresentacion.main.ControladorUniversal;
 
 /**
@@ -15,6 +21,7 @@ public class frmCanciones extends javax.swing.JFrame {
 
     UsuarioDTO usuarioActual;
     ControladorUniversal universal;
+    private final IAlbumesBO albumesBO = FabricaObjetosNegocio.crearAlbumesBO();
     
     /**
      * Creates new form frmCanciones
@@ -25,7 +32,48 @@ public class frmCanciones extends javax.swing.JFrame {
         setTitle("Canciones");
         this.usuarioActual=usuarioActual;
         this.universal=universal;
+        this.LlenarTablaCanciones();
     }
+    
+    public void LlenarTablaCanciones(){
+        List<CancionDTO> canciones;
+        
+        String filtro = txtBuscador.getText().trim();;
+        String Seleccionado = (String) comboboxFiltro.getSelectedItem();
+        String idUsuario = usuarioActual.getId();
+        
+        if(Seleccionado.equals("NOMBRE")){
+            canciones = albumesBO.buscarCancionesPorNombre(filtro, idUsuario);
+            DefaultTableModel modeloTabla = (DefaultTableModel) tablaCanciones.getModel();
+            modeloTabla.setRowCount(0);
+            for (CancionDTO a : canciones) {
+                Object[] fila = {
+                    a.getId(),
+                    a.getArtistaNombre(),
+                    a.getTitulo(),
+                    a.getAlbumNombre(),
+                    a.getDuracion()
+                };
+                modeloTabla.addRow(fila);
+            }
+        }else{
+            canciones = albumesBO.obtenerTodasLasCanciones(idUsuario);
+            DefaultTableModel modeloTabla = (DefaultTableModel) tablaCanciones.getModel();
+            modeloTabla.setRowCount(0);
+            for (CancionDTO a : canciones) {
+                Object[] fila = {
+                    a.getId(),
+                    a.getArtistaNombre(),
+                    a.getTitulo(),
+                    a.getAlbumNombre(),
+                    a.getDuracion()
+                };
+                modeloTabla.addRow(fila);
+        }
+    }
+        }
+      
+        
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -53,7 +101,6 @@ public class frmCanciones extends javax.swing.JFrame {
         btnBuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaCanciones = new javax.swing.JTable();
-        btnAgregarFavoritos = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(820, 519));
@@ -162,11 +209,16 @@ public class frmCanciones extends javax.swing.JFrame {
 
         comboboxFiltro.setBackground(new java.awt.Color(30, 215, 96));
         comboboxFiltro.setFont(new java.awt.Font("Gotham Black", 1, 14)); // NOI18N
-        comboboxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "Album", "Artista" }));
+        comboboxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NOMBRE" }));
 
         btnBuscar.setBackground(new java.awt.Color(30, 215, 96));
         btnBuscar.setFont(new java.awt.Font("Gotham Black", 0, 18)); // NOI18N
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         tablaCanciones.setFont(new java.awt.Font("Gotham Black", 1, 12)); // NOI18N
         tablaCanciones.setModel(new javax.swing.table.DefaultTableModel(
@@ -174,14 +226,14 @@ public class frmCanciones extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Artista", "Nombre", "Album", "Duracion"
+                "id", "Artista", "Nombre", "Album", "Duracion"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -193,10 +245,6 @@ public class frmCanciones extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(tablaCanciones);
-
-        btnAgregarFavoritos.setBackground(new java.awt.Color(255, 204, 0));
-        btnAgregarFavoritos.setFont(new java.awt.Font("Gotham Black", 0, 14)); // NOI18N
-        btnAgregarFavoritos.setText("Agregar a Favoritos");
 
         javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
         panelFondo.setLayout(panelFondoLayout);
@@ -222,9 +270,7 @@ public class frmCanciones extends javax.swing.JFrame {
                                 .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnAgregarFavoritos)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         panelFondoLayout.setVerticalGroup(
@@ -243,9 +289,7 @@ public class frmCanciones extends javax.swing.JFrame {
                         .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnAgregarFavoritos, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -282,10 +326,13 @@ public class frmCanciones extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnUsuarioActionPerformed
 
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        LlenarTablaCanciones();
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAgregarFavoritos;
     private javax.swing.JButton btnAlbumes;
     private javax.swing.JButton btnArtistas;
     private javax.swing.JButton btnBuscar;

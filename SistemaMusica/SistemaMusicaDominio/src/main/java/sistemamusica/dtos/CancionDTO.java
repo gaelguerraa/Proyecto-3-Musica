@@ -13,6 +13,10 @@ public class CancionDTO {
     private String titulo;
     private float duracion;
     private String idArtista;
+    
+    //pa mostrarlo en tabla
+    private String artistaNombre;
+    private String albumNombre;
 
     public CancionDTO() {
     }
@@ -22,6 +26,32 @@ public class CancionDTO {
         this.duracion = duracion;
         this.idArtista = idArtista;
     }
+
+    public CancionDTO(String id, String titulo, float duracion, String artistaNombre, String albumNombre) {
+        this.id = id;
+        this.titulo = titulo;
+        this.duracion = duracion;
+        this.artistaNombre = artistaNombre;
+        this.albumNombre = albumNombre;
+    }
+
+    public String getArtistaNombre() {
+        return artistaNombre;
+    }
+
+    public void setArtistaNombre(String artistaNombre) {
+        this.artistaNombre = artistaNombre;
+    }
+
+    public String getAlbumNombre() {
+        return albumNombre;
+    }
+
+    public void setAlbumNombre(String albumNombre) {
+        this.albumNombre = albumNombre;
+    }
+    
+    
 
     public String getId() {
         return id;

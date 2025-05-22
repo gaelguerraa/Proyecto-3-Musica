@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -425,6 +426,65 @@ public class AlbumesDAO implements IAlbumesDAO {
 
         return resultado;
     }
+    
+    @Override
+    public List<Document> obtenerTodasLasCanciones(String idUsuario) {
+            MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
+            MongoCollection<Document> albumes = db.getCollection("albumes", Document.class);
+            List<Bson> pipeline = new ArrayList<>();
+
+            List<String> restricciones = obtenerGenerosRestringidos(idUsuario);
+            if (!restricciones.isEmpty()) {
+                pipeline.add(Aggregates.match(Filters.nin(CAMPO_GENERO, restricciones)));
+            }
+
+            pipeline.addAll(Arrays.asList(
+                Aggregates.unwind("$" + CAMPO_CANCIONES),
+                Aggregates.lookup("artistas", CAMPO_ID_ARTISTA, "_id", CAMPO_ARTISTA_INFO),
+                Aggregates.unwind("$" + CAMPO_ARTISTA_INFO),
+                Aggregates.project(Projections.fields(
+                    Projections.computed("idCancion", "$" + CAMPO_CANCIONES + "._id"),
+                    Projections.computed("titulo", "$" + CAMPO_CANCIONES + ".titulo"),
+                    Projections.computed("duracion", "$" + CAMPO_CANCIONES + ".duracion"),
+                    Projections.computed("nombreArtista", "$" + CAMPO_ARTISTA_INFO + ".nombre"),
+                    Projections.computed("nombreAlbum", "$nombre")
+                ))
+            ));
+
+            return albumes.aggregate(pipeline).into(new ArrayList<>());
+        }
+
+
+    @Override
+    public List<Document> buscarCancionesPorNombre(String nombre, String idUsuario) {
+        MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
+        MongoCollection<Document> albumes = db.getCollection("albumes", Document.class);
+        
+        List<Bson> pipeline = new ArrayList<>();
+
+        List<String> restricciones = obtenerGenerosRestringidos(idUsuario);
+        if (!restricciones.isEmpty()) {
+            pipeline.add(Aggregates.match(Filters.nin(CAMPO_GENERO, restricciones)));
+        }
+
+        pipeline.addAll(Arrays.asList(
+            Aggregates.unwind("$" + CAMPO_CANCIONES),
+            Aggregates.match(Filters.regex(CAMPO_CANCIONES + ".titulo", Pattern.compile(nombre, Pattern.CASE_INSENSITIVE))),
+            Aggregates.lookup("artistas", CAMPO_ID_ARTISTA, "_id", CAMPO_ARTISTA_INFO),
+            Aggregates.unwind("$" + CAMPO_ARTISTA_INFO),
+            Aggregates.project(Projections.fields(
+                Projections.computed("idCancion", "$" + CAMPO_CANCIONES + "._id"),
+                Projections.computed("titulo", "$" + CAMPO_CANCIONES + ".titulo"),
+                Projections.computed("duracion", "$" + CAMPO_CANCIONES + ".duracion"),
+                Projections.computed("nombreArtista", "$" + CAMPO_ARTISTA_INFO + ".nombre"),
+                Projections.computed("idAlbum", "$_id"),
+                Projections.computed("nombreAlbum", "$nombre")
+            ))
+        ));
+
+        return albumes.aggregate(pipeline).into(new ArrayList<>());
+    }
+
     
     /**
      * Metodo que obtiene los generos restringidos por el usuario busca el

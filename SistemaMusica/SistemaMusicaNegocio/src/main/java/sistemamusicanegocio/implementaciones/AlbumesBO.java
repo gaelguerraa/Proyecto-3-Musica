@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.Document;
 import sistemamusica.dtos.AlbumDTO;
 import sistemamusica.dtos.CancionDTO;
 import sistemamusicadominio.Album;
@@ -372,6 +373,46 @@ public class AlbumesBO implements IAlbumesBO {
     @Override
     public CancionDTO buscarCancionPorId(String idCancion) {
         return albumesDAO.buscarCancionPorId(idCancion);
+    }
+
+    @Override
+    public List<CancionDTO> buscarCancionesPorNombre(String nombre, String idUsuario) {
+        List<Document> documentos = albumesDAO.buscarCancionesPorNombre(nombre, idUsuario);
+        
+        List<CancionDTO> canciones = new ArrayList<>();
+        
+        if(documentos != null){
+            for(Document d : documentos){
+                CancionDTO dto = new CancionDTO();
+                dto.setId(d.getObjectId("idCancion").toString());
+                dto.setTitulo(d.getString("titulo"));
+                dto.setArtistaNombre(d.getString("nombreArtista"));
+                dto.setAlbumNombre(d.getString("nombreAlbum"));
+                dto.setDuracion(d.getDouble("duracion").floatValue());
+                canciones.add(dto);
+            }
+        }
+        return canciones;
+    }
+
+    @Override
+    public List<CancionDTO> obtenerTodasLasCanciones(String idUsuario) {
+        List<Document> documentos = albumesDAO.obtenerTodasLasCanciones(idUsuario);
+        
+        List<CancionDTO> canciones = new ArrayList<>();
+        
+        if(documentos != null){
+            for(Document d : documentos){
+                CancionDTO dto = new CancionDTO();
+                dto.setId(d.getObjectId("idCancion").toString());
+                dto.setTitulo(d.getString("titulo"));
+                dto.setArtistaNombre(d.getString("nombreArtista"));
+                dto.setAlbumNombre(d.getString("nombreAlbum"));
+                dto.setDuracion(d.getDouble("duracion").floatValue());
+                canciones.add(dto);
+            }
+        }
+        return canciones;
     }
 
 }
