@@ -208,6 +208,7 @@ public class AlbumesDAO implements IAlbumesDAO {
         }
 
         pipeline.addAll(Arrays.asList(
+            //Para cada álbum, busca en la colección artistas el documento cuyo _id coincida con el idArtista del álbum
                 Aggregates.lookup("artistas", CAMPO_ID_ARTISTA, CAMPO_ID, CAMPO_ARTISTA_INFO),
                 Aggregates.unwind("$" + CAMPO_ARTISTA_INFO),
                 Aggregates.project(Projections.fields(
@@ -244,6 +245,7 @@ public class AlbumesDAO implements IAlbumesDAO {
         }
 
         pipeline.addAll(Arrays.asList(
+                //Para cada álbum, busca en la colección artistas el documento cuyo _id coincida con el idArtista del álbum
                 Aggregates.lookup("artistas", CAMPO_ID_ARTISTA, CAMPO_ID, CAMPO_ARTISTA_INFO),
                 Aggregates.unwind("$" + CAMPO_ARTISTA_INFO),
                 Aggregates.project(Projections.fields(
@@ -272,6 +274,7 @@ public class AlbumesDAO implements IAlbumesDAO {
 
         List<Bson> pipeline = Arrays.asList(
                 Aggregates.match(Filters.eq(CAMPO_NOMBRE, nombreBuscado)),
+                //Busca en la colección artistas un documento cuyo _id coincida con el idArtista del álbume actual y guarda el resultado en artistaInfo
                 Aggregates.lookup("artistas", CAMPO_ID_ARTISTA, CAMPO_ID, CAMPO_ARTISTA_INFO),
                 Aggregates.unwind("$" + CAMPO_ARTISTA_INFO),
                 Aggregates.project(Projections.fields(
@@ -341,6 +344,7 @@ public class AlbumesDAO implements IAlbumesDAO {
         return canciones;
     }
     
+    @Override
     public CancionDTO buscarCancionPorId(String idCancion) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
         MongoCollection<Document> albumes = db.getCollection("albumes", Document.class);
@@ -439,9 +443,9 @@ public class AlbumesDAO implements IAlbumesDAO {
             }
 
             pipeline.addAll(Arrays.asList(
-                Aggregates.unwind("$" + CAMPO_CANCIONES),
+                Aggregates.unwind("$" + CAMPO_CANCIONES), //permite que la cancion sea un documento separado
                 Aggregates.lookup("artistas", CAMPO_ID_ARTISTA, "_id", CAMPO_ARTISTA_INFO),
-                Aggregates.unwind("$" + CAMPO_ARTISTA_INFO),
+                Aggregates.unwind("$" + CAMPO_ARTISTA_INFO), //permite acceder a los datos del artista luego de un lookup
                 Aggregates.project(Projections.fields(
                     Projections.computed("idCancion", "$" + CAMPO_CANCIONES + "._id"),
                     Projections.computed("titulo", "$" + CAMPO_CANCIONES + ".titulo"),

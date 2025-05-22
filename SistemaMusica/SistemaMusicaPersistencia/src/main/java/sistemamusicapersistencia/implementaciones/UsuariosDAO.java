@@ -17,22 +17,14 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Pattern;
-import org.bson.BsonString;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
-import sistemamusica.dtos.AlbumFavoritoDTO;
-import sistemamusica.dtos.ArtistaFavoritoDTO;
-import sistemamusica.dtos.CancionFavoritaDTO;
 import sistemamusica.dtos.FavoritoDTO;
-import sistemamusica.dtos.GeneroFavoritoDTO;
 import sistemamusica.dtos.UsuarioDTO;
 import sistemamusicadominio.Favorito;
-import sistemamusicadominio.Genero;
 import sistemamusicadominio.TipoContenido;
 import sistemamusicadominio.Usuario;
 import sistemamusicapersistencia.interfaces.IUsuariosDAO;
@@ -486,7 +478,7 @@ public class UsuariosDAO implements IUsuariosDAO {
             }
         }
 
-        // Si hay que eliminar favoritos, notifica (esto lo haces desde la capa de negocio)
+        // se eliminan los favoritos con este genero 
         if (!aEliminar.isEmpty()) {
             coleccion.updateOne(filtro, new Document("$pull", new Document("favoritos", new Document("genero", genero))));
         }
