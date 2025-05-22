@@ -323,14 +323,22 @@ public class frmAgregarCancionesAlbum extends javax.swing.JFrame {
         float duracionCancion = Float.parseFloat(txtDuracion.getText());
         String idArtistaObtenido = albumRecibido.getIdArtista();
 
-        CancionDTO cancionEnlistar = new CancionDTO();
-        cancionEnlistar.setTitulo(nombreCancion);
-        cancionEnlistar.setDuracion(duracionCancion);
-        cancionEnlistar.setIdArtista(idArtistaObtenido);
+        try {
+            CancionDTO cancionEnlistar = new CancionDTO();
+            cancionEnlistar.setTitulo(nombreCancion);
+            cancionEnlistar.setDuracion(duracionCancion);
+            cancionEnlistar.setIdArtista(idArtistaObtenido);
 
-        enlistarCancion(cancionEnlistar);
+            enlistarCancion(cancionEnlistar);
 
-        limpiarCampos();
+            limpiarCampos();
+            
+            JOptionPane.showMessageDialog(this, "Cancion agregada correctamente",
+                    "Info", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al agregar la cancion: " +
+                    e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnAgregarCancionAlbumActionPerformed
 
 
