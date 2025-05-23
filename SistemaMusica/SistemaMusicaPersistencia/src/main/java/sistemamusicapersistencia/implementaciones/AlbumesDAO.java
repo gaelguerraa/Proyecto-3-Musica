@@ -344,6 +344,12 @@ public class AlbumesDAO implements IAlbumesDAO {
         return canciones;
     }
     
+    /**
+     * Metodo para buscar una cancion por id
+     * Busca una cancion con su id dentro del arreglo canciones en albumes y la devuelve
+     * @param idCancion
+     * @return cancionDTO
+     */
     @Override
     public CancionDTO buscarCancionPorId(String idCancion) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
@@ -431,6 +437,14 @@ public class AlbumesDAO implements IAlbumesDAO {
         return resultado;
     }
     
+    /**
+     * Metodo para obtener todas las canciones existentes
+     * Hace que todas las canciones sean documentos separados para luego unir las canciones con sus artistas
+     * Y de esa union saca el idCancion, su titulo, su duracion, el nombre de su artista y el nombre de su album.
+     * Excluye a las canciones que sean de un album que tengan un genero restringido 
+     * @param idUsuario
+     * @return Lista de documentos
+     */
     @Override
     public List<Document> obtenerTodasLasCanciones(String idUsuario) {
             MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
@@ -458,7 +472,16 @@ public class AlbumesDAO implements IAlbumesDAO {
             return albumes.aggregate(pipeline).into(new ArrayList<>());
         }
 
-
+    /**
+     * Metodo que busca todas las canciones con un nombre o nombre a medias
+     * Aplana todas las canciones, luego filtra por las canciones que tengan de titulo el titulo que el usuario introducio
+     * Para luego unirlas con sus artistas que tienen las canciones a su nombre
+     * Excluye las canciones que pertenezcan a un album que tenga un genero restringido.
+     * 
+     * @param nombre
+     * @param idUsuario
+     * @return lista de documentos
+     */
     @Override
     public List<Document> buscarCancionesPorNombre(String nombre, String idUsuario) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();

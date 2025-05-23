@@ -312,8 +312,7 @@ public class frmCanciones extends javax.swing.JFrame {
     }//GEN-LAST:event_btnArtistasActionPerformed
 
     private void btnCancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancionesActionPerformed
-        universal.mostrarModuloPrincipalUsuarios(usuarioActual);
-        this.dispose();
+
     }//GEN-LAST:event_btnCancionesActionPerformed
 
     private void btnAlbumesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlbumesActionPerformed

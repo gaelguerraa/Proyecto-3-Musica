@@ -211,6 +211,14 @@ public class UsuariosDAO implements IUsuariosDAO {
         return null;
     }
 
+    /**
+    * Agrega un contenido a la lista de favoritos del usuario.
+    * Verifica si ya existe el contenido en favoritos para evitar duplicados.
+    *
+    * @param idUsuario ID del usuario.
+    * @param favoritoDTO Objeto con los datos del contenido a agregar como favorito.
+    * @return true si el favorito fue agregado, false si ya existía.
+    */
     @Override
     public boolean agregarFavorito(String idUsuario, FavoritoDTO favoritoDTO) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
@@ -241,7 +249,13 @@ public class UsuariosDAO implements IUsuariosDAO {
         return resultado.getModifiedCount() > 0;
     }
 
-    
+     /**
+     * Elimina un contenido de la lista de favoritos del usuario.
+     *
+     * @param idUsuario ID del usuario.
+     * @param idContenido ID del contenido a eliminar de favoritos.
+     * @return true si se eliminó correctamente, false si no se modificó nada.
+     */
     @Override
     public boolean eliminarFavorito(String idUsuario, String idContenido) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
@@ -258,6 +272,13 @@ public class UsuariosDAO implements IUsuariosDAO {
         return resultado.getModifiedCount() > 0;
     }
     
+    /**
+    * Obtiene los artistas marcados como favoritos por el usuario cuyo nombre coincida parcialmente.
+    *
+    * @param idUsuario ID del usuario.
+    * @param nombreArtista Nombre parcial o completo del artista.
+    * @return Lista de documentos con información detallada del artista favorito.
+    */
     @Override
     public List<Document> obtenerArtistasFavoritos(String idUsuario, String nombreArtista) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
@@ -289,7 +310,13 @@ public class UsuariosDAO implements IUsuariosDAO {
         return resultado;
     }
 
-
+    /**
+    * Obtiene los álbumes marcados como favoritos por el usuario cuyo nombre coincida parcialmente.
+    *
+    * @param idUsuario ID del usuario.
+    * @param nombreAlbum Nombre parcial o completo del álbum.
+    * @return Lista de documentos con información detallada del álbum favorito.
+    */
     @Override
     public List<Document> obtenerAlbumesFavoritos(String idUsuario, String nombreAlbum ) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
@@ -326,6 +353,13 @@ public class UsuariosDAO implements IUsuariosDAO {
                
     }
     
+    /**
+    * Obtiene las canciones marcadas como favoritas por el usuario cuyo título coincida parcialmente.
+    *
+    * @param idUsuario ID del usuario.
+    * @param nombreCancion Nombre parcial o completo de la canción.
+    * @return Lista de documentos con información detallada de la canción favorita.
+    */
     @Override
     public List<Document> obtenerCancionesFavoritas(String idUsuario, String nombreCancion) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
@@ -365,6 +399,13 @@ public class UsuariosDAO implements IUsuariosDAO {
 
     }
     
+    /**
+    * Obtiene todos los favoritos del usuario con un género específico.
+    *
+    * @param idUsuario ID del usuario.
+    * @param genero Género a buscar dentro de los favoritos.
+    * @return Lista de documentos que representan los favoritos con ese género.
+    */
     @Override
     public List<Document> obtenerGenerosFavoritos(String idUsuario, String genero) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
@@ -381,6 +422,14 @@ public class UsuariosDAO implements IUsuariosDAO {
 
     }
     
+    /**
+    * Consulta los favoritos agregados por el usuario dentro de un rango de fechas.
+    *
+    * @param idUsuario ID del usuario.
+    * @param fechaInicio Fecha inicial del rango.
+    * @param fechaFin Fecha final del rango.
+    * @return Lista de documentos de favoritos en ese rango de fechas.
+    */
     @Override
     public List<Document> consultarFavoritosPorRangoFechas(String idUsuario, Date fechaInicio, Date fechaFin) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
@@ -398,6 +447,12 @@ public class UsuariosDAO implements IUsuariosDAO {
        
     }
     
+    /**
+    * Obtiene todos los favoritos del usuario.
+    *
+    * @param idUsuario ID del usuario.
+    * @return Lista de documentos que representan todos los favoritos del usuario.
+    */
     @Override
     public List<Document> obtenerTodosFavoritos(String idUsuario) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
@@ -415,7 +470,12 @@ public class UsuariosDAO implements IUsuariosDAO {
        
     }
 
-
+    /**
+    * Consulta los favoritos del usuario utilizando objetos de tipo Favorito.
+    *
+    * @param idUsuario ID del usuario.
+    * @return Lista de objetos Favorito del usuario.
+    */
     @Override
     public List<Favorito> consultarFavoritos(String idUsuario) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
@@ -457,6 +517,16 @@ public class UsuariosDAO implements IUsuariosDAO {
         return sb.toString();
     }
 
+    /**
+    * Agrega un género a la lista de restricciones de un usuario y elimina de sus favoritos
+    * todas las canciones, álbumes o artistas que tengan ese género.
+    *
+    * @param idUsuario El ID del usuario al que se le quiere restringir el género.
+    * @param genero El nombre del género que se desea restringir.
+    *
+    * Si el género ya está restringido, no se realiza ninguna acción.
+    * Si hay favoritos que tienen ese género, se eliminan antes de añadir la restricción.
+    */
     @Override
     public void agregarGeneroRestringido(String idUsuario, String genero) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
@@ -502,7 +572,14 @@ public class UsuariosDAO implements IUsuariosDAO {
     }
 
     
-
+    /**
+    * Elimina un género previamente restringido de la lista de restricciones del usuario.
+    *
+    * @param idUsuario El ID del usuario del que se quiere eliminar la restricción.
+    * @param genero El nombre del género que se desea quitar de las restricciones.
+    *
+    * Si el género no está en la lista de restricciones, no se realiza ninguna acción.
+    */
     @Override
     public void eliminarGeneroRestringido(String idUsuario, String genero) {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();
@@ -514,6 +591,13 @@ public class UsuariosDAO implements IUsuariosDAO {
         coleccion.updateOne(filtro, update);
     }
     
+    /**
+    * Obtiene la lista de géneros restringidos de un usuario.
+    *
+    * @param idUsuario El ID del usuario del que se quieren obtener las restricciones.
+    * @return Una lista de cadenas con los géneros restringidos. Si el usuario no existe
+    *         o no tiene restricciones, se retorna una lista vacía.
+    */
     @Override
     public List<String> mostrarGenerosRestringidos(String idUsuario){
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();

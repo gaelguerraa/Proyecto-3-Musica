@@ -29,7 +29,11 @@ public class UtilsDAO implements IUtilsDAO {
     
     private final String COLECCION_ARTISTAS = "artistas";
     private final String COLECCION_ALBUMES = "albumes";
-    
+  
+    /**
+     * Metodo que inserta masivamente 60 artistas, siendo 30 de estos solistas y 30 bandas, por cada artista 
+     * añade 2 albumes con 3 canciones
+     */
   @Override
     public void insertarDatos() {
         MongoDatabase db = ManejadorConexiones.obtenerBaseDatos();

@@ -370,11 +370,25 @@ public class AlbumesBO implements IAlbumesBO {
         }
     }
 
+    /**
+     * Metodo para buscar una cancion por id
+     * 
+     * @param idCancion
+     * @return CancionDTO
+     */
     @Override
     public CancionDTO buscarCancionPorId(String idCancion) {
         return albumesDAO.buscarCancionPorId(idCancion);
     }
 
+    /**
+     * Metodo para devolver una lista de cancionesDTO
+     * recibe la lista de documentos con los resultados de la busqueda de canciones por nombre
+     * y convierte cada documento en una CancionDTO para ser mostrada a la capa presentacion
+     * @param nombre
+     * @param idUsuario
+     * @return lista de cancionesDTO
+     */
     @Override
     public List<CancionDTO> buscarCancionesPorNombre(String nombre, String idUsuario) {
         List<Document> documentos = albumesDAO.buscarCancionesPorNombre(nombre, idUsuario);
@@ -395,6 +409,12 @@ public class AlbumesBO implements IAlbumesBO {
         return canciones;
     }
 
+    /**
+     * Metodo para devolver todas las cancionesDTO
+     * recibe la lista de documentos con todas las canciones y documento a documento las va convirtiendo en cancionDTO
+     * @param idUsuario
+     * @return lista de cancionesDTO
+     */
     @Override
     public List<CancionDTO> obtenerTodasLasCanciones(String idUsuario) {
         List<Document> documentos = albumesDAO.obtenerTodasLasCanciones(idUsuario);
